@@ -1,3 +1,10 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": ["next/core-web-vitals", "prettier"],
+  "rules": {
+    "no-unused-vars": "warn",
+    "quotes": ["warn", "single"],
+    "semi": ["warn", "never"],
+    "object-curly-spacing": ["warn", "always"],
+    "no-console": "warn"
+  }
 }
