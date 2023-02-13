@@ -2,6 +2,7 @@ import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { Session, SessionContextProvider } from "@supabase/auth-helpers-react";
 import { useState } from "react";
 import { AppProps } from "next/app";
+import { ChakraProvider } from "@chakra-ui/react";
 
 export default function App({
   Component,
