@@ -14,8 +14,7 @@ export default function App({
   return (
     <SessionContextProvider
       supabaseClient={supabaseClient}
-      initialSession={pageProps.initialSession}
-    >
+      initialSession={pageProps.initialSession}>
       <ChakraProvider>
         <Component {...pageProps} />
       </ChakraProvider>
