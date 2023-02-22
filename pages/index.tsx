@@ -1,10 +1,11 @@
 import Layout from "@/components/Layout";
-import Head from "next/head";
+import LoginButton from "@/components/LoginButton";
 
 export default function Home() {
   return (
-    <>
-      <Layout>Lorem ipsum</Layout>
-    </>
+    <Layout>
+      <a href="/profile">profile</a>
+      <LoginButton></LoginButton>
+    </Layout>
   );
 }
