@@ -1,4 +1,5 @@
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Button } from "@chakra-ui/button";
 
 const LoginButton = () => {
   const session = useSession();
@@ -7,9 +8,13 @@ const LoginButton = () => {
   return (
     <>
       {session ? (
-        <button onClick={() => supabase.auth.signOut()}>Sign Out</button>
+        <Button onClick={() => supabase.auth.signOut()} colorScheme="orange">
+          Sign Out
+        </Button>
       ) : (
-        <a href="/login">Log in</a>
+        <a href="/login">
+          <Button colorScheme="orange">Log in</Button>
+        </a>
       )}
     </>
   );

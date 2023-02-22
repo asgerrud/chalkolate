@@ -3,6 +3,9 @@ import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { EPageRoute } from "@/types/enums/EPageRoute";
+import { Card } from "@chakra-ui/card";
+import { Container, Flex } from "@chakra-ui/react";
+import Layout from "@/components/Layout";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -16,11 +19,19 @@ const LoginPage = () => {
   });
 
   return (
-    <Auth
-      supabaseClient={supabase}
-      appearance={{ theme: ThemeSupa }}
-      providers={["google", "github"]}
-    />
+    <Layout>
+      <Container>
+        <Flex justifyContent="center" alignItems="center">
+          <Card p={4}>
+            <Auth
+              supabaseClient={supabase}
+              appearance={{ theme: ThemeSupa }}
+              providers={["google", "github"]}
+            />
+          </Card>
+        </Flex>
+      </Container>
+    </Layout>
   );
 };
 
