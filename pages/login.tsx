@@ -22,7 +22,7 @@ const LoginPage = () => {
     <Layout>
       <Container>
         <Flex justifyContent="center" alignItems="center">
-          <Card p={4}>
+          <Card p={4} w="100%">
             <Auth
               supabaseClient={supabase}
               appearance={{ theme: ThemeSupa }}
