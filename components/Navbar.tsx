@@ -17,7 +17,7 @@ const Navbar = () => {
   const supabase = useSupabaseClient();
 
   return (
-    <Box py={4} px={8} bgColor="gray.100">
+    <Box py={4} px={8}>
       <HStack justifyContent="space-between">
         <a href="/">Home</a>
         {session ? (
