@@ -14,6 +14,8 @@ interface NumberInputProps extends NumberInputFieldProps {
   isRequired?: boolean;
   isError?: boolean;
   errorMessage?: string;
+  min?: number;
+  max?: number;
   onInputChange?: (string) => void;
 }
 
@@ -23,6 +25,8 @@ const NumberInput: FC<NumberInputProps> = ({
   isError,
   errorMessage,
   onInputChange,
+  min,
+  max,
   ...props
 }: NumberInputProps) => {
   const handleInputChange = (value: string) => {
@@ -37,7 +41,7 @@ const NumberInput: FC<NumberInputProps> = ({
       isRequired={isRequired}
       isError={isError}
       errorMessage={errorMessage}>
-      <ChakraNumberInput onChange={handleInputChange}>
+      <ChakraNumberInput onChange={handleInputChange} min={min} max={max}>
         <NumberInputField {...props} />
         <NumberInputStepper>
           <NumberIncrementStepper />

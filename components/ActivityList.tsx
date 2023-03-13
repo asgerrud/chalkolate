@@ -1,10 +1,10 @@
 import { List, ListItem } from "@chakra-ui/react";
-import CreateActivity from "@/components/modals/CreateActivity";
+import AddActivity from "@/components/modals/AddActivity";
 
 const ActivityList = () => {
   return (
     <>
-      <CreateActivity />
+      <AddActivity />
       <List spacing={3}>
         <ListItem>Show list of activities</ListItem>
       </List>

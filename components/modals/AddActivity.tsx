@@ -23,18 +23,48 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Calendar, MapPin } from "lucide-react";
+import NumberInput from "@/components/common/NumberInput";
+import { useState } from "react";
+import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 
-const Required = () => (
-  <Text as="span" color="red">
-    *
-  </Text>
-);
+const AddActivity = () => {
+  const supabase = useSupabaseClient();
+  const session = useSession();
 
-const CreateActivity = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const [hours, setHours] = useState<string>("");
+  const [minutes, setMinutes] = useState<string>("");
+  const [location, setLocation] = useState<string>("");
+  const [date, setDate] = useState<string>("");
+
   const getLocation = () => {
-    console.log("getting location");
+    setLocation("option3");
+  };
+
+  const handleSubmit = async () => {
+    if (!session) {
+      return;
+    }
+
+    const durationInMinutes =
+      Number.parseInt(hours) * 60 + Number.parseInt(minutes);
+
+    const { error } = await supabase
+      .from("Activity")
+      .insert({
+        user_id: session.user.id,
+        activity_date: date,
+        duration: durationInMinutes,
+      })
+      .select()
+      .single();
+
+    if (error) {
+      alert(error.message);
+    } else {
+      onClose();
+    }
   };
 
   return (
@@ -55,29 +85,43 @@ const CreateActivity = () => {
               <FormControl>
                 <FormLabel>Activity date</FormLabel>
                 <InputGroup>
-                  <InputLeftElement
-                    pointerEvents="none"
-                    children={<Calendar size={18} />}
+                  <InputLeftElement pointerEvents="none">
+                    <Calendar size={18} />
+                  </InputLeftElement>
+                  <Input
+                    type="date"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                    isRequired
                   />
-                  <Input type="date" isRequired />
                 </InputGroup>
               </FormControl>
-
               <FormControl>
                 <FormLabel>Duration</FormLabel>
                 <HStack>
-                  <Input type="number" placeholder="Hours" w={24} />
+                  <NumberInput
+                    w={28}
+                    min={0}
+                    placeholder="Hours"
+                    onInputChange={(hours) => setHours(hours)}
+                  />
                   <span>:</span>
-                  <Input type="number" placeholder="Minutes" w={24} />
+                  <NumberInput
+                    w={28}
+                    min={0}
+                    max={59}
+                    placeholder="Minutes"
+                    onInputChange={(minutes) => setMinutes(minutes)}
+                  />
                 </HStack>
               </FormControl>
-
               <Divider />
-
               <FormControl>
                 <FormLabel>Location</FormLabel>
                 <HStack spacing={4}>
-                  <Select>
+                  <Select
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}>
                     <option value="option1">Option 1</option>
                     <option value="option2">Option 2</option>
                     <option value="option3">Option 3</option>
@@ -90,10 +134,10 @@ const CreateActivity = () => {
                   </Button>
                 </HStack>
               </FormControl>
-
               <Divider />
-
-              <Button colorScheme="orange">Submit</Button>
+              <Button type="submit" colorScheme="orange" onClick={handleSubmit}>
+                Submit
+              </Button>
             </VStack>
           </ModalBody>
           <ModalFooter />
@@ -103,4 +147,4 @@ const CreateActivity = () => {
   );
 };
 
-export default CreateActivity;
+export default AddActivity;
