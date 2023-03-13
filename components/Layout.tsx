@@ -5,7 +5,7 @@ import { Center, Flex } from "@chakra-ui/react";
 
 type LayoutProps = {
   pageTitle?: string;
-  children: ReactNode;
+  children?: ReactNode;
 };
 
 const Layout = ({ pageTitle = "Climbing App", children }: LayoutProps) => {
@@ -16,7 +16,7 @@ const Layout = ({ pageTitle = "Climbing App", children }: LayoutProps) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Flex as="main" flexDirection="column" minH="100vh" bg="gray.100">
+      <Flex as="main" flexDirection="column" minH="100vh">
         <Navbar />
         <Center flex={1}>{children}</Center>
       </Flex>
