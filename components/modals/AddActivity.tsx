@@ -24,11 +24,13 @@ import {
 } from "@chakra-ui/react";
 import { Calendar, MapPin } from "lucide-react";
 import NumberInput from "@/components/common/NumberInput";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
+import { database } from "@/lib/database";
+import { Database, TActivity, TLocation } from "@/types/database";
 
 const AddActivity = () => {
-  const supabase = useSupabaseClient();
+  const supabase = useSupabaseClient<Database>();
   const session = useSession();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -36,9 +38,19 @@ const AddActivity = () => {
   const [hours, setHours] = useState<string>("");
   const [minutes, setMinutes] = useState<string>("");
   const [location, setLocation] = useState<string>("");
+  const [locations, setLocations] = useState<TLocation["Row"][]>([]);
   const [date, setDate] = useState<string>("");
 
-  const getLocation = () => {
+  useEffect(() => {
+    fetchLocations();
+  }, [supabase]);
+
+  const fetchLocations = async () => {
+    const locations = await database.fetchLocations();
+    setLocations(locations);
+  };
+
+  const getNearestLocation = () => {
     setLocation("option3");
   };
 
@@ -52,10 +64,10 @@ const AddActivity = () => {
 
     const { error } = await supabase
       .from("Activity")
-      .insert({
+      .insert<TActivity["Insert"]>({
+        duration: durationInMinutes,
         user_id: session.user.id,
         activity_date: date,
-        duration: durationInMinutes,
       })
       .select()
       .single();
@@ -122,11 +134,13 @@ const AddActivity = () => {
                   <Select
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}>
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
+                    {locations.map((location) => (
+                      <option key={location.id} value={location.id}>
+                        {location.name}
+                      </option>
+                    ))}
                   </Select>
-                  <Button colorScheme="gray" onClick={getLocation}>
+                  <Button colorScheme="gray" onClick={getNearestLocation}>
                     <Flex px={4} alignItems="center">
                       <MapPin size={18} />
                       <Text px={1}>Get location</Text>
