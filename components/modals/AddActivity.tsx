@@ -63,7 +63,7 @@ const AddActivity = () => {
       Number.parseInt(hours) * 60 + Number.parseInt(minutes);
 
     const { error } = await supabase
-      .from("Activity")
+      .from("activities")
       .insert<TActivity["Insert"]>({
         duration: durationInMinutes,
         user_id: session.user.id,

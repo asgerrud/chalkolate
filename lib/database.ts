@@ -13,7 +13,7 @@ export const database = {
       .select("*");
 
     if (error) {
-      console.log(error);
+      console.error(error);
     }
 
     return Locations ?? [];
