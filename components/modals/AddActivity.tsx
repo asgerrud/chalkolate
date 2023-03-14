@@ -10,6 +10,10 @@ import {
 import { Button } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
 import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
   Divider,
   Flex,
   FormControl,
@@ -26,8 +30,9 @@ import { Calendar, MapPin } from "lucide-react";
 import NumberInput from "@/components/common/NumberInput";
 import { useEffect, useState } from "react";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "@/types/supabase";
+import { TActivity, TLocation } from "@/types/database";
 import { database } from "@/lib/database";
-import { Database, TActivity, TLocation } from "@/types/database";
 
 const AddActivity = () => {
   const supabase = useSupabaseClient<Database>();
@@ -39,7 +44,10 @@ const AddActivity = () => {
   const [minutes, setMinutes] = useState<string>("");
   const [location, setLocation] = useState<string>("");
   const [locations, setLocations] = useState<TLocation["Row"][]>([]);
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const [date, setDate] = useState<string>("");
+
+  const isInvalid = date === "";
 
   useEffect(() => {
     fetchLocations();
@@ -55,7 +63,7 @@ const AddActivity = () => {
   };
 
   const handleSubmit = async () => {
-    if (!session) {
+    if (!session || isInvalid) {
       return;
     }
 
@@ -73,7 +81,7 @@ const AddActivity = () => {
       .single();
 
     if (error) {
-      alert(error.message);
+      setErrorMessage(error.message);
     } else {
       onClose();
     }
@@ -94,7 +102,7 @@ const AddActivity = () => {
               justifyContent="flex-start"
               alignItems="stretch"
               spacing={6}>
-              <FormControl>
+              <FormControl isInvalid={isInvalid} isRequired>
                 <FormLabel>Activity date</FormLabel>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none">
@@ -149,6 +157,13 @@ const AddActivity = () => {
                 </HStack>
               </FormControl>
               <Divider />
+              {errorMessage && (
+                <Alert status="error">
+                  <AlertIcon />
+                  <AlertTitle>Error</AlertTitle>
+                  <AlertDescription>{errorMessage}</AlertDescription>
+                </Alert>
+              )}
               <Button type="submit" colorScheme="orange" onClick={handleSubmit}>
                 Submit
               </Button>
