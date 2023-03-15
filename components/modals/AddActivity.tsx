@@ -28,11 +28,11 @@ import {
 } from "@chakra-ui/react";
 import { Calendar, MapPin } from "lucide-react";
 import NumberInput from "@/components/common/NumberInput";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "@/types/supabase";
-import { TActivity, TLocation } from "@/types/database";
-import { database } from "@/lib/database";
+import { useLocations } from "@/hooks/useLocations";
+import { CreateActivity } from "@/types/database";
 
 const AddActivity = () => {
   const supabase = useSupabaseClient<Database>();
@@ -43,20 +43,11 @@ const AddActivity = () => {
   const [hours, setHours] = useState<string>("");
   const [minutes, setMinutes] = useState<string>("");
   const [location, setLocation] = useState<string>("");
-  const [locations, setLocations] = useState<TLocation["Row"][]>([]);
+  const { locations } = useLocations();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [date, setDate] = useState<string>("");
 
   const isInvalid = date === "";
-
-  useEffect(() => {
-    fetchLocations();
-  }, [supabase]);
-
-  const fetchLocations = async () => {
-    const locations = await database.fetchLocations();
-    setLocations(locations);
-  };
 
   const getNearestLocation = () => {
     setLocation("option3");
@@ -72,7 +63,7 @@ const AddActivity = () => {
 
     const { error } = await supabase
       .from("activities")
-      .insert<TActivity["Insert"]>({
+      .insert<CreateActivity>({
         duration: durationInMinutes,
         user_id: session.user.id,
         activity_date: date,
