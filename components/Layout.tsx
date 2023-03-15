@@ -5,7 +5,7 @@ import { Center, Flex } from "@chakra-ui/react";
 
 type LayoutProps = {
   pageTitle?: string;
-  children: ReactNode;
+  children?: ReactNode;
 };
 
 const Layout = ({ pageTitle = "Climbing App", children }: LayoutProps) => {

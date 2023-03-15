@@ -1,10 +1,15 @@
 import Layout from "@/components/Layout";
-import Link from "next/link";
+import ActivityList from "@/components/ActivityList";
+import { Card, CardBody } from "@chakra-ui/card";
 
 const ProfilePage = () => {
   return (
     <Layout>
-      <Link href="/">Home</Link>
+      <Card width="lg">
+        <CardBody>
+          <ActivityList />
+        </CardBody>
+      </Card>
     </Layout>
   );
 };
