@@ -14,6 +14,7 @@ import {
   AlertDescription,
   AlertIcon,
   AlertTitle,
+  Box,
   Divider,
   Flex,
   FormControl,
@@ -44,11 +45,13 @@ const AddActivity: FC<Props> = ({ locations, onAddActivity }) => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const today = new Date().toISOString().substring(0, 10);
+
   const [hours, setHours] = useState<string>("");
   const [minutes, setMinutes] = useState<string>("");
   const [location, setLocation] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [date, setDate] = useState<string>("");
+  const [date, setDate] = useState<string>(today);
 
   const isInvalid = date === "";
 
@@ -109,6 +112,9 @@ const AddActivity: FC<Props> = ({ locations, onAddActivity }) => {
                     onChange={(e) => setDate(e.target.value)}
                     isRequired
                   />
+                  <Box px={2}>
+                    <Button onClick={() => setDate(today)}>Today</Button>
+                  </Box>
                 </InputGroup>
               </FormControl>
               <FormControl>
