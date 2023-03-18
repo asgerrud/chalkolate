@@ -1,7 +1,7 @@
 import { Database } from "@/types/supabase";
 
-export type Location = Database["public"]["Tables"]["locations"]["Row"];
-export type CreateLocation =
+export type ClimbingLocation = Database["public"]["Tables"]["locations"]["Row"];
+export type CreateClimbingLocation =
   Database["public"]["Tables"]["locations"]["Insert"];
 
 export type Activity = Database["public"]["Tables"]["activities"]["Row"];

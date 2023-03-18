@@ -1,18 +1,21 @@
 import { HStack, List, ListItem, Text } from "@chakra-ui/react";
 import AddActivity from "@/components/modals/AddActivity";
-import { useActivities } from "@/hooks/useActivities";
-import { Activity } from "@/types/database";
+import { Activity, ClimbingLocation } from "@/types/database";
+import { FC } from "react";
 
-const ActivityList = () => {
-  const { activities } = useActivities();
+type Props = {
+  activities: Activity[];
+  locations: ClimbingLocation[];
+};
 
+const ActivityList: FC<Props> = ({ activities, locations }) => {
   const formatDate = (date: string): string => {
     return new Date(date).toLocaleDateString();
   };
 
   return (
     <>
-      <AddActivity />
+      <AddActivity locations={locations} />
       <List spacing={3}>
         <ListItem>Show list of activities</ListItem>
         {activities.map((activity: Activity) => {

@@ -28,13 +28,16 @@ import {
 } from "@chakra-ui/react";
 import { Calendar, MapPin } from "lucide-react";
 import NumberInput from "@/components/common/NumberInput";
-import { useState } from "react";
+import { FC, useState } from "react";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "@/types/supabase";
-import { useLocations } from "@/hooks/useLocations";
-import { CreateActivity } from "@/types/database";
+import { ClimbingLocation, CreateActivity } from "@/types/database";
 
-const AddActivity = () => {
+type Props = {
+  locations: ClimbingLocation[];
+};
+
+const AddActivity: FC<Props> = ({ locations }) => {
   const supabase = useSupabaseClient<Database>();
   const session = useSession();
 
@@ -43,7 +46,6 @@ const AddActivity = () => {
   const [hours, setHours] = useState<string>("");
   const [minutes, setMinutes] = useState<string>("");
   const [location, setLocation] = useState<string>("");
-  const { locations } = useLocations();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [date, setDate] = useState<string>("");
 
