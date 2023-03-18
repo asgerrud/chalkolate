@@ -15,7 +15,7 @@ const ProfilePage: FC<Props> = ({ activities, locations }) => {
     <Layout>
       <Card width="lg">
         <CardBody>
-          <ActivityList activities={activities} locations={locations} />
+          <ActivityList initialActivities={activities} locations={locations} />
         </CardBody>
       </Card>
     </Layout>

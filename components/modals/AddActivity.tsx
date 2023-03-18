@@ -31,13 +31,14 @@ import NumberInput from "@/components/common/NumberInput";
 import { FC, useState } from "react";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "@/types/supabase";
-import { ClimbingLocation, CreateActivity } from "@/types/database";
+import { Activity, ClimbingLocation, CreateActivity } from "@/types/database";
 
 type Props = {
   locations: ClimbingLocation[];
+  onAddActivity: (activity: Activity) => void;
 };
 
-const AddActivity: FC<Props> = ({ locations }) => {
+const AddActivity: FC<Props> = ({ locations, onAddActivity }) => {
   const supabase = useSupabaseClient<Database>();
   const session = useSession();
 
@@ -61,9 +62,9 @@ const AddActivity: FC<Props> = ({ locations }) => {
     }
 
     const durationInMinutes =
-      Number.parseInt(hours) * 60 + Number.parseInt(minutes);
+      Number.parseInt(hours ?? 0) * 60 + Number.parseInt(minutes ?? 0);
 
-    const { error } = await supabase
+    const { data: activity, error } = await supabase
       .from("activities")
       .insert<CreateActivity>({
         duration: durationInMinutes,
@@ -76,6 +77,7 @@ const AddActivity: FC<Props> = ({ locations }) => {
     if (error) {
       setErrorMessage(error.message);
     } else {
+      onAddActivity(activity);
       onClose();
     }
   };
