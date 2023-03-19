@@ -4,8 +4,9 @@ import { Card, CardBody } from "@chakra-ui/card";
 import { supabase } from "@/lib/supabase";
 import { Activity, ClimbingLocation } from "@/types/database";
 import { FC } from "react";
-import { getCurrentWeeklyStreak } from "@/utils/streak";
-import { Stat, StatHelpText, StatLabel, StatNumber } from "@chakra-ui/stat";
+import { getCurrentWeeklyStreak, getHighestWeeklyStreak } from "@/utils/streak";
+import { Stat, StatLabel, StatNumber } from "@chakra-ui/stat";
+import { Flex } from "@chakra-ui/react";
 
 type Props = {
   activities: Activity[];
@@ -17,15 +18,22 @@ const ProfilePage: FC<Props> = ({ activities, locations }) => {
     (activity: Activity) => new Date(activity.activity_date),
   );
   const currentWeeklyStreak: number = getCurrentWeeklyStreak(activityDates);
+  const highestWeeklyStreak: number = getHighestWeeklyStreak(activityDates);
 
   return (
     <Layout>
       <Card width="lg">
         <CardBody>
-          <Stat>
-            <StatLabel>Weekly streak</StatLabel>
-            <StatNumber>{currentWeeklyStreak}</StatNumber>
-          </Stat>
+          <Flex mb={4}>
+            <Stat>
+              <StatLabel>Current streak</StatLabel>
+              <StatNumber>{currentWeeklyStreak} weeks</StatNumber>
+            </Stat>
+            <Stat>
+              <StatLabel>Highest streak</StatLabel>
+              <StatNumber>{highestWeeklyStreak} weeks</StatNumber>
+            </Stat>
+          </Flex>
           <ActivityList initialActivities={activities} locations={locations} />
         </CardBody>
       </Card>

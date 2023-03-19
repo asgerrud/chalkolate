@@ -4,7 +4,7 @@ import {
   isDateInSameWeek,
 } from "@/utils/date";
 
-export const getCurrentWeeklyStreak = (dates: Date[]) => {
+export const getCurrentWeeklyStreak = (dates: Date[]): number => {
   if (!dates?.length) {
     return 0;
   }
@@ -24,4 +24,23 @@ export const getCurrentWeeklyStreak = (dates: Date[]) => {
     }
   }
   return streak;
+};
+
+export const getHighestWeeklyStreak = (dates: Date[]): number => {
+  if (!dates?.length) {
+    return 0;
+  }
+
+  let streak = 1;
+  let lastDate = dates[0];
+  let highestStreak = streak;
+  for (let date of dates) {
+    if (isDateInAdjacentWeek(date, lastDate)) {
+      highestStreak = ++streak;
+    } else if (!isDateInSameWeek(date, lastDate)) {
+      streak = 1;
+    }
+    lastDate = date;
+  }
+  return highestStreak;
 };

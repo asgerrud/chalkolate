@@ -45,10 +45,7 @@ const ActivityList: FC<Props> = ({ initialActivities, locations }) => {
   };
 
   const removeActivity = async (id: string) => {
-    const { data, error } = await supabase
-      .from("activities")
-      .delete()
-      .eq("id", id);
+    const { error } = await supabase.from("activities").delete().eq("id", id);
     if (error) {
       alert(error.message);
     }
@@ -73,14 +70,14 @@ const ActivityList: FC<Props> = ({ initialActivities, locations }) => {
               px={3}
               py={2}
               bg="gray.100">
-              <HStack w="100%" justifyContent="space-between">
+              <HStack spacing={4}>
                 <Text>{formatDate(activity.activity_date)}</Text>
                 {getLocationName(activity.location) && (
                   <Text>{getLocationName(activity.location)}</Text>
                 )}
-                <Text>{activity.duration}</Text>
               </HStack>
-              <Box ml={2}>
+              <HStack spacing={4}>
+                <Text>{activity.duration}</Text>
                 <Popover>
                   <PopoverTrigger>
                     <Button size="xs" variant="unstyled">
@@ -103,7 +100,7 @@ const ActivityList: FC<Props> = ({ initialActivities, locations }) => {
                     </PopoverBody>
                   </PopoverContent>
                 </Popover>
-              </Box>
+              </HStack>
             </Flex>
           );
         })}
