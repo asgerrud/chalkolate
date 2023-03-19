@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import BaseFormControl from "@/components/common/BaseFormControl";
 import {
   NumberDecrementStepper,
@@ -14,6 +14,7 @@ interface NumberInputProps extends NumberInputFieldProps {
   isRequired?: boolean;
   isError?: boolean;
   errorMessage?: string;
+  defaultValue?: string;
   min?: number;
   max?: number;
   onInputChange?: (string) => void;
@@ -25,11 +26,15 @@ const NumberInput: FC<NumberInputProps> = ({
   isError,
   errorMessage,
   onInputChange,
+  defaultValue,
   min,
   max,
   ...props
-}: NumberInputProps) => {
+}) => {
+  const [value, setValue] = useState<string>(defaultValue ?? "");
+
   const handleInputChange = (value: string) => {
+    setValue(value);
     if (onInputChange) {
       onInputChange(value);
     }
@@ -41,7 +46,11 @@ const NumberInput: FC<NumberInputProps> = ({
       isRequired={isRequired}
       isError={isError}
       errorMessage={errorMessage}>
-      <ChakraNumberInput onChange={handleInputChange} min={min} max={max}>
+      <ChakraNumberInput
+        value={value}
+        onChange={handleInputChange}
+        min={min}
+        max={max}>
         <NumberInputField {...props} />
         <NumberInputStepper>
           <NumberIncrementStepper />

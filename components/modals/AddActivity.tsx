@@ -33,6 +33,7 @@ import { FC, useState } from "react";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "@/types/supabase";
 import { Activity, ClimbingLocation, CreateActivity } from "@/types/database";
+import { getDistanceBetween } from "@/utils/geo";
 
 type Props = {
   locations: ClimbingLocation[];
@@ -48,7 +49,7 @@ const AddActivity: FC<Props> = ({ locations, onAddActivity }) => {
   const today = new Date().toISOString().substring(0, 10);
 
   const [hours, setHours] = useState<string>("");
-  const [minutes, setMinutes] = useState<string>("");
+  const [minutes, setMinutes] = useState<string>("00");
   const [location, setLocation] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [date, setDate] = useState<string>(today);
@@ -56,7 +57,33 @@ const AddActivity: FC<Props> = ({ locations, onAddActivity }) => {
   const isInvalid = date === "";
 
   const getNearestLocation = () => {
-    setLocation("option3");
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude } = position.coords;
+        const userCoords = { lat: latitude, lon: longitude };
+        const nearestLocation: ClimbingLocation = locations.reduce(
+          (a: ClimbingLocation, b: ClimbingLocation) => {
+            const distA = getDistanceBetween(userCoords, {
+              lat: a.latitude,
+              lon: a.longitude,
+            });
+            const distB = getDistanceBetween(userCoords, {
+              lat: b.latitude,
+              lon: b.longitude,
+            });
+            return distA < distB ? a : b;
+          },
+        );
+        setLocation(nearestLocation.id);
+      });
+    } else {
+      alert("An error occurred fetching your location");
+    }
+  };
+
+  const getDurationInMinutes = (): number => {
+    const hoursInMinutes = (Number.parseInt(hours) ?? 0) * 60;
+    return (Number.parseInt(minutes) ?? 0) + hoursInMinutes;
   };
 
   const handleSubmit = async () => {
@@ -64,13 +91,11 @@ const AddActivity: FC<Props> = ({ locations, onAddActivity }) => {
       return;
     }
 
-    const durationInMinutes =
-      Number.parseInt(hours ?? 0) * 60 + Number.parseInt(minutes ?? 0);
-
     const { data: activity, error } = await supabase
       .from("activities")
       .insert<CreateActivity>({
-        duration: durationInMinutes,
+        duration: getDurationInMinutes() || null,
+        location: location,
         user_id: session.user.id,
         activity_date: date,
       })
@@ -131,6 +156,7 @@ const AddActivity: FC<Props> = ({ locations, onAddActivity }) => {
                     w={28}
                     min={0}
                     max={59}
+                    defaultValue="00"
                     placeholder="Minutes"
                     onInputChange={(minutes) => setMinutes(minutes)}
                   />
@@ -152,7 +178,7 @@ const AddActivity: FC<Props> = ({ locations, onAddActivity }) => {
                   <Button colorScheme="gray" onClick={getNearestLocation}>
                     <Flex px={4} alignItems="center">
                       <MapPin size={18} />
-                      <Text px={1}>Get location</Text>
+                      <Text px={1}>Find nearest</Text>
                     </Flex>
                   </Button>
                 </HStack>

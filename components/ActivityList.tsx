@@ -28,11 +28,20 @@ type Props = {
 };
 
 const ActivityList: FC<Props> = ({ initialActivities, locations }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
   const [activities, setActivities] = useState<Activity[]>(initialActivities);
   const formatDate = (date: string): string => {
     return new Date(date).toLocaleDateString();
+  };
+
+  const getLocationName = (id: string): string => {
+    console.log(
+      id,
+      locations.map((location) => location.id),
+    );
+    const location = locations.find(
+      (location: ClimbingLocation) => location.id === id,
+    );
+    return location?.name || null;
   };
 
   const onAddActivity = (newActivity: Activity) => {
@@ -68,9 +77,11 @@ const ActivityList: FC<Props> = ({ initialActivities, locations }) => {
               px={3}
               py={2}
               bg="gray.100">
-              <HStack w="100%" justifyContent="space-between" spacing={2}>
+              <HStack w="100%" justifyContent="space-between">
                 <Text>{formatDate(activity.activity_date)}</Text>
-                <Text>{activity.location}</Text>
+                {getLocationName(activity.location) && (
+                  <Text>{getLocationName(activity.location)}</Text>
+                )}
                 <Text>{activity.duration}</Text>
               </HStack>
               <Box ml={2}>
