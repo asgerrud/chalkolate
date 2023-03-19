@@ -167,6 +167,7 @@ const AddActivity: FC<Props> = ({ locations, onAddActivity }) => {
                 <FormLabel>Location</FormLabel>
                 <HStack spacing={4}>
                   <Select
+                    placeholder="Select option"
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}>
                     {locations.map((location) => (

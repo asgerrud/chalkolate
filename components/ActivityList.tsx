@@ -34,10 +34,6 @@ const ActivityList: FC<Props> = ({ initialActivities, locations }) => {
   };
 
   const getLocationName = (id: string): string => {
-    console.log(
-      id,
-      locations.map((location) => location.id),
-    );
     const location = locations.find(
       (location: ClimbingLocation) => location.id === id,
     );
