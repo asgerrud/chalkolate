@@ -1,23 +1,24 @@
-import { extendTheme } from "@chakra-ui/react";
+import { extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
 
-const extendedTheme = extendTheme({
-  colors: {
-    white: "#FFFFFF",
-    primary: {
-      500: "#E4447C",
-      700: "#933D65",
-      800: "#3D3049",
+const extendedTheme = extendTheme(
+  {
+    colors: {
+      primary: {
+        500: "#20b887",
+      },
+      white: "#FFFFFF",
+      background: "#f7f7f7",
+      lightGreen: "#e0eeee",
+      black: "#1e293a",
     },
-    gray: {
-      500: "#363A4F",
-      600: "#2B2E42",
-      800: "#191C2D",
+    config: {
+      initialColorMode: "light",
+      useSystemColorMode: false,
     },
   },
-  config: {
-    initialColorMode: "dark",
-    useSystemColorMode: false,
-  },
-});
+  withDefaultColorScheme({
+    colorScheme: "primary",
+  }),
+);
 
 export default extendedTheme;

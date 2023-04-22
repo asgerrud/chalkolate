@@ -112,7 +112,7 @@ const AddActivity: FC<Props> = ({ locations, onAddActivity }) => {
 
   return (
     <>
-      <Button mb={4} onClick={onOpen}>
+      <Button colorScheme="primary" mb={4} onClick={onOpen}>
         Add activity
       </Button>
       <Modal size="lg" isOpen={isOpen} onClose={onClose} isCentered>
@@ -192,7 +192,10 @@ const AddActivity: FC<Props> = ({ locations, onAddActivity }) => {
                   <AlertDescription>{errorMessage}</AlertDescription>
                 </Alert>
               )}
-              <Button type="submit" colorScheme="orange" onClick={handleSubmit}>
+              <Button
+                type="submit"
+                colorScheme="primary"
+                onClick={handleSubmit}>
                 Submit
               </Button>
             </VStack>

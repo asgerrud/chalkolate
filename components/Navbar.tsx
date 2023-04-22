@@ -5,6 +5,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Text,
 } from "@chakra-ui/react";
 import { Button } from "@chakra-ui/button";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
@@ -19,10 +20,13 @@ const Navbar = () => {
   return (
     <Box py={4} px={8}>
       <HStack justifyContent="space-between">
-        <a href="/">Home</a>
+        <Link href="/">Home</Link>
         {session ? (
           <Menu>
-            <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+            <MenuButton
+              as={Button}
+              variant="ghost"
+              rightIcon={<ChevronDownIcon />}>
               Profile
             </MenuButton>
             <MenuList>
