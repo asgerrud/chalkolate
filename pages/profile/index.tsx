@@ -1,5 +1,5 @@
 import Layout from "@/components/Layout";
-import ActivityList from "@/components/ActivityList";
+import ActivityList from "@/components/ActivityList/ActivityList";
 import { Card, CardBody } from "@chakra-ui/card";
 import { supabase } from "@/lib/supabase";
 import { Activity, ClimbingLocation } from "@/types/database";
@@ -11,28 +11,33 @@ import { Flex } from "@chakra-ui/react";
 type Props = {
   activities: Activity[];
   locations: ClimbingLocation[];
+  currentWeeklyStreak: number;
+  highestWeeklyStreak: number;
 };
 
-const ProfilePage: FC<Props> = ({ activities, locations }) => {
-  const activityDates = activities.map(
-    (activity: Activity) => new Date(activity.activity_date),
-  );
-  const currentWeeklyStreak: number = getCurrentWeeklyStreak(activityDates);
-  const highestWeeklyStreak: number = getHighestWeeklyStreak(activityDates);
-
+const ProfilePage: FC<Props> = ({
+  activities,
+  locations,
+  currentWeeklyStreak,
+  highestWeeklyStreak,
+}) => {
   return (
     <Layout>
       <Card width="lg">
         <CardBody>
           <Flex mb={4}>
-            <Stat>
-              <StatLabel>Current streak</StatLabel>
-              <StatNumber>{currentWeeklyStreak} weeks</StatNumber>
-            </Stat>
-            <Stat>
-              <StatLabel>Highest streak</StatLabel>
-              <StatNumber>{highestWeeklyStreak} weeks</StatNumber>
-            </Stat>
+            {currentWeeklyStreak != null && (
+              <Stat>
+                <StatLabel>Current streak</StatLabel>
+                <StatNumber>{currentWeeklyStreak} weeks</StatNumber>
+              </Stat>
+            )}
+            {highestWeeklyStreak != null && (
+              <Stat>
+                <StatLabel>Highest streak</StatLabel>
+                <StatNumber>{highestWeeklyStreak} weeks</StatNumber>
+              </Stat>
+            )}
           </Flex>
           <ActivityList initialActivities={activities} locations={locations} />
         </CardBody>
@@ -48,12 +53,20 @@ export async function getStaticProps() {
     .select("*")
     .order("activity_date", { ascending: false });
 
-  const props = {
-    locations: locations || [],
-    activities: activities || [],
-  };
+  const activityDates = activities.map(
+    (activity: Activity) => new Date(activity.activity_date),
+  );
+  const currentWeeklyStreak: number = getCurrentWeeklyStreak(activityDates);
+  const highestWeeklyStreak: number = getHighestWeeklyStreak(activityDates);
 
-  return { props };
+  return {
+    props: {
+      locations: locations || [],
+      activities: activities || [],
+      currentWeeklyStreak,
+      highestWeeklyStreak,
+    },
+  };
 }
 
 export default ProfilePage;
