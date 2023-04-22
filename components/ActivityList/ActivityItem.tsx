@@ -1,20 +1,9 @@
-import {
-  Button,
-  Flex,
-  HStack,
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverHeader,
-  PopoverTrigger,
-  Text
-} from "@chakra-ui/react";
-import { Activity, ClimbingLocation } from "@/types/database";
-import { FC } from "react";
 import { useHydrationSafeDate } from "@/hooks/use-hydration-safe-date";
-import { X } from "lucide-react";
+import { Activity, ClimbingLocation } from "@/types/database";
+import { EDialogType } from "@/types/enums/EDialogType";
+import { Flex, HStack, Text } from "@chakra-ui/react";
+import { FC } from "react";
+import { ConfirmDialog } from "../common/dialogs/ConfirmDialog";
 
 type Props = {
   activity: Activity;
@@ -42,26 +31,12 @@ export const ActivityItem: FC<Props> = ({ activity, locations, onRemoveActivity 
       </HStack>
       <HStack spacing={4}>
         <Text>{activity.duration}</Text>
-        <Popover>
-          <PopoverTrigger>
-            <Button size="xs" variant="unstyled">
-              <X></X>
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent>
-            <PopoverArrow />
-            <PopoverCloseButton />
-            <PopoverHeader>Delete activity</PopoverHeader>
-            <PopoverBody>
-              Are you sure you want to delete the activity?
-              <Flex justifyContent="flex-end">
-                <Button colorScheme="red" onClick={() => removeActivity()}>
-                  Delete
-                </Button>
-              </Flex>
-            </PopoverBody>
-          </PopoverContent>
-        </Popover>
+        <ConfirmDialog
+          type={EDialogType.DELETE}
+          heading="Delete activity"
+          description="Are you sure you want to delete the activity?"
+          onConfirm={removeActivity}
+        />
       </HStack>
     </Flex>
   );
