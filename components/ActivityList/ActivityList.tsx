@@ -1,6 +1,7 @@
 import AddActivity from "@/components/modals/AddActivity";
 import { supabase } from "@/lib/supabase";
 import { Activity, ClimbingLocation } from "@/types/database";
+import { compareDates } from "@/utils/date";
 import { List, ListItem } from "@chakra-ui/react";
 import { FC, useState } from "react";
 import { ActivityItem } from "./ActivityItem";
@@ -14,7 +15,7 @@ const ActivityList: FC<Props> = ({ initialActivities, locations }) => {
   const [activities, setActivities] = useState<Activity[]>(initialActivities);
 
   const onAddActivity = (newActivity: Activity) => {
-    setActivities([...activities, newActivity]);
+    setActivities([...activities, newActivity].sort((a, b) => compareDates(b.activity_date, a.activity_date)));
   };
 
   const removeActivity = async (id: string) => {

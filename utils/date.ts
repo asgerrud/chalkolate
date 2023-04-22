@@ -29,13 +29,15 @@ export const isDateInSameWeek = (a: Date, b: Date): boolean => {
 
 export const isDateInAdjacentWeek = (a: Date, b: Date): boolean => {
   setBeginningOfWeek([a, b]);
-  return (
-    hoursBetweenDates(a, b) > 0 && hoursBetweenDates(a, b) <= WEEK_IN_HOURS
-  );
+  return hoursBetweenDates(a, b) > 0 && hoursBetweenDates(a, b) <= WEEK_IN_HOURS;
 };
 
 export const getTodaysDate = (): Date => {
   const today: Date = new Date();
   today.setUTCHours(0, 0, 0, 0);
   return new Date(today.toISOString());
+};
+
+export const compareDates = (a: string, b: string) => {
+  return Date.parse(a) - Date.parse(b);
 };
