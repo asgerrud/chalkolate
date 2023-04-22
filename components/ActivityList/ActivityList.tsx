@@ -12,15 +12,18 @@ import {
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
+  Skeleton,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import AddActivity from "@/components/modals/AddActivity";
 import { Activity, ClimbingLocation } from "@/types/database";
-import { FC, useState } from "react";
+import { FC, Suspense, useState } from "react";
 import { Button } from "@chakra-ui/button";
 import { X } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { useHydrationSafeDate } from "../../hooks/use-hydration-safe-date";
+import { ActivityItem } from "./ActivityItem";
 
 type Props = {
   initialActivities: Activity[];
@@ -29,16 +32,6 @@ type Props = {
 
 const ActivityList: FC<Props> = ({ initialActivities, locations }) => {
   const [activities, setActivities] = useState<Activity[]>(initialActivities);
-  const formatDate = (date: string): string => {
-    return new Date(date).toLocaleDateString();
-  };
-
-  const getLocationName = (id: string): string => {
-    const location = locations.find(
-      (location: ClimbingLocation) => location.id === id,
-    );
-    return location?.name || null;
-  };
 
   const onAddActivity = (newActivity: Activity) => {
     setActivities([...activities, newActivity]);
@@ -71,10 +64,7 @@ const ActivityList: FC<Props> = ({ initialActivities, locations }) => {
               py={2}
               bg="gray.100">
               <HStack spacing={4}>
-                <Text>{formatDate(activity.activity_date)}</Text>
-                {getLocationName(activity.location) && (
-                  <Text>{getLocationName(activity.location)}</Text>
-                )}
+                <ActivityItem activity={activity} locations={locations} />
               </HStack>
               <HStack spacing={4}>
                 <Text>{activity.duration}</Text>
