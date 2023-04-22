@@ -35,7 +35,7 @@ export const ActivityItem: FC<Props> = ({ activity, locations, onRemoveActivity 
   };
 
   return (
-    <Flex key={activity.id} w="100%" justifyContent="space-between" alignItems="center" px={3} py={2} bg="gray.100">
+    <Flex key={activity.id} w="100%" justifyContent="space-between" alignItems="center" px={3} py={2} bg="lightGreen">
       <HStack spacing={4}>
         <Text>{formattedDate}</Text>
         {getLocationName(activity.location) && <Text>{getLocationName(activity.location)}</Text>}

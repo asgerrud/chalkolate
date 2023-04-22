@@ -5,7 +5,7 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay,
+  ModalOverlay
 } from "@chakra-ui/modal";
 import { Button } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
@@ -25,11 +25,11 @@ import {
   InputLeftElement,
   Select,
   Text,
-  VStack,
+  VStack
 } from "@chakra-ui/react";
 import { Calendar, MapPin } from "lucide-react";
 import NumberInput from "@/components/common/NumberInput";
-import { ChangeEvent, FC, useState } from "react";
+import { FC, useState } from "react";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "@/types/supabase";
 import { Activity, ClimbingLocation, CreateActivity } from "@/types/database";
@@ -61,19 +61,17 @@ const AddActivity: FC<Props> = ({ locations, onAddActivity }) => {
       navigator.geolocation.getCurrentPosition((position) => {
         const { latitude, longitude } = position.coords;
         const userCoords = { lat: latitude, lon: longitude };
-        const nearestLocation: ClimbingLocation = locations.reduce(
-          (a: ClimbingLocation, b: ClimbingLocation) => {
-            const distA = getDistanceBetween(userCoords, {
-              lat: a.latitude,
-              lon: a.longitude,
-            });
-            const distB = getDistanceBetween(userCoords, {
-              lat: b.latitude,
-              lon: b.longitude,
-            });
-            return distA < distB ? a : b;
-          },
-        );
+        const nearestLocation: ClimbingLocation = locations.reduce((a: ClimbingLocation, b: ClimbingLocation) => {
+          const distA = getDistanceBetween(userCoords, {
+            lat: a.latitude,
+            lon: a.longitude
+          });
+          const distB = getDistanceBetween(userCoords, {
+            lat: b.latitude,
+            lon: b.longitude
+          });
+          return distA < distB ? a : b;
+        });
         setLocation(nearestLocation.id);
       });
     } else {
@@ -97,7 +95,7 @@ const AddActivity: FC<Props> = ({ locations, onAddActivity }) => {
         duration: getDurationInMinutes() || null,
         location: location || null,
         user_id: session.user.id,
-        activity_date: date,
+        activity_date: date
       })
       .select()
       .single();
@@ -121,22 +119,14 @@ const AddActivity: FC<Props> = ({ locations, onAddActivity }) => {
           <ModalHeader>Add activity</ModalHeader>
           <ModalCloseButton></ModalCloseButton>
           <ModalBody>
-            <VStack
-              justifyContent="flex-start"
-              alignItems="stretch"
-              spacing={6}>
+            <VStack justifyContent="flex-start" alignItems="stretch" spacing={6}>
               <FormControl isInvalid={isInvalid} isRequired>
                 <FormLabel>Activity date</FormLabel>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none">
                     <Calendar size={18} />
                   </InputLeftElement>
-                  <Input
-                    type="date"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                    isRequired
-                  />
+                  <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} isRequired />
                   <Box px={2}>
                     <Button onClick={() => setDate(today)}>Today</Button>
                   </Box>
@@ -145,12 +135,7 @@ const AddActivity: FC<Props> = ({ locations, onAddActivity }) => {
               <FormControl>
                 <FormLabel>Duration</FormLabel>
                 <HStack>
-                  <NumberInput
-                    w={28}
-                    min={0}
-                    placeholder="Hours"
-                    onInputChange={(hours) => setHours(hours)}
-                  />
+                  <NumberInput w={28} min={0} placeholder="Hours" onInputChange={(hours) => setHours(hours)} />
                   <span>:</span>
                   <NumberInput
                     w={28}
@@ -166,10 +151,7 @@ const AddActivity: FC<Props> = ({ locations, onAddActivity }) => {
               <FormControl>
                 <FormLabel>Location</FormLabel>
                 <HStack spacing={4}>
-                  <Select
-                    placeholder="Select option"
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}>
+                  <Select placeholder="Select option" value={location} onChange={(e) => setLocation(e.target.value)}>
                     {locations.map((location) => (
                       <option key={location.id} value={location.id}>
                         {location.name}
@@ -192,10 +174,7 @@ const AddActivity: FC<Props> = ({ locations, onAddActivity }) => {
                   <AlertDescription>{errorMessage}</AlertDescription>
                 </Alert>
               )}
-              <Button
-                type="submit"
-                colorScheme="primary"
-                onClick={handleSubmit}>
+              <Button type="submit" colorScheme="primary" onClick={handleSubmit}>
                 Submit
               </Button>
             </VStack>

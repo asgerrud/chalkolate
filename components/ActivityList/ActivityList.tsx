@@ -32,7 +32,14 @@ const ActivityList: FC<Props> = ({ initialActivities, locations }) => {
       <List spacing={3}>
         <ListItem>Show list of activities</ListItem>
         {activities.map((activity: Activity) => {
-          return <ActivityItem key={activity.id} activity={activity} locations={locations} onRemoveActivity={removeActivity} />;
+          return (
+            <ActivityItem
+              key={activity.id}
+              activity={activity}
+              locations={locations}
+              onRemoveActivity={removeActivity}
+            />
+          );
         })}
       </List>
     </>

@@ -1,12 +1,4 @@
-import {
-  Box,
-  HStack,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Text,
-} from "@chakra-ui/react";
+import { Box, HStack, Menu, MenuButton, MenuItem, MenuList, Text } from "@chakra-ui/react";
 import { Button } from "@chakra-ui/button";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
@@ -23,19 +15,14 @@ const Navbar = () => {
         <Link href="/">Home</Link>
         {session ? (
           <Menu>
-            <MenuButton
-              as={Button}
-              variant="ghost"
-              rightIcon={<ChevronDownIcon />}>
+            <MenuButton as={Button} variant="ghost" rightIcon={<ChevronDownIcon />}>
               Profile
             </MenuButton>
             <MenuList>
               <MenuItem as={Link} href={EPageRoute.PROFILE}>
                 View Profile
               </MenuItem>
-              <MenuItem onClick={() => supabase.auth.signOut()}>
-                Sign out
-              </MenuItem>
+              <MenuItem onClick={() => supabase.auth.signOut()}>Sign out</MenuItem>
             </MenuList>
           </Menu>
         ) : (

@@ -6,7 +6,7 @@ import {
   NumberInput as ChakraNumberInput,
   NumberInputField,
   NumberInputFieldProps,
-  NumberInputStepper,
+  NumberInputStepper
 } from "@chakra-ui/react";
 
 interface NumberInputProps extends NumberInputFieldProps {
@@ -41,16 +41,8 @@ const NumberInput: FC<NumberInputProps> = ({
   };
 
   return (
-    <BaseFormControl
-      label={label}
-      isRequired={isRequired}
-      isError={isError}
-      errorMessage={errorMessage}>
-      <ChakraNumberInput
-        value={value}
-        onChange={handleInputChange}
-        min={min}
-        max={max}>
+    <BaseFormControl label={label} isRequired={isRequired} isError={isError} errorMessage={errorMessage}>
+      <ChakraNumberInput value={value} onChange={handleInputChange} min={min} max={max}>
         <NumberInputField {...props} />
         <NumberInputStepper>
           <NumberIncrementStepper />

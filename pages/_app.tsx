@@ -5,20 +5,13 @@ import { AppProps } from "next/app";
 import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import extendedTheme from "@/theme";
 
-export default function App({
-  Component,
-  pageProps,
-}: AppProps<{ initialSession: Session }>) {
+export default function App({ Component, pageProps }: AppProps<{ initialSession: Session }>) {
   // Create a new supabase browser client on every first render.
   const [supabaseClient] = useState(() => createBrowserSupabaseClient());
 
   return (
-    <SessionContextProvider
-      supabaseClient={supabaseClient}
-      initialSession={pageProps.initialSession}>
-      <ColorModeScript
-        initialColorMode={extendedTheme.config.initialColorMode}
-      />
+    <SessionContextProvider supabaseClient={supabaseClient} initialSession={pageProps.initialSession}>
+      <ColorModeScript initialColorMode={extendedTheme.config.initialColorMode} />
       <ChakraProvider theme={extendedTheme}>
         <Component {...pageProps} />
       </ChakraProvider>
