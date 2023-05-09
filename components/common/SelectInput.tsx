@@ -4,16 +4,15 @@ import BaseFormControl from "@/components/common/BaseFormControl";
 import { Row, TABLE_NAME } from "@/types/database";
 
 type Props = {
+  label?: string;
+  nameColumn: string;
   options: Row<TABLE_NAME>[];
-  labelColumn: string;
-  label: string;
   isRequired?: boolean;
+  placeholder?: string;
   onSelect: (string) => void;
 };
-const SelectInput: FC<Props> = ({ label, labelColumn, options, isRequired, onSelect }) => {
-  const [value, setValue] = useState<string>("");
-
-  const isError = value.length === 0;
+const SelectInput: FC<Props> = ({ label, nameColumn, options, isRequired, placeholder, onSelect }) => {
+  const [value, setValue] = useState(placeholder || options?.[0]?.id);
 
   const handleSelect = (value: string) => {
     setValue(value);
@@ -21,12 +20,12 @@ const SelectInput: FC<Props> = ({ label, labelColumn, options, isRequired, onSel
   };
 
   return (
-    <BaseFormControl label={label} isError={isError} isRequired={isRequired}>
-      <Select value={value} onChange={(e) => handleSelect(e.target.value)}>
-        <option value="">Select grade</option>
+    <BaseFormControl label={label} isError={!value} isRequired={isRequired}>
+      <Select variant="filled" value={value} onChange={(e) => handleSelect(e.target.value)}>
+        {placeholder && <option value="">{placeholder}</option>}
         {options?.map((option) => (
           <option key={option.id} value={option.id}>
-            {option[labelColumn]}
+            {option[nameColumn]}
           </option>
         ))}
       </Select>
