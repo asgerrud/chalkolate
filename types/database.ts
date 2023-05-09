@@ -11,6 +11,8 @@ export type Activity = Row<"activities">;
 export type Challenge = Row<"challenge">;
 export type Grade = Row<"grade">;
 export type ClimbingLocation = Row<"locations">;
+export type ClimbingZone = Row<"climbing_zone">;
+export type Technique = Row<"technique">;
 
 export type CreateClimbingLocation = Insert<"locations">;
 export type CreateActivity = Insert<"activities">;
