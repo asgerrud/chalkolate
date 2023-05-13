@@ -1,13 +1,16 @@
-import { Grade, Row } from "@/types/database";
+import { Grade } from "@/types/database";
 import { Card, CardBody, CardHeader, Flex, Heading, SimpleGrid } from "@chakra-ui/react";
-import { FC, useState } from "react";
+import { Dispatch, FC, ReactNode, SetStateAction, useState } from "react";
+
+type gradeId = Grade["id"];
 
 type Props = {
   grades: Grade[];
-  onGradeSelect: (gradeId: string) => void;
+  setGrade: Dispatch<SetStateAction<gradeId>>;
+  children?: ReactNode;
 };
 
-const GradeSelect: FC<Props> = ({ grades, onGradeSelect }) => {
+const GradeSelect: FC<Props> = ({ grades, setGrade: onGradeSelect, children }) => {
   const [selectedGrade, setSelectedGrade] = useState<Grade>(null);
 
   const isActiveColor = (grade: Grade): boolean => {
@@ -50,6 +53,7 @@ const GradeSelect: FC<Props> = ({ grades, onGradeSelect }) => {
             />
           ))}
         </SimpleGrid>
+        {children}
       </CardBody>
     </Card>
   );

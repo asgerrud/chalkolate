@@ -17,9 +17,17 @@ import { FC, useEffect, useState } from "react";
 import { ClimbingLocation, ClimbingZone, CreateChallenge, Grade, Technique } from "@/types/database";
 import { ModalFooter } from "@chakra-ui/modal";
 import GradeSelect from "./GradeSelect";
-import LocationAndZoneSelect from "./LocationAndZoneSelect";
+import LocationClimbingZoneSelect from "./LocationClimbingZoneSelect";
 import DateSelect from "./DateSelect";
 import TechniqueSelect from "./TechniqueSelect";
+import ErrorText from "../common/ErrorText";
+
+type FormErrors = {
+  startDate?: string;
+  grade?: string;
+  location?: string;
+  climbingZone?: string;
+};
 
 type Props = {
   locations: ClimbingLocation[];
@@ -39,28 +47,36 @@ const AddChallenge: FC<Props> = ({ locations, climbingZones, techniques, grades 
   const [climbingZone, setClimbingZone] = useState<string>(null);
   const [selectedTechniques, setSelectedTechniques] = useState<string[]>([]);
 
-  const [errorMessages, setErrorMessages] = useState<string[]>([]);
+  const [errorMessages, setErrorMessages] = useState<FormErrors>({});
 
   const validateForm = (): boolean => {
-    const errorMessages = [];
+    const errors: FormErrors = {};
+
     if (!startDate) {
-      errorMessages.push("Start date is required");
+      errors.startDate = "Start date is required";
     }
 
     if (!grade) {
-      errorMessages.push("Grade is required");
+      errors.grade = "Grade is required";
     }
 
     if (!location) {
-      errorMessages.push("Location is required");
+      errors.location = "Location is required";
     }
 
     if (!climbingZone) {
-      errorMessages.push("Climbing zone is required");
+      errors.climbingZone = "Climbing zone is required";
     }
 
-    setErrorMessages(errorMessages);
-    return errorMessages.length === 0;
+    const hasErrors: boolean = Object.keys(errors).length > 0;
+
+    if (hasErrors) {
+      setErrorMessages(errors);
+    } else {
+      setErrorMessages({});
+    }
+
+    return hasErrors;
   };
 
   const submitForm = () => {
@@ -91,33 +107,28 @@ const AddChallenge: FC<Props> = ({ locations, climbingZones, techniques, grades 
           <ModalCloseButton />
           <ModalBody>
             <Stack spacing={4}>
-              <DateSelect label="Select start day" defaultValue={today} onDateChange={(date) => setStartDate(date)} />
-              <GradeSelect grades={grades} onGradeSelect={(grade) => setGrade(grade)} />
-              <LocationAndZoneSelect
+              <DateSelect label="Select start day" defaultValue={today} setDate={(date) => setStartDate(date)}>
+                {errorMessages.startDate && <Text variant="error">{errorMessages.startDate}</Text>}
+              </DateSelect>
+              <GradeSelect grades={grades} setGrade={(grade) => setGrade(grade)}>
+                {errorMessages.grade && <Text variant="error">{errorMessages.grade}</Text>}
+              </GradeSelect>
+              <LocationClimbingZoneSelect
                 defaultLocation={locations[0]}
                 locations={locations}
                 climbingZones={climbingZones}
-                onLocationSelect={(location) => setLocation(location)}
-                onClimbingZoneSelect={(climbingZone) => setClimbingZone(climbingZone)}
-              />
-              <TechniqueSelect
-                techniques={techniques}
-                onSelectedChange={(techniques) => setSelectedTechniques(techniques)}
-              />
+                setLocation={(location) => setLocation(location)}
+                setClimbingZone={setClimbingZone}>
+                {errorMessages.location && <Text variant="error">{errorMessages.location}</Text>}
+                {errorMessages.climbingZone && <Text variant="error">{errorMessages.climbingZone}</Text>}
+              </LocationClimbingZoneSelect>
+              <TechniqueSelect techniques={techniques} setSelectedTechniques={setSelectedTechniques} />
             </Stack>
           </ModalBody>
           <ModalFooter>
-            <Flex w="100%" direction="column">
-              {errorMessages?.map((message, index) => (
-                <Alert key={index} status="error" mb={2}>
-                  <AlertIcon />
-                  <Text>{message}</Text>
-                </Alert>
-              ))}
-              <Button colorScheme="green" w="100%" onClick={() => submitForm()}>
-                Add challenge
-              </Button>
-            </Flex>
+            <Button colorScheme="green" w="100%" onClick={() => submitForm()}>
+              Add challenge
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

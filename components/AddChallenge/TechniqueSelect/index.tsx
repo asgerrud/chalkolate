@@ -1,13 +1,13 @@
 import { Technique } from "@/types/database";
 import { Card, CardHeader, CardBody, Stack, Checkbox, Heading } from "@chakra-ui/react";
-import { FC, useState } from "react";
+import { Dispatch, FC, ReactNode, SetStateAction, useState } from "react";
 
 type Props = {
   techniques: Technique[];
-  onSelectedChange: (techniques: string[]) => void;
+  setSelectedTechniques: Dispatch<SetStateAction<string[]>>;
 };
 
-const TechniqueSelect: FC<Props> = ({ techniques, onSelectedChange }) => {
+const TechniqueSelect: FC<Props> = ({ techniques, setSelectedTechniques: onSelectedChange }) => {
   const [techniquesSelectedList, setTechniquesSelectedList] = useState<boolean[]>(
     new Array(techniques.length).fill(false)
   );
@@ -17,7 +17,7 @@ const TechniqueSelect: FC<Props> = ({ techniques, onSelectedChange }) => {
     setTechniquesSelectedList([...techniquesSelectedList]);
     const selectedTechniques = techniques
       .filter((technique: Technique, index: number) => techniquesSelectedList[index])
-      .map((technique: Technique) => technique.name);
+      .map((technique: Technique) => technique.name.toLowerCase());
     onSelectedChange(selectedTechniques);
   }
 

@@ -1,13 +1,14 @@
 import { Card, CardHeader, CardBody, Input, Heading } from "@chakra-ui/react";
-import { FC, useState } from "react";
+import { Dispatch, FC, ReactNode, SetStateAction, useState } from "react";
 
 type Props = {
   label: string;
   defaultValue: string;
-  onDateChange: (date: string) => void;
+  setDate: Dispatch<SetStateAction<string>>;
+  children?: ReactNode;
 };
 
-const DateSelect: FC<Props> = ({ label, defaultValue, onDateChange }) => {
+const DateSelect: FC<Props> = ({ label, defaultValue, children, setDate: onDateChange }) => {
   const [date, setDate] = useState<string>(defaultValue);
 
   function handleDateSelect(date: string) {
@@ -22,6 +23,7 @@ const DateSelect: FC<Props> = ({ label, defaultValue, onDateChange }) => {
       </CardHeader>
       <CardBody pt={0}>
         <Input size="md" type="date" value={date} onChange={(e) => handleDateSelect(e.target.value)} />
+        {children}
       </CardBody>
     </Card>
   );

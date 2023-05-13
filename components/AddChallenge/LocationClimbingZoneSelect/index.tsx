@@ -1,22 +1,27 @@
 import SelectInput from "@/components/common/SelectInput";
 import { ClimbingLocation, ClimbingZone } from "@/types/database";
 import { Card, CardHeader, CardBody, Divider, Heading, Text } from "@chakra-ui/react";
-import { FC, useEffect, useState } from "react";
+import { Dispatch, FC, ReactNode, SetStateAction, useState } from "react";
+
+type locationId = ClimbingLocation["id"];
+type climbingZoneId = ClimbingZone["id"];
 
 type Props = {
   defaultLocation: ClimbingLocation;
   locations: ClimbingLocation[];
   climbingZones: ClimbingZone[];
-  onLocationSelect: (locationId: string) => void;
-  onClimbingZoneSelect: (climbingZoneId: string) => void;
+  setLocation: Dispatch<SetStateAction<locationId>>;
+  setClimbingZone: Dispatch<SetStateAction<climbingZoneId>>;
+  children?: ReactNode;
 };
 
-const LocationAndZoneSelect: FC<Props> = ({
+const LocationClimbingZoneSelect: FC<Props> = ({
   defaultLocation,
   locations,
   climbingZones,
-  onLocationSelect,
-  onClimbingZoneSelect
+  setLocation: onLocationSelect,
+  setClimbingZone: onClimbingZoneSelect,
+  children
 }) => {
   const defaultClimbingZones = getClimbingZonesByLocation(defaultLocation.id) ?? [];
 
@@ -59,9 +64,10 @@ const LocationAndZoneSelect: FC<Props> = ({
         ) : (
           <Text color="gray.700">No climbing zones were found for this location</Text>
         )}
+        {children}
       </CardBody>
     </Card>
   );
 };
 
-export default LocationAndZoneSelect;
+export default LocationClimbingZoneSelect;
