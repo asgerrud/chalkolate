@@ -141,6 +141,7 @@ const AddActivity: FC<AddActivityProps> = ({ locations, onAddActivity }) => {
                     w={28}
                     min={0}
                     max={59}
+                    step={15}
                     defaultValue="00"
                     placeholder="Minutes"
                     onInputChange={(minutes) => setMinutes(minutes)}
