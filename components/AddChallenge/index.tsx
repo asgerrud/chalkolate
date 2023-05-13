@@ -22,6 +22,7 @@ import SelectInput from "../common/SelectInput";
 import { ModalFooter } from "@chakra-ui/modal";
 import { CardBody } from "@chakra-ui/card";
 import { Camera } from "lucide-react";
+import GradeSelect from "./GradeSelect";
 
 type Props = {
   locations: ClimbingLocation[];
@@ -78,13 +79,7 @@ const AddChallenge: FC<Props> = ({ locations, climbingZones, techniques, grades 
                   <Heading size="md">Grade</Heading>
                 </CardHeader>
                 <CardBody pt={0}>
-                  <SelectInput
-                    placeholder="Select grade"
-                    nameColumn="name"
-                    options={grades}
-                    isRequired={true}
-                    onSelect={(grade) => setGrade(grade)}
-                  />
+                  <GradeSelect grades={grades} onGradeSelect={(grade) => setGrade(grade)} />
                 </CardBody>
               </Card>
 
