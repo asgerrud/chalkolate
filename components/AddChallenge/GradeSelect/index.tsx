@@ -1,5 +1,5 @@
 import { Grade, Row } from "@/types/database";
-import { Flex, SimpleGrid } from "@chakra-ui/react";
+import { Card, CardBody, CardHeader, Flex, Heading, SimpleGrid } from "@chakra-ui/react";
 import { FC, useState } from "react";
 
 type Props = {
@@ -33,18 +33,25 @@ const GradeSelect: FC<Props> = ({ grades, onGradeSelect }) => {
   };
 
   return (
-    <SimpleGrid minChildWidth="120px" spacing={2} mb={4}>
-      {grades.map((grade: Grade) => (
-        <Flex
-          key={grade.id}
-          h={16}
-          cursor="pointer"
-          bgColor={getGradeColor(grade)}
-          transition="background-color 50ms ease-out"
-          onClick={() => handleGradeSelect(grade)}
-        />
-      ))}
-    </SimpleGrid>
+    <Card>
+      <CardHeader>
+        <Heading size="md">Grade</Heading>
+      </CardHeader>
+      <CardBody pt={0}>
+        <SimpleGrid minChildWidth="120px" spacing={2} mb={4}>
+          {grades.map((grade: Grade) => (
+            <Flex
+              key={grade.id}
+              h={16}
+              cursor="pointer"
+              bgColor={getGradeColor(grade)}
+              transition="background-color 50ms ease-out"
+              onClick={() => handleGradeSelect(grade)}
+            />
+          ))}
+        </SimpleGrid>
+      </CardBody>
+    </Card>
   );
 };
 

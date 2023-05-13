@@ -3,7 +3,6 @@ import {
   Card,
   CardHeader,
   Checkbox,
-  Divider,
   Flex,
   Heading,
   Input,
@@ -17,13 +16,15 @@ import {
   Text,
   useDisclosure
 } from "@chakra-ui/react";
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { ClimbingLocation, ClimbingZone, Grade, Technique } from "@/types/database";
-import SelectInput from "../common/SelectInput";
 import { ModalFooter } from "@chakra-ui/modal";
 import { CardBody } from "@chakra-ui/card";
 import { Camera } from "lucide-react";
 import GradeSelect from "./GradeSelect";
+import LocationAndZoneSelect from "./LocationAndZoneSelect";
+import DateSelect from "./DateSelect";
+import TechniqueSelect from "./TechniqueSelect";
 
 type Props = {
   locations: ClimbingLocation[];
@@ -40,24 +41,8 @@ const AddChallenge: FC<Props> = ({ locations, climbingZones, techniques, grades 
   const [startDate, setStartDate] = useState<string>(today);
   const [grade, setGrade] = useState<string>(null);
   const [location, setLocation] = useState<string>(locations[0].id);
-  const [climbingZone, setClimbingZone] = useState<string>(null);
-  const [locationClimbingZones, setLocationClimbingZones] = useState<ClimbingZone[]>(
-    getClimbingZonesByLocation(location)
-  );
-  const [techniquesSelected, setTechniquesSelected] = useState<boolean[]>(new Array(techniques.length).fill(false));
-
-  useEffect(() => {
-    setLocationClimbingZones(getClimbingZonesByLocation(location));
-  }, [location]);
-
-  function getClimbingZonesByLocation(locationId: string): ClimbingZone[] {
-    return climbingZones.filter((climbingZone: ClimbingZone) => climbingZone.location === locationId);
-  }
-
-  function onTechniqueSelected(index: number, selected: boolean) {
-    techniquesSelected[index] = selected;
-    setTechniquesSelected([...techniquesSelected]);
-  }
+  const [climbingZone, setClimbingZone] = useState<ClimbingZone>(null);
+  const [selectedTechniques, setSelectedTechniques] = useState<Technique[]>([]);
 
   return (
     <Flex my={4}>
@@ -71,73 +56,19 @@ const AddChallenge: FC<Props> = ({ locations, climbingZones, techniques, grades 
           <ModalCloseButton />
           <ModalBody>
             <Stack spacing={4}>
-              <Card>
-                <CardBody>
-                  <Flex justifyContent="space-between" px={6} py={4}>
-                    <Text>Take picture (coming soon)</Text>
-                    <Camera />
-                  </Flex>
-                </CardBody>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <Heading size="md">When did you start the challenge?</Heading>
-                </CardHeader>
-                <CardBody pt={0}>
-                  <Input size="md" type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
-                </CardBody>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <Heading size="md">Grade</Heading>
-                </CardHeader>
-                <CardBody pt={0}>
-                  <GradeSelect grades={grades} onGradeSelect={(grade) => setGrade(grade)} />
-                </CardBody>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <Heading size="md">Location and zone</Heading>
-                </CardHeader>
-                <CardBody pt={0}>
-                  <SelectInput
-                    nameColumn="name"
-                    options={locations}
-                    isRequired={true}
-                    onSelect={(location) => setLocation(location)}
-                  />
-                  <Divider my={4} />
-                  {locationClimbingZones.length ? (
-                    <SelectInput
-                      placeholder="Select climbing zone"
-                      nameColumn="name"
-                      options={locationClimbingZones}
-                      onSelect={(climbingZone) => setClimbingZone(climbingZone)}></SelectInput>
-                  ) : (
-                    <Text color="gray.700">No climbing zones were found for this location</Text>
-                  )}
-                </CardBody>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <Heading size="md">Techniques</Heading>
-                </CardHeader>
-                <CardBody pt={0}>
-                  <Stack spacing={2}>
-                    {techniques &&
-                      techniques.map((technique: Technique, index: number) => (
-                        <Checkbox
-                          key={technique.id}
-                          isChecked={techniquesSelected[index]}
-                          onChange={(e) => onTechniqueSelected(index, e.target.checked)}
-                          colorScheme="green">
-                          {technique.name}
-                        </Checkbox>
-                      ))}
-                  </Stack>
-                </CardBody>
-              </Card>
+              <DateSelect label="Select start day" defaultValue={today} onDateChange={(date) => setStartDate(date)} />
+              <GradeSelect grades={grades} onGradeSelect={(grade) => setGrade(grade)} />
+              <LocationAndZoneSelect
+                defaultLocation={locations[0]}
+                locations={locations}
+                climbingZones={climbingZones}
+                onLocationSelect={(location) => setLocation(location)}
+                onClimbingZoneSelect={(climbingZone) => setClimbingZone(climbingZone)}
+              />
+              <TechniqueSelect
+                techniques={techniques}
+                onSelectedChange={(techniques) => setSelectedTechniques(techniques)}
+              />
             </Stack>
           </ModalBody>
           <ModalFooter>
