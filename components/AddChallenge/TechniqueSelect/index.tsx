@@ -4,7 +4,7 @@ import { FC, useState } from "react";
 
 type Props = {
   techniques: Technique[];
-  onSelectedChange: (selected: Technique[]) => void;
+  onSelectedChange: (techniques: string[]) => void;
 };
 
 const TechniqueSelect: FC<Props> = ({ techniques, onSelectedChange }) => {
@@ -15,9 +15,9 @@ const TechniqueSelect: FC<Props> = ({ techniques, onSelectedChange }) => {
   function onTechniqueSelected(index: number, selected: boolean) {
     techniquesSelectedList[index] = selected;
     setTechniquesSelectedList([...techniquesSelectedList]);
-    const selectedTechniques = techniques.filter(
-      (technique: Technique, index: number) => techniquesSelectedList[index]
-    );
+    const selectedTechniques = techniques
+      .filter((technique: Technique, index: number) => techniquesSelectedList[index])
+      .map((technique: Technique) => technique.name);
     onSelectedChange(selectedTechniques);
   }
 

@@ -1,11 +1,8 @@
 import {
+  Alert,
+  AlertIcon,
   Button,
-  Card,
-  CardHeader,
-  Checkbox,
   Flex,
-  Heading,
-  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -16,11 +13,9 @@ import {
   Text,
   useDisclosure
 } from "@chakra-ui/react";
-import { FC, useEffect, useState } from "react";
-import { ClimbingLocation, ClimbingZone, Grade, Technique } from "@/types/database";
+import { FC, useState } from "react";
+import { ClimbingLocation, ClimbingZone, CreateChallenge, Grade, Technique } from "@/types/database";
 import { ModalFooter } from "@chakra-ui/modal";
-import { CardBody } from "@chakra-ui/card";
-import { Camera } from "lucide-react";
 import GradeSelect from "./GradeSelect";
 import LocationAndZoneSelect from "./LocationAndZoneSelect";
 import DateSelect from "./DateSelect";
@@ -42,7 +37,47 @@ const AddChallenge: FC<Props> = ({ locations, climbingZones, techniques, grades 
   const [grade, setGrade] = useState<string>(null);
   const [location, setLocation] = useState<string>(locations[0].id);
   const [climbingZone, setClimbingZone] = useState<ClimbingZone>(null);
-  const [selectedTechniques, setSelectedTechniques] = useState<Technique[]>([]);
+  const [selectedTechniques, setSelectedTechniques] = useState<string[]>([]);
+
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
+
+  const validateForm = (): boolean => {
+    const errorMessages = [];
+    if (!startDate) {
+      errorMessages.push("Start date is required");
+    }
+
+    if (!grade) {
+      errorMessages.push("Grade is required");
+    }
+
+    if (!location) {
+      errorMessages.push("Location is required");
+    }
+
+    if (!climbingZone) {
+      errorMessages.push("Climbing zone is required");
+    }
+
+    setErrorMessages(errorMessages);
+    return errorMessages.length === 0;
+  };
+
+  const submitForm = () => {
+    if (!validateForm()) {
+      return;
+    }
+
+    const formData: CreateChallenge = {
+      climbing_zone: climbingZone.id,
+      grade: grade,
+      location: location,
+      start_date: startDate,
+      techniques: selectedTechniques
+    };
+
+    console.log("SUBMIT FORM", formData);
+  };
 
   return (
     <Flex my={4}>
@@ -72,9 +107,17 @@ const AddChallenge: FC<Props> = ({ locations, climbingZones, techniques, grades 
             </Stack>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="green" w="100%">
-              Add challenge
-            </Button>
+            <Flex w="100%" direction="column">
+              {errorMessages?.map((message, index) => (
+                <Alert key={index} status="error" mb={2}>
+                  <AlertIcon />
+                  <Text>{message}</Text>
+                </Alert>
+              ))}
+              <Button colorScheme="green" w="100%" onClick={() => submitForm()}>
+                Add challenge
+              </Button>
+            </Flex>
           </ModalFooter>
         </ModalContent>
       </Modal>
