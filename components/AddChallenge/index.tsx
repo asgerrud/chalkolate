@@ -6,6 +6,7 @@ import {
   Divider,
   Flex,
   Heading,
+  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -33,6 +34,10 @@ type Props = {
 
 const AddChallenge: FC<Props> = ({ locations, climbingZones, techniques, grades }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const today = new Date().toISOString().substring(0, 10);
+
+  const [startDate, setStartDate] = useState<string>(today);
   const [grade, setGrade] = useState<string>(null);
   const [location, setLocation] = useState<string>(locations[0].id);
   const [climbingZone, setClimbingZone] = useState<string>(null);
@@ -72,6 +77,14 @@ const AddChallenge: FC<Props> = ({ locations, climbingZones, techniques, grades 
                     <Text>Take picture (coming soon)</Text>
                     <Camera />
                   </Flex>
+                </CardBody>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <Heading size="md">When did you start the challenge?</Heading>
+                </CardHeader>
+                <CardBody pt={0}>
+                  <Input size="md" type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
                 </CardBody>
               </Card>
               <Card>
