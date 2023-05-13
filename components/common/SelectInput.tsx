@@ -9,10 +9,11 @@ type Props = {
   options: Row<TABLE_NAME>[];
   isRequired?: boolean;
   placeholder?: string;
+  defaultValue?: string;
   onSelect: (string) => void;
 };
-const SelectInput: FC<Props> = ({ label, nameColumn, options, isRequired, placeholder, onSelect }) => {
-  const [value, setValue] = useState(placeholder || options?.[0]?.id);
+const SelectInput: FC<Props> = ({ label, nameColumn, options, isRequired, placeholder, defaultValue, onSelect }) => {
+  const [value, setValue] = useState(placeholder || defaultValue || options?.[0]?.id);
 
   const handleSelect = (value: string) => {
     setValue(value);

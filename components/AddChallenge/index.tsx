@@ -13,7 +13,7 @@ import {
   Text,
   useDisclosure
 } from "@chakra-ui/react";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { ClimbingLocation, ClimbingZone, CreateChallenge, Grade, Technique } from "@/types/database";
 import { ModalFooter } from "@chakra-ui/modal";
 import GradeSelect from "./GradeSelect";
@@ -36,7 +36,7 @@ const AddChallenge: FC<Props> = ({ locations, climbingZones, techniques, grades 
   const [startDate, setStartDate] = useState<string>(today);
   const [grade, setGrade] = useState<string>(null);
   const [location, setLocation] = useState<string>(locations[0].id);
-  const [climbingZone, setClimbingZone] = useState<ClimbingZone>(null);
+  const [climbingZone, setClimbingZone] = useState<string>(null);
   const [selectedTechniques, setSelectedTechniques] = useState<string[]>([]);
 
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
@@ -69,7 +69,7 @@ const AddChallenge: FC<Props> = ({ locations, climbingZones, techniques, grades 
     }
 
     const formData: CreateChallenge = {
-      climbing_zone: climbingZone.id,
+      climbing_zone: climbingZone,
       grade: grade,
       location: location,
       start_date: startDate,

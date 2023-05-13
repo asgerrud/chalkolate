@@ -7,8 +7,8 @@ type Props = {
   defaultLocation: ClimbingLocation;
   locations: ClimbingLocation[];
   climbingZones: ClimbingZone[];
-  onLocationSelect: (location: string) => void;
-  onClimbingZoneSelect: (climbingZone: ClimbingZone) => void;
+  onLocationSelect: (locationId: string) => void;
+  onClimbingZoneSelect: (climbingZoneId: string) => void;
 };
 
 const LocationAndZoneSelect: FC<Props> = ({
@@ -18,17 +18,22 @@ const LocationAndZoneSelect: FC<Props> = ({
   onLocationSelect,
   onClimbingZoneSelect
 }) => {
-  const [locationClimbingZones, setLocationClimbingZones] = useState<ClimbingZone[]>(
-    getClimbingZonesByLocation(defaultLocation.id) ?? []
-  );
+  const defaultClimbingZones = getClimbingZonesByLocation(defaultLocation.id) ?? [];
+
+  const [location, setLocation] = useState<string>(defaultLocation.id);
+  const [locationClimbingZones, setLocationClimbingZones] = useState<ClimbingZone[]>(defaultClimbingZones);
 
   function getClimbingZonesByLocation(locationId: string) {
     return climbingZones.filter((climbingZone: ClimbingZone) => climbingZone.location === locationId);
   }
 
-  function handleLocationSelect(locationId: string) {
-    setLocationClimbingZones(getClimbingZonesByLocation(locationId));
-    onLocationSelect(locationId);
+  function handleLocationChanged(locationId: string) {
+    if (locationId !== location) {
+      setLocation(locationId);
+      setLocationClimbingZones(getClimbingZonesByLocation(locationId));
+      onLocationSelect(locationId);
+      onClimbingZoneSelect(null);
+    }
   }
 
   return (
@@ -41,7 +46,8 @@ const LocationAndZoneSelect: FC<Props> = ({
           nameColumn="name"
           options={locations}
           isRequired={true}
-          onSelect={(locationId) => handleLocationSelect(locationId)}
+          defaultValue={defaultLocation.id}
+          onSelect={(locationId) => handleLocationChanged(locationId)}
         />
         <Divider my={4} />
         {locationClimbingZones.length ? (
