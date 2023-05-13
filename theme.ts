@@ -15,6 +15,16 @@ const extendedTheme = extendTheme(
     config: {
       initialColorMode: "light",
       useSystemColorMode: false
+    },
+    components: {
+      Text: {
+        variants: {
+          error: {
+            color: "red.500",
+            mt: 2
+          }
+        }
+      }
     }
   },
   withDefaultColorScheme({
