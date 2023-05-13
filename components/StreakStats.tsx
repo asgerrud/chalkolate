@@ -1,12 +1,12 @@
 import { Card, CardBody, Flex, Stat, StatLabel, StatNumber } from "@chakra-ui/react";
 import React, { FC } from "react";
 
-type Props = {
+interface StreakStatsProps {
   currentWeeklyStreak: number;
   highestWeeklyStreak: number;
-};
+}
 
-const StreakStats: FC<Props> = ({ currentWeeklyStreak, highestWeeklyStreak }) => {
+const StreakStats: FC<StreakStatsProps> = ({ currentWeeklyStreak, highestWeeklyStreak }) => {
   return (
     <Flex mb={4}>
       {currentWeeklyStreak != null && (

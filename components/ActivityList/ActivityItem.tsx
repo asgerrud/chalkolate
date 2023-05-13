@@ -5,13 +5,13 @@ import { Flex, HStack, Text } from "@chakra-ui/react";
 import { FC } from "react";
 import { ConfirmDialog } from "../common/dialogs/ConfirmDialog";
 
-type Props = {
+type ActivityItemProps = {
   activity: Activity;
   locations: ClimbingLocation[];
   onRemoveActivity: (activityId: string) => void;
 };
 
-export const ActivityItem: FC<Props> = ({ activity, locations, onRemoveActivity }) => {
+export const ActivityItem: FC<ActivityItemProps> = ({ activity, locations, onRemoveActivity }) => {
   const formattedDate = useHydrationSafeDate(activity.activity_date);
 
   const getLocationName = (id: string): string => {

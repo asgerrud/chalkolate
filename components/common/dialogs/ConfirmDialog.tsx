@@ -13,14 +13,14 @@ import {
 import { X } from "lucide-react";
 import { FC } from "react";
 
-type Props = {
+interface ConfirmDialogProps {
   type: EDialogType;
   heading: string;
   description: string;
   onConfirm: () => void;
-};
+}
 
-export const ConfirmDialog: FC<Props> = ({ type, heading, description, onConfirm }) => {
+export const ConfirmDialog: FC<ConfirmDialogProps> = ({ type, heading, description, onConfirm }) => {
   return (
     <Popover>
       <PopoverTrigger>

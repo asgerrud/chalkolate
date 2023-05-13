@@ -9,7 +9,7 @@ import { Stack } from "@chakra-ui/react";
 import StreakStats from "@/components/StreakStats";
 import AddChallenge from "@/components/AddChallenge";
 
-type Props = {
+interface ProfilePageProps {
   activities: Activity[];
   locations: ClimbingLocation[];
   climbingZones: ClimbingZone[];
@@ -17,9 +17,9 @@ type Props = {
   grades: Grade[];
   currentWeeklyStreak: number;
   highestWeeklyStreak: number;
-};
+}
 
-const ProfilePage: FC<Props> = ({
+const ProfilePage: FC<ProfilePageProps> = ({
   activities,
   locations,
   climbingZones,

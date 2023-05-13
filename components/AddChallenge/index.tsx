@@ -1,6 +1,4 @@
 import {
-  Alert,
-  AlertIcon,
   Button,
   Flex,
   Modal,
@@ -13,30 +11,29 @@ import {
   Text,
   useDisclosure
 } from "@chakra-ui/react";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { ClimbingLocation, ClimbingZone, CreateChallenge, Grade, Technique } from "@/types/database";
 import { ModalFooter } from "@chakra-ui/modal";
 import GradeSelect from "./GradeSelect";
 import LocationClimbingZoneSelect from "./LocationClimbingZoneSelect";
 import DateSelect from "./DateSelect";
 import TechniqueSelect from "./TechniqueSelect";
-import ErrorText from "../common/ErrorText";
 
-type FormErrors = {
+interface FormErrors {
   startDate?: string;
   grade?: string;
   location?: string;
   climbingZone?: string;
-};
+}
 
-type Props = {
+interface AddChallengeProps {
   locations: ClimbingLocation[];
   climbingZones: ClimbingZone[];
   techniques: Technique[];
   grades: Grade[];
-};
+}
 
-const AddChallenge: FC<Props> = ({ locations, climbingZones, techniques, grades }) => {
+const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniques, grades }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const today = new Date().toISOString().substring(0, 10);
@@ -46,7 +43,6 @@ const AddChallenge: FC<Props> = ({ locations, climbingZones, techniques, grades 
   const [location, setLocation] = useState<string>(locations[0].id);
   const [climbingZone, setClimbingZone] = useState<string>(null);
   const [selectedTechniques, setSelectedTechniques] = useState<string[]>([]);
-
   const [errorMessages, setErrorMessages] = useState<FormErrors>({});
 
   const validateForm = (): boolean => {
@@ -108,10 +104,10 @@ const AddChallenge: FC<Props> = ({ locations, climbingZones, techniques, grades 
           <ModalBody>
             <Stack spacing={4}>
               <DateSelect label="Select start day" defaultValue={today} setDate={(date) => setStartDate(date)}>
-                {errorMessages.startDate && <Text variant="error">{errorMessages.startDate}</Text>}
+                {!startDate && <Text variant="error">{errorMessages.startDate}</Text>}
               </DateSelect>
               <GradeSelect grades={grades} setGrade={(grade) => setGrade(grade)}>
-                {errorMessages.grade && <Text variant="error">{errorMessages.grade}</Text>}
+                {!grade && <Text variant="error">{errorMessages.grade}</Text>}
               </GradeSelect>
               <LocationClimbingZoneSelect
                 defaultLocation={locations[0]}
@@ -119,8 +115,8 @@ const AddChallenge: FC<Props> = ({ locations, climbingZones, techniques, grades 
                 climbingZones={climbingZones}
                 setLocation={(location) => setLocation(location)}
                 setClimbingZone={setClimbingZone}>
-                {errorMessages.location && <Text variant="error">{errorMessages.location}</Text>}
-                {errorMessages.climbingZone && <Text variant="error">{errorMessages.climbingZone}</Text>}
+                {!location && <Text variant="error">{errorMessages.location}</Text>}
+                {!climbingZone && <Text variant="error">{errorMessages.climbingZone}</Text>}
               </LocationClimbingZoneSelect>
               <TechniqueSelect techniques={techniques} setSelectedTechniques={setSelectedTechniques} />
             </Stack>

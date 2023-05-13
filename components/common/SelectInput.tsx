@@ -3,7 +3,7 @@ import { Select } from "@chakra-ui/react";
 import BaseFormControl from "@/components/common/BaseFormControl";
 import { Row, TABLE_NAME } from "@/types/database";
 
-type Props = {
+interface SelectInputProps {
   label?: string;
   nameColumn: string;
   options: Row<TABLE_NAME>[];
@@ -11,8 +11,16 @@ type Props = {
   placeholder?: string;
   defaultValue?: string;
   onSelect: (string) => void;
-};
-const SelectInput: FC<Props> = ({ label, nameColumn, options, isRequired, placeholder, defaultValue, onSelect }) => {
+}
+const SelectInput: FC<SelectInputProps> = ({
+  label,
+  nameColumn,
+  options,
+  isRequired,
+  placeholder,
+  defaultValue,
+  onSelect
+}) => {
   const [value, setValue] = useState(placeholder || defaultValue || options?.[0]?.id);
 
   const handleSelect = (value: string) => {

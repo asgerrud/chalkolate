@@ -6,12 +6,12 @@ import { List, ListItem } from "@chakra-ui/react";
 import { FC, useState } from "react";
 import { ActivityItem } from "./ActivityItem";
 
-type Props = {
+interface ActivityListProps {
   initialActivities: Activity[];
   locations: ClimbingLocation[];
-};
+}
 
-const ActivityList: FC<Props> = ({ initialActivities, locations }) => {
+const ActivityList: FC<ActivityListProps> = ({ initialActivities, locations }) => {
   const [activities, setActivities] = useState<Activity[]>(initialActivities);
 
   const onAddActivity = (newActivity: Activity) => {

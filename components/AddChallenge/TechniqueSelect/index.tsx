@@ -2,12 +2,12 @@ import { Technique } from "@/types/database";
 import { Card, CardHeader, CardBody, Stack, Checkbox, Heading } from "@chakra-ui/react";
 import { Dispatch, FC, ReactNode, SetStateAction, useState } from "react";
 
-type Props = {
+interface TechniqueSelectProps {
   techniques: Technique[];
   setSelectedTechniques: Dispatch<SetStateAction<string[]>>;
-};
+}
 
-const TechniqueSelect: FC<Props> = ({ techniques, setSelectedTechniques: onSelectedChange }) => {
+const TechniqueSelect: FC<TechniqueSelectProps> = ({ techniques, setSelectedTechniques: onSelectedChange }) => {
   const [techniquesSelectedList, setTechniquesSelectedList] = useState<boolean[]>(
     new Array(techniques.length).fill(false)
   );

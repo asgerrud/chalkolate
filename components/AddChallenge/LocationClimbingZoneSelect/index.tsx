@@ -6,16 +6,16 @@ import { Dispatch, FC, ReactNode, SetStateAction, useState } from "react";
 type locationId = ClimbingLocation["id"];
 type climbingZoneId = ClimbingZone["id"];
 
-type Props = {
+interface LocationClimbingZoneSelect {
   defaultLocation: ClimbingLocation;
   locations: ClimbingLocation[];
   climbingZones: ClimbingZone[];
   setLocation: Dispatch<SetStateAction<locationId>>;
   setClimbingZone: Dispatch<SetStateAction<climbingZoneId>>;
   children?: ReactNode;
-};
+}
 
-const LocationClimbingZoneSelect: FC<Props> = ({
+const LocationClimbingZoneSelect: FC<LocationClimbingZoneSelect> = ({
   defaultLocation,
   locations,
   climbingZones,

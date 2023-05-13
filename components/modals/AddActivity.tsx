@@ -31,16 +31,16 @@ import { Calendar, MapPin } from "lucide-react";
 import NumberInput from "@/components/common/NumberInput";
 import { FC, useState } from "react";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "@/types/supabase";
+import { Database } from "@/types/_supabase";
 import { Activity, ClimbingLocation, CreateActivity } from "@/types/database";
 import { getDistanceBetween } from "@/utils/geo";
 
-type Props = {
+interface AddActivityProps {
   locations: ClimbingLocation[];
   onAddActivity: (activity: Activity) => void;
-};
+}
 
-const AddActivity: FC<Props> = ({ locations, onAddActivity }) => {
+const AddActivity: FC<AddActivityProps> = ({ locations, onAddActivity }) => {
   const supabase = useSupabaseClient<Database>();
   const session = useSession();
 
