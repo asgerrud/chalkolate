@@ -1,0 +1,25 @@
+name: Release Drafter
+
+on:
+  push:
+    # Only consider main branch
+    branches:
+      - main
+  # Handle the following pull request events
+  pull_request:
+    types: [opened, reopened, synchronize]
+permissions:
+  contents: read
+
+jobs:
+  update_release_draft:
+    # Write permission required for Github release
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      # Drafts release notes as pull requests are merged into "main"
+      - uses: release-drafter/release-drafter@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
