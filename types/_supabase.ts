@@ -46,7 +46,7 @@ export interface Database {
         Insert: {
           climbing_zone?: string | null
           created_at?: string | null
-          end_date?: string
+          end_date: string
           grade?: string | null
           id?: string
           location?: string | null
@@ -67,27 +67,27 @@ export interface Database {
       change_schedule: {
         Row: {
           change_interval_weeks: number | null
-          change_start_date: string | null
           change_weekday: number | null
           climbing_zone: string | null
           created_at: string | null
           id: string
+          schedule_start_date: string | null
         }
         Insert: {
           change_interval_weeks?: number | null
-          change_start_date?: string | null
           change_weekday?: number | null
           climbing_zone?: string | null
           created_at?: string | null
           id?: string
+          schedule_start_date?: string | null
         }
         Update: {
           change_interval_weeks?: number | null
-          change_start_date?: string | null
           change_weekday?: number | null
           climbing_zone?: string | null
           created_at?: string | null
           id?: string
+          schedule_start_date?: string | null
         }
       }
       climbing_zone: {

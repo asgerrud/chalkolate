@@ -48,3 +48,28 @@ export const getTodaysDate = (): Date => {
 export const compareDates = (a: string, b: string): number => {
   return Date.parse(a) - Date.parse(b);
 };
+
+export const getNextScheduleChange = (
+  scheduleStartDate: Date,
+  challengeBeginDate: Date,
+  weeksBetweenChange: number
+): Date => {
+  const millisecondsPerDay = 1000 * 60 * 60 * 24;
+
+  // Calculate the time difference in days
+  const timeDiff = Math.floor((challengeBeginDate.getTime() - scheduleStartDate.getTime()) / millisecondsPerDay);
+
+  // Calculate the remaining days after complete cycles
+  const remainingDays = timeDiff % (7 * weeksBetweenChange);
+
+  // Calculate the next schedule change date
+  const nextChangeDate = new Date(
+    challengeBeginDate.getTime() + (7 * weeksBetweenChange - remainingDays) * millisecondsPerDay
+  );
+
+  return nextChangeDate;
+};
+
+export const getFormattedDateString = (date: Date): string => {
+  return date.toISOString().substring(0, 10);
+};

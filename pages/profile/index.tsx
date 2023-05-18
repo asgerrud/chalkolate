@@ -3,11 +3,12 @@ import ActivityList from "@/components/ActivityList/ActivityList";
 import { Card, CardBody } from "@chakra-ui/card";
 import { supabase } from "@/lib/supabase";
 import { Activity, ClimbingLocation, ClimbingZone, Grade, Technique } from "@/types/database";
-import React, { FC } from "react";
-import { getCurrentWeeklyStreak, getHighestWeeklyStreak } from "@/utils/streak";
+import { FC } from "react";
+import { getWeeklyStreak } from "@/utils/streak";
 import { Stack } from "@chakra-ui/react";
 import StreakStats from "@/components/StreakStats";
 import AddChallenge from "@/components/AddChallenge";
+import { Streak } from "@/utils/types/interfaces/Streak";
 
 interface ProfilePageProps {
   activities: Activity[];
@@ -15,8 +16,7 @@ interface ProfilePageProps {
   climbingZones: ClimbingZone[];
   techniques: Technique[];
   grades: Grade[];
-  currentWeeklyStreak: number;
-  highestWeeklyStreak: number;
+  weeklyStreak: Streak;
 }
 
 const ProfilePage: FC<ProfilePageProps> = ({
@@ -25,8 +25,7 @@ const ProfilePage: FC<ProfilePageProps> = ({
   climbingZones,
   techniques,
   grades,
-  currentWeeklyStreak,
-  highestWeeklyStreak
+  weeklyStreak
 }) => {
   return (
     <Layout>
@@ -34,7 +33,10 @@ const ProfilePage: FC<ProfilePageProps> = ({
         <Card width="lg">
           <CardBody>
             <AddChallenge locations={locations} climbingZones={climbingZones} techniques={techniques} grades={grades} />
-            <StreakStats currentWeeklyStreak={currentWeeklyStreak} highestWeeklyStreak={highestWeeklyStreak} />
+            <StreakStats currentStreak={weeklyStreak.current} highestStreak={weeklyStreak.highest} unit="week" />
+            {/*           <Box bg="orange" py={4} my={4} textAlign="center">
+              <span>Show calendar</span>
+  </Box>*/}
             <ActivityList initialActivities={activities} locations={locations} />
           </CardBody>
         </Card>
@@ -54,8 +56,7 @@ export async function getStaticProps() {
   const { data: grades } = await supabase.from("grade").select("*");
 
   const activityDates = activities.map((activity: Activity) => new Date(activity.activity_date));
-  const currentWeeklyStreak: number = getCurrentWeeklyStreak(activityDates);
-  const highestWeeklyStreak: number = getHighestWeeklyStreak(activityDates);
+  const weeklyStreak: Streak = getWeeklyStreak(activityDates);
 
   return {
     props: {
@@ -64,8 +65,7 @@ export async function getStaticProps() {
       grades,
       climbingZones,
       techniques,
-      currentWeeklyStreak,
-      highestWeeklyStreak
+      weeklyStreak
     }
   };
 }

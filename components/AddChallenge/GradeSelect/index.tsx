@@ -4,13 +4,13 @@ import { Dispatch, FC, ReactNode, SetStateAction, useState } from "react";
 
 type gradeId = Grade["id"];
 
-type Props = {
+interface GradeSelectProps {
   grades: Grade[];
   setGrade: Dispatch<SetStateAction<gradeId>>;
   children?: ReactNode;
-};
+}
 
-const GradeSelect: FC<Props> = ({ grades, setGrade: onGradeSelect, children }) => {
+const GradeSelect: FC<GradeSelectProps> = ({ grades, setGrade: onGradeSelect, children }) => {
   const [selectedGrade, setSelectedGrade] = useState<Grade>(null);
 
   const isActiveColor = (grade: Grade): boolean => {

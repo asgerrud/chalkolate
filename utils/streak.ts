@@ -9,8 +9,6 @@ export const getWeeklyStreak = (dates: Date[]): Streak => {
   // Sort the dates in descending order
   dates.sort((a, b) => b.getTime() - a.getTime());
 
-  console.log(dates);
-
   const today: Date = getTodaysDate();
 
   let count: number = isDateInSameWeek(today, new Date(dates[0])) ? 1 : 0;

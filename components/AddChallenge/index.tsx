@@ -11,13 +11,27 @@ import {
   Text,
   useDisclosure
 } from "@chakra-ui/react";
-import { FC, useState } from "react";
-import { ClimbingLocation, ClimbingZone, CreateChallenge, Grade, Technique } from "@/types/database";
+import { FC, useEffect, useState } from "react";
+import {
+  Challenge,
+  ChangeSchedule,
+  ClimbingLocation,
+  ClimbingZone,
+  CreateChallenge,
+  Grade,
+  Row,
+  Technique
+} from "@/types/database";
 import { ModalFooter } from "@chakra-ui/modal";
 import GradeSelect from "./GradeSelect";
 import LocationClimbingZoneSelect from "./LocationClimbingZoneSelect";
 import DateSelect from "./DateSelect";
 import TechniqueSelect from "./TechniqueSelect";
+import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "@/types/_supabase";
+import useSnackbar from "@/hooks/use-snackbar";
+import { EToastStatus } from "@/types/enums/EToastStatus";
+import { getFormattedDateString, getNextScheduleChange } from "@/utils/date";
 
 interface FormErrors {
   startDate?: string;
@@ -31,19 +45,62 @@ interface AddChallengeProps {
   climbingZones: ClimbingZone[];
   techniques: Technique[];
   grades: Grade[];
+  onAddChallenge: (challenge: Row<Challenge>) => void;
 }
 
-const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniques, grades }) => {
+const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniques, grades, onAddChallenge }) => {
+  const supabase = useSupabaseClient<Database>();
+  const session = useSession();
+  const showToast = useSnackbar();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const today = new Date().toISOString().substring(0, 10);
+  const today = getFormattedDateString(new Date());
 
   const [startDate, setStartDate] = useState<string>(today);
   const [grade, setGrade] = useState<string>(null);
   const [location, setLocation] = useState<string>(locations[0].id);
   const [climbingZone, setClimbingZone] = useState<string>(null);
+  const [zoneChangeSchedule, setZoneChangeSchedule] = useState<Partial<ChangeSchedule>>(null);
   const [selectedTechniques, setSelectedTechniques] = useState<string[]>([]);
   const [errorMessages, setErrorMessages] = useState<FormErrors>({});
+
+  useEffect(() => {
+    async function fetchZoneChangeSchedule() {
+      try {
+        console.log(climbingZone);
+        const { data, error } = await supabase
+          .from("change_schedule")
+          .select("schedule_start_date, change_interval_weeks")
+          .eq("climbing_zone", climbingZone)
+          .single();
+
+        if (error) {
+          throw error;
+        }
+
+        setZoneChangeSchedule(data);
+      } catch (error) {
+        console.error("Error fetching schedule:", error);
+      }
+    }
+    if (climbingZone) {
+      fetchZoneChangeSchedule();
+    }
+  }, [climbingZone]);
+
+  const getChallengeEndDate = (startDate: string) => {
+    const scheduleStartDate: Date = new Date(zoneChangeSchedule.schedule_start_date);
+    const challengeStartDate: Date = new Date(startDate);
+
+    const scheduleChangeDate = getNextScheduleChange(
+      scheduleStartDate,
+      challengeStartDate,
+      zoneChangeSchedule.change_interval_weeks
+    );
+
+    return scheduleChangeDate;
+  };
 
   const validateForm = (): boolean => {
     const errors: FormErrors = {};
@@ -65,30 +122,51 @@ const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniq
     }
 
     const hasErrors: boolean = Object.keys(errors).length > 0;
+    setErrorMessages(hasErrors ? errors : {});
 
-    if (hasErrors) {
-      setErrorMessages(errors);
-    } else {
-      setErrorMessages({});
-    }
-
-    return hasErrors;
+    return !hasErrors;
   };
 
-  const submitForm = () => {
+  const submitForm = async () => {
     if (!validateForm()) {
       return;
     }
+
+    if (!zoneChangeSchedule) {
+      showToast(EToastStatus.ERROR, "Error creating challenge. Could not fetch climbing zone change schedule");
+      return;
+    }
+
+    const scheduleChangeDate = getChallengeEndDate(startDate);
+    const challengeEndDate: string = getFormattedDateString(scheduleChangeDate);
 
     const formData: CreateChallenge = {
       climbing_zone: climbingZone,
       grade: grade,
       location: location,
       start_date: startDate,
+      end_date: challengeEndDate,
       techniques: selectedTechniques
     };
 
-    console.log("SUBMIT FORM", formData);
+    try {
+      const { data: challenge, error } = await supabase
+        .from("challenge")
+        .insert<CreateChallenge>(formData)
+        .select()
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      showToast(EToastStatus.SUCCESS, "Challenge created!");
+      onAddChallenge(challenge);
+      onClose();
+    } catch (error) {
+      showToast(EToastStatus.ERROR, "Challenge creation failed");
+      console.log(error);
+    }
   };
 
   return (
@@ -102,24 +180,28 @@ const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniq
           <ModalHeader>Add challenge</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Stack spacing={4}>
-              <DateSelect label="Select start day" defaultValue={today} setDate={(date) => setStartDate(date)}>
-                {!startDate && <Text variant="error">{errorMessages.startDate}</Text>}
-              </DateSelect>
-              <GradeSelect grades={grades} setGrade={(grade) => setGrade(grade)}>
-                {!grade && <Text variant="error">{errorMessages.grade}</Text>}
-              </GradeSelect>
-              <LocationClimbingZoneSelect
-                defaultLocation={locations[0]}
-                locations={locations}
-                climbingZones={climbingZones}
-                setLocation={(location) => setLocation(location)}
-                setClimbingZone={setClimbingZone}>
-                {!location && <Text variant="error">{errorMessages.location}</Text>}
-                {!climbingZone && <Text variant="error">{errorMessages.climbingZone}</Text>}
-              </LocationClimbingZoneSelect>
-              <TechniqueSelect techniques={techniques} setSelectedTechniques={setSelectedTechniques} />
-            </Stack>
+            {session ? (
+              <Stack spacing={4}>
+                <DateSelect label="Select start day" defaultValue={today} setDate={(date) => setStartDate(date)}>
+                  {!startDate && <Text variant="error">{errorMessages.startDate}</Text>}
+                </DateSelect>
+                <GradeSelect grades={grades} setGrade={(grade) => setGrade(grade)}>
+                  {!grade && <Text variant="error">{errorMessages.grade}</Text>}
+                </GradeSelect>
+                <LocationClimbingZoneSelect
+                  defaultLocation={locations[0]}
+                  locations={locations}
+                  climbingZones={climbingZones}
+                  setLocation={(location) => setLocation(location)}
+                  setClimbingZone={setClimbingZone}>
+                  {!location && <Text variant="error">{errorMessages.location}</Text>}
+                  {!climbingZone && <Text variant="error">{errorMessages.climbingZone}</Text>}
+                </LocationClimbingZoneSelect>
+                <TechniqueSelect techniques={techniques} setSelectedTechniques={setSelectedTechniques} />
+              </Stack>
+            ) : (
+              <Text variant="error">You need to be logged in to add a challenge</Text>
+            )}
           </ModalBody>
           <ModalFooter>
             <Button colorScheme="green" w="100%" onClick={() => submitForm()}>
