@@ -1,46 +1,43 @@
-import {
-  getTodaysDate,
-  isDateInAdjacentWeek,
-  isDateInSameWeek,
-} from "@/utils/date";
+import { getTodaysDate, isDateInAdjacentWeek, isDateInSameWeek } from "@/utils/date";
+import { Streak } from "./types/interfaces/Streak";
 
-export const getCurrentWeeklyStreak = (dates: Date[]): number => {
+export const getWeeklyStreak = (dates: Date[]): Streak => {
   if (!dates?.length) {
-    return 0;
+    return { current: 0, highest: 0 };
   }
 
-  const today = getTodaysDate();
+  // Sort the dates in descending order
+  dates.sort((a, b) => b.getTime() - a.getTime());
 
-  const latestActivityDate = new Date(dates[0]);
-  const hasActivityInCurrentWeek = isDateInSameWeek(today, latestActivityDate);
+  console.log(dates);
 
-  let streak = hasActivityInCurrentWeek ? 1 : 0;
+  const today: Date = getTodaysDate();
 
-  let lastDate = today;
+  let count: number = isDateInSameWeek(today, new Date(dates[0])) ? 1 : 0;
+  let currentCount: number = count;
+  let highestCount: number = count;
+  let previousDate: Date = today;
+
+  let currentStreakFound = false;
+
   for (let date of dates) {
-    if (isDateInAdjacentWeek(date, lastDate)) {
-      streak++;
-      lastDate = date;
+    if (isDateInAdjacentWeek(date, previousDate)) {
+      count++;
+      if (!currentStreakFound) {
+        currentCount++;
+      }
+    } else {
+      currentStreakFound = true;
+      highestCount = Math.max(highestCount, count);
+      if (!isDateInSameWeek(date, previousDate)) {
+        count = 1;
+      }
     }
-  }
-  return streak;
-};
 
-export const getHighestWeeklyStreak = (dates: Date[]): number => {
-  if (!dates?.length) {
-    return 0;
+    previousDate = date;
   }
 
-  let streak = 1;
-  let lastDate = dates[0];
-  let highestStreak = streak;
-  for (let date of dates) {
-    if (isDateInAdjacentWeek(date, lastDate)) {
-      highestStreak = ++streak;
-    } else if (!isDateInSameWeek(date, lastDate)) {
-      streak = 1;
-    }
-    lastDate = date;
-  }
-  return highestStreak;
+  highestCount = Math.max(highestCount, count);
+
+  return { current: currentCount, highest: highestCount };
 };

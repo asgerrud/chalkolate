@@ -6,10 +6,19 @@ export const hoursBetweenDates = (a: Date, b: Date): number => {
   return msBetweenDates / milisecondToHourMultiplier;
 };
 
+const getDaysFromMonday = (date: Date): number => {
+  const day = date.getDay();
+  if (day === 0) {
+    return 6;
+  } else {
+    return day - 1;
+  }
+};
+
 const getDateBeginningOfWeek = (date: Date): Date => {
   const newDate = new Date(date);
   newDate.setHours(0, 0, 0, 0);
-  newDate.setDate(newDate.getDate() - newDate.getDay());
+  newDate.setDate(newDate.getDate() - getDaysFromMonday(newDate));
   return newDate;
 };
 
@@ -24,6 +33,7 @@ export const isDateInAdjacentWeek = (a: Date, b: Date): boolean => {
   const d1 = getDateBeginningOfWeek(a);
   const d2 = getDateBeginningOfWeek(b);
 
+  // Calculate difference in weeks
   const weekDiff = Math.abs((d2.getTime() - d1.getTime()) / MILISECONDS_TO_WEEKS);
 
   return weekDiff === 1;

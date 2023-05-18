@@ -2,23 +2,34 @@ import { Card, CardBody, Flex, Stat, StatLabel, StatNumber } from "@chakra-ui/re
 import React, { FC } from "react";
 
 interface StreakStatsProps {
-  currentWeeklyStreak: number;
-  highestWeeklyStreak: number;
+  currentStreak: number;
+  highestStreak: number;
+  unit: string;
 }
 
-const StreakStats: FC<StreakStatsProps> = ({ currentWeeklyStreak, highestWeeklyStreak }) => {
+const StreakStats: FC<StreakStatsProps> = ({ currentStreak, highestStreak, unit }) => {
+  const getPluralSuffix = (count: Number): string => {
+    return count > 1 ? "s" : "";
+  };
+
   return (
     <Flex mb={4}>
-      {currentWeeklyStreak != null && (
+      {currentStreak != null && (
         <Stat>
           <StatLabel>Current streak</StatLabel>
-          <StatNumber>{currentWeeklyStreak} weeks</StatNumber>
+          <StatNumber>
+            {currentStreak} {unit}
+            {getPluralSuffix(currentStreak)}
+          </StatNumber>
         </Stat>
       )}
-      {highestWeeklyStreak != null && (
+      {highestStreak != null && (
         <Stat>
           <StatLabel>Highest streak</StatLabel>
-          <StatNumber>{highestWeeklyStreak} weeks</StatNumber>
+          <StatNumber>
+            {highestStreak} {unit}
+            {getPluralSuffix(currentStreak)}
+          </StatNumber>
         </Stat>
       )}
     </Flex>
