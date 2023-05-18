@@ -2,18 +2,21 @@ import Layout from "@/components/Layout";
 import ActivityList from "@/components/ActivityList/ActivityList";
 import { Card, CardBody } from "@chakra-ui/card";
 import { supabase } from "@/lib/supabase";
-import { Activity, ClimbingLocation, ClimbingZone, Grade, Technique } from "@/types/database";
-import { FC } from "react";
+import { Activity, Challenge, ClimbingLocation, ClimbingZone, Grade, Technique } from "@/types/database";
+import { FC, useEffect, useState } from "react";
 import { getWeeklyStreak } from "@/utils/streak";
 import { Stack } from "@chakra-ui/react";
 import StreakStats from "@/components/StreakStats";
 import AddChallenge from "@/components/AddChallenge";
 import { Streak } from "@/utils/types/interfaces/Streak";
+import { ChallengeList } from "@/components/ChallengeList/ChallengeList";
+import { useSession } from "@supabase/auth-helpers-react";
 
 interface ProfilePageProps {
   activities: Activity[];
   locations: ClimbingLocation[];
   climbingZones: ClimbingZone[];
+  challenges: Challenge[];
   techniques: Technique[];
   grades: Grade[];
   weeklyStreak: Streak;
@@ -23,20 +26,58 @@ const ProfilePage: FC<ProfilePageProps> = ({
   activities,
   locations,
   climbingZones,
+  challenges,
   techniques,
   grades,
   weeklyStreak
 }) => {
+  const [userChallenges, setUserChallenges] = useState<Challenge[]>([]);
+
+  const session = useSession();
+
+  useEffect(() => {
+    async function fetchChallenges() {
+      try {
+        if (!session) {
+          return;
+        }
+
+        const { data: challenges, error } = await supabase
+          .from("challenge")
+          .select("*")
+          .eq("user_id", session?.user.id);
+
+        if (error) {
+          throw error;
+        }
+
+        setUserChallenges(challenges);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchChallenges();
+  }, [session]);
+
+  const onAddChallenge = (challenge: Challenge): void => {
+    // TODO: implement
+    setUserChallenges([...challenges, challenge]);
+  };
+
   return (
     <Layout>
       <Stack direction="column">
         <Card width="lg">
           <CardBody>
-            <AddChallenge locations={locations} climbingZones={climbingZones} techniques={techniques} grades={grades} />
+            <AddChallenge
+              locations={locations}
+              climbingZones={climbingZones}
+              techniques={techniques}
+              grades={grades}
+              onAddChallenge={onAddChallenge}
+            />
+            <ChallengeList challenges={userChallenges} />
             <StreakStats currentStreak={weeklyStreak.current} highestStreak={weeklyStreak.highest} unit="week" />
-            {/*           <Box bg="orange" py={4} my={4} textAlign="center">
-              <span>Show calendar</span>
-  </Box>*/}
             <ActivityList initialActivities={activities} locations={locations} />
           </CardBody>
         </Card>

@@ -42,6 +42,7 @@ export interface Database {
           location: string | null
           start_date: string
           techniques: string[] | null
+          user_id: string | null
         }
         Insert: {
           climbing_zone?: string | null
@@ -52,6 +53,7 @@ export interface Database {
           location?: string | null
           start_date?: string
           techniques?: string[] | null
+          user_id?: string | null
         }
         Update: {
           climbing_zone?: string | null
@@ -62,6 +64,7 @@ export interface Database {
           location?: string | null
           start_date?: string
           techniques?: string[] | null
+          user_id?: string | null
         }
       }
       change_schedule: {

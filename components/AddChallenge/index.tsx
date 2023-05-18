@@ -45,7 +45,7 @@ interface AddChallengeProps {
   climbingZones: ClimbingZone[];
   techniques: Technique[];
   grades: Grade[];
-  onAddChallenge: (challenge: Row<Challenge>) => void;
+  onAddChallenge: (challenge: Challenge) => void;
 }
 
 const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniques, grades, onAddChallenge }) => {
@@ -141,6 +141,7 @@ const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniq
     const challengeEndDate: string = getFormattedDateString(scheduleChangeDate);
 
     const formData: CreateChallenge = {
+      user_id: session?.user.id,
       climbing_zone: climbingZone,
       grade: grade,
       location: location,
@@ -154,7 +155,7 @@ const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniq
         .from("challenge")
         .insert<CreateChallenge>(formData)
         .select()
-        .single();
+        .single<Challenge>();
 
       if (error) {
         throw error;
