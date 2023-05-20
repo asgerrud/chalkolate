@@ -31,16 +31,16 @@ import { Calendar, MapPin } from "lucide-react";
 import NumberInput from "@/components/common/NumberInput";
 import { FC, useState } from "react";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "@/types/supabase";
+import { Database } from "@/types/_supabase";
 import { Activity, ClimbingLocation, CreateActivity } from "@/types/database";
 import { getDistanceBetween } from "@/utils/geo";
 
-type Props = {
+interface AddActivityProps {
   locations: ClimbingLocation[];
   onAddActivity: (activity: Activity) => void;
-};
+}
 
-const AddActivity: FC<Props> = ({ locations, onAddActivity }) => {
+const AddActivityModal: FC<AddActivityProps> = ({ locations, onAddActivity }) => {
   const supabase = useSupabaseClient<Database>();
   const session = useSession();
 
@@ -141,6 +141,7 @@ const AddActivity: FC<Props> = ({ locations, onAddActivity }) => {
                     w={28}
                     min={0}
                     max={59}
+                    step={15}
                     defaultValue="00"
                     placeholder="Minutes"
                     onInputChange={(minutes) => setMinutes(minutes)}
@@ -186,4 +187,4 @@ const AddActivity: FC<Props> = ({ locations, onAddActivity }) => {
   );
 };
 
-export default AddActivity;
+export default AddActivityModal;

@@ -17,6 +17,7 @@ interface NumberInputProps extends NumberInputFieldProps {
   defaultValue?: string;
   min?: number;
   max?: number;
+  step?: number;
   onInputChange?: (string) => void;
 }
 
@@ -29,6 +30,7 @@ const NumberInput: FC<NumberInputProps> = ({
   defaultValue,
   min,
   max,
+  step,
   ...props
 }) => {
   const [value, setValue] = useState<string>(defaultValue ?? "");
@@ -42,7 +44,7 @@ const NumberInput: FC<NumberInputProps> = ({
 
   return (
     <BaseFormControl label={label} isRequired={isRequired} isError={isError} errorMessage={errorMessage}>
-      <ChakraNumberInput value={value} onChange={handleInputChange} min={min} max={max}>
+      <ChakraNumberInput value={value} onChange={handleInputChange} min={min} max={max} step={step}>
         <NumberInputField {...props} />
         <NumberInputStepper>
           <NumberIncrementStepper />
