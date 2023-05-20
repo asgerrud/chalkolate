@@ -68,7 +68,6 @@ const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniq
   useEffect(() => {
     async function fetchZoneChangeSchedule() {
       try {
-        console.log(climbingZone);
         const { data, error } = await supabase
           .from("change_schedule")
           .select("schedule_start_date, change_interval_weeks")
@@ -93,13 +92,7 @@ const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniq
     const scheduleStartDate: Date = new Date(zoneChangeSchedule.schedule_start_date);
     const challengeStartDate: Date = new Date(startDate);
 
-    const scheduleChangeDate = getNextScheduleChange(
-      scheduleStartDate,
-      challengeStartDate,
-      zoneChangeSchedule.change_interval_weeks
-    );
-
-    return scheduleChangeDate;
+    return getNextScheduleChange(scheduleStartDate, challengeStartDate, zoneChangeSchedule.change_interval_weeks);
   };
 
   const validateForm = (): boolean => {
@@ -166,7 +159,7 @@ const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniq
       onClose();
     } catch (error) {
       showToast(EToastStatus.ERROR, "Challenge creation failed");
-      console.log(error);
+      console.error(error);
     }
   };
 
