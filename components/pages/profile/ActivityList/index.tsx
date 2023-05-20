@@ -1,4 +1,4 @@
-import AddActivity from "@/components/modals/AddActivity";
+import AddActivityModal from "@/components/pages/profile/ActivityList/AddActivityModal";
 import { supabase } from "@/lib/supabase";
 import { Activity, ClimbingLocation } from "@/types/database";
 import { compareDates } from "@/utils/date";
@@ -29,7 +29,7 @@ const ActivityList: FC<ActivityListProps> = ({ initialActivities, locations }) =
 
   return (
     <>
-      <AddActivity locations={locations} onAddActivity={onAddActivity} />
+      <AddActivityModal locations={locations} onAddActivity={onAddActivity} />
       <List spacing={3}>
         <ListItem>Show list of activities</ListItem>
         {activities.map((activity: Activity) => {

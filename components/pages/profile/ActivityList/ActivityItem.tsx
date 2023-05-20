@@ -3,7 +3,7 @@ import { Activity, ClimbingLocation } from "@/types/database";
 import { EDialogType } from "@/types/enums/EDialogType";
 import { Flex, HStack, Text } from "@chakra-ui/react";
 import { FC } from "react";
-import { ConfirmDialog } from "../common/dialogs/ConfirmDialog";
+import { ConfirmDialog } from "../../../common/dialogs/ConfirmDialog";
 
 type ActivityItemProps = {
   activity: Activity;

@@ -40,7 +40,7 @@ interface AddActivityProps {
   onAddActivity: (activity: Activity) => void;
 }
 
-const AddActivity: FC<AddActivityProps> = ({ locations, onAddActivity }) => {
+const AddActivityModal: FC<AddActivityProps> = ({ locations, onAddActivity }) => {
   const supabase = useSupabaseClient<Database>();
   const session = useSession();
 
@@ -187,4 +187,4 @@ const AddActivity: FC<AddActivityProps> = ({ locations, onAddActivity }) => {
   );
 };
 
-export default AddActivity;
+export default AddActivityModal;
