@@ -32,6 +32,7 @@ import { Database } from "@/types/_supabase";
 import useSnackbar from "@/hooks/use-snackbar";
 import { EToastStatus } from "@/types/enums/EToastStatus";
 import { getFormattedDateString, getNextScheduleChange } from "@/utils/date";
+import { start } from "@popperjs/core";
 
 interface FormErrors {
   startDate?: string;
@@ -88,6 +89,11 @@ const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniq
     }
   }, [climbingZone]);
 
+  const closeMenu = () => {
+    resetFormValues();
+    onClose();
+  };
+
   const getChallengeEndDate = (startDate: string) => {
     const scheduleStartDate: Date = new Date(zoneChangeSchedule.schedule_start_date);
     const challengeStartDate: Date = new Date(startDate);
@@ -118,6 +124,15 @@ const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniq
     setErrorMessages(hasErrors ? errors : {});
 
     return !hasErrors;
+  };
+
+  const resetFormValues = () => {
+    setStartDate(today);
+    setGrade(null);
+    setLocation(locations[0].id);
+    setClimbingZone(null);
+    setZoneChangeSchedule(null);
+    setSelectedTechniques([]);
   };
 
   const submitForm = async () => {
@@ -156,7 +171,7 @@ const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniq
 
       showToast(EToastStatus.SUCCESS, "Challenge created!");
       onAddChallenge(challenge);
-      onClose();
+      closeMenu();
     } catch (error) {
       showToast(EToastStatus.ERROR, "Challenge creation failed");
       console.error(error);
@@ -168,7 +183,7 @@ const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniq
       <Button w="100%" onClick={onOpen}>
         Add challenge
       </Button>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={closeMenu}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Add challenge</ModalHeader>
