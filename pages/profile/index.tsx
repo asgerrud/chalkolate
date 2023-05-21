@@ -5,7 +5,7 @@ import { supabase } from "@/lib/supabase";
 import { Activity, Challenge, ClimbingLocation, ClimbingZone, Grade, Technique } from "@/types/database";
 import { FC, useEffect, useState } from "react";
 import { getWeeklyStreak } from "@/utils/streak";
-import { Stack } from "@chakra-ui/react";
+import { CardHeader, Heading, Stack } from "@chakra-ui/react";
 import StreakStats from "@/components/pages/profile/StreakStats/StreakStats";
 import AddChallenge from "@/components/pages/profile/AddChallenge";
 import { Streak } from "@/utils/types/interfaces/Streak";
@@ -45,7 +45,8 @@ const ProfilePage: FC<ProfilePageProps> = ({
         const { data: challenges, error } = await supabase
           .from("challenge")
           .select("*")
-          .eq("user_id", session?.user.id);
+          .eq("user_id", session?.user.id)
+          .order("end_date", { ascending: true });
 
         if (error) {
           throw error;
@@ -60,23 +61,35 @@ const ProfilePage: FC<ProfilePageProps> = ({
   }, [session]);
 
   const onAddChallenge = (challenge: Challenge): void => {
-    // TODO: implement
-    setUserChallenges([...challenges, challenge]);
+    const newChallenges = [...userChallenges, challenge].sort((a, b) => a.end_date.localeCompare(b.end_date));
+    setUserChallenges(newChallenges);
   };
 
   return (
     <Layout>
       <Stack direction="column">
         <Card width="lg">
-          <CardBody>
+          <CardHeader pb={0}>
+            <Heading size="md">Challenges</Heading>
+          </CardHeader>
+          <CardBody pb={0}>
+            <ChallengeList
+              challenges={userChallenges}
+              climbingZones={climbingZones}
+              locations={locations}
+              grades={grades}
+            />
             <AddChallenge
               locations={locations}
               climbingZones={climbingZones}
               techniques={techniques}
               grades={grades}
-              onAddChallenge={onAddChallenge}
+              onAddChallenge={(challenge) => onAddChallenge(challenge)}
             />
-            <ChallengeList challenges={userChallenges} />
+          </CardBody>
+        </Card>
+        <Card width="lg">
+          <CardBody>
             <StreakStats currentStreak={weeklyStreak.current} highestStreak={weeklyStreak.highest} unit="week" />
             <ActivityList initialActivities={activities} locations={locations} />
           </CardBody>
