@@ -1,9 +1,13 @@
-const MILISECONDS_TO_WEEKS = 1000 * 60 * 60 * 24 * 7;
+import { WEEK_IN_MS } from "@/constants";
 
 export const hoursBetweenDates = (a: Date, b: Date): number => {
   const msBetweenDates = Math.abs(a.getTime() - b.getTime());
   const milisecondToHourMultiplier = 60 * 60 * 1000;
   return msBetweenDates / milisecondToHourMultiplier;
+};
+
+export const daysBetweenDates = (a: Date, b: Date): number => {
+  return hoursBetweenDates(a, b) / 24;
 };
 
 const getDaysFromMonday = (date: Date): number => {
@@ -34,7 +38,7 @@ export const isDateInAdjacentWeek = (a: Date, b: Date): boolean => {
   const d2 = getDateBeginningOfWeek(b);
 
   // Calculate difference in weeks
-  const weekDiff = Math.abs((d2.getTime() - d1.getTime()) / MILISECONDS_TO_WEEKS);
+  const weekDiff = Math.abs((d2.getTime() - d1.getTime()) / WEEK_IN_MS);
 
   return weekDiff === 1;
 };
