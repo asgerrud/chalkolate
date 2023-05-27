@@ -19,7 +19,6 @@ import {
   ClimbingZone,
   CreateChallenge,
   Grade,
-  Row,
   Technique
 } from "@/types/database";
 import { ModalFooter } from "@chakra-ui/modal";
@@ -27,12 +26,12 @@ import GradeSelect from "./GradeSelect";
 import LocationClimbingZoneSelect from "./LocationClimbingZoneSelect";
 import DateSelect from "./DateSelect";
 import TechniqueSelect from "./TechniqueSelect";
-import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "@/types/_supabase";
+import { useSession } from "@supabase/auth-helpers-react";
 import useSnackbar from "@/hooks/use-snackbar";
 import { EToastStatus } from "@/types/enums/EToastStatus";
 import { getFormattedDateString, getNextScheduleChange } from "@/utils/date";
-import { start } from "@popperjs/core";
+import { fetchChangeSchedule } from "@/api/change-schedule";
+import { createChallenge } from "@/api/challenge";
 
 interface FormErrors {
   startDate?: string;
@@ -50,10 +49,8 @@ interface AddChallengeProps {
 }
 
 const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniques, grades, onAddChallenge }) => {
-  const supabase = useSupabaseClient<Database>();
   const session = useSession();
   const showToast = useSnackbar();
-
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const today = getFormattedDateString(new Date());
@@ -68,21 +65,8 @@ const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniq
 
   useEffect(() => {
     async function fetchZoneChangeSchedule() {
-      try {
-        const { data, error } = await supabase
-          .from("change_schedule")
-          .select("schedule_start_date, change_interval_weeks")
-          .eq("climbing_zone", climbingZone)
-          .single();
-
-        if (error) {
-          throw error;
-        }
-
-        setZoneChangeSchedule(data);
-      } catch (error) {
-        console.error("Error fetching schedule:", error);
-      }
+      const changeSchedule = await fetchChangeSchedule(climbingZone);
+      setZoneChangeSchedule(changeSchedule);
     }
     if (climbingZone) {
       fetchZoneChangeSchedule();
@@ -158,23 +142,16 @@ const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniq
       techniques: selectedTechniques
     };
 
-    try {
-      const { data: challenge, error } = await supabase
-        .from("challenge")
-        .insert<CreateChallenge>(formData)
-        .select()
-        .single<Challenge>();
+    const { data, error } = await createChallenge(formData);
 
-      if (error) {
-        throw error;
-      }
-
-      showToast(EToastStatus.SUCCESS, "Challenge created!");
-      onAddChallenge(challenge);
-      closeMenu();
-    } catch (error) {
+    if (error) {
       showToast(EToastStatus.ERROR, "Challenge creation failed");
-      console.error(error);
+    }
+
+    if (data) {
+      showToast(EToastStatus.SUCCESS, "Challenge created!");
+      onAddChallenge(data);
+      closeMenu();
     }
   };
 

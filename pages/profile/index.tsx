@@ -11,12 +11,12 @@ import AddChallenge from "@/components/pages/profile/AddChallenge";
 import { Streak } from "@/utils/types/interfaces/Streak";
 import { ChallengeList } from "@/components/pages/profile/ChallengeList";
 import { useSession } from "@supabase/auth-helpers-react";
+import { getUserChallenges } from "@/api/challenge";
 
 interface ProfilePageProps {
   activities: Activity[];
   locations: ClimbingLocation[];
   climbingZones: ClimbingZone[];
-  challenges: Challenge[];
   techniques: Technique[];
   grades: Grade[];
   weeklyStreak: Streak;
@@ -26,7 +26,6 @@ const ProfilePage: FC<ProfilePageProps> = ({
   activities,
   locations,
   climbingZones,
-  challenges,
   techniques,
   grades,
   weeklyStreak
@@ -37,24 +36,14 @@ const ProfilePage: FC<ProfilePageProps> = ({
 
   useEffect(() => {
     async function fetchChallenges() {
-      try {
-        if (!session) {
-          return;
-        }
+      if (!session) {
+        return;
+      }
 
-        const { data: challenges, error } = await supabase
-          .from("challenge")
-          .select("*")
-          .eq("user_id", session?.user.id)
-          .order("end_date", { ascending: true });
+      const challenges: Challenge[] = await getUserChallenges(session?.user.id);
 
-        if (error) {
-          throw error;
-        }
-
+      if (challenges) {
         setUserChallenges(challenges);
-      } catch (error) {
-        console.error(error);
       }
     }
     fetchChallenges();
