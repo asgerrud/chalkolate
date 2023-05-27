@@ -67,7 +67,7 @@ const ChallengeItem: FC<ChallengeItemProps> = ({ challenge, climbingZone, change
                 </Text>
               </Box>
             </Flex>
-            <Progress w="100%" my={1} value={getElapsedTimePercentage()} />
+            {!isEnded && <Progress w="100%" my={1} value={getElapsedTimePercentage()} />}
           </Box>
         </HStack>
       </Box>
