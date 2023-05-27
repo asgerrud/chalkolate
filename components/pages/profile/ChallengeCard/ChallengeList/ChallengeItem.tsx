@@ -23,6 +23,7 @@ const ChallengeItem: FC<ChallengeItemProps> = ({ challenge, climbingZone, locati
   const gradeColor: string = getGradeColor(grade.name);
 
   const getElapsedTimePercentage = (): number => {
+    // TODO: replace now with date of last change
     return ((now.getTime() - challengeStart.getTime()) / (challengeEnd.getTime() - challengeStart.getTime())) * 100;
   };
 
@@ -41,9 +42,7 @@ const ChallengeItem: FC<ChallengeItemProps> = ({ challenge, climbingZone, locati
     }
   };
 
-  const isEndingSoon: boolean = !isEnded && getElapsedTimePercentage() > 80;
-
-  // TODO: add compact view for ended challenges
+  const isEndingSoon: boolean = !isEnded && getElapsedTimePercentage() > 75;
 
   return (
     <Flex
@@ -62,9 +61,13 @@ const ChallengeItem: FC<ChallengeItemProps> = ({ challenge, climbingZone, locati
                 <Text fontSize="md">{location.name}</Text>
                 <Text fontSize="xs">{climbingZone.name}</Text>
               </Box>
-              <Text fontSize="xs" color={isEndingSoon && "red"}>
-                {!isEnded ? <span>{displayTimeRemaining()} left</span> : <span>Challenge ended</span>}
-              </Text>
+              <Box textAlign="right">
+                <Text fontSize="xs">{getFormattedDateString(challengeEnd)}</Text>
+                <Text fontSize="xs" color={isEndingSoon && "red"}>
+                  {!isEnded ? <span>{displayTimeRemaining()} left</span> : <span>Challenge ended</span>}
+                  {/* Add icon indicating challenge success or failure */}
+                </Text>
+              </Box>
             </Flex>
             <Progress w="100%" my={1} value={getElapsedTimePercentage()} />
           </Box>
