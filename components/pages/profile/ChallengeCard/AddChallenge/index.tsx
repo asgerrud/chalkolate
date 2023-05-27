@@ -29,7 +29,7 @@ import TechniqueSelect from "./TechniqueSelect";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import useSnackbar from "@/hooks/use-snackbar";
 import { EToastStatus } from "@/types/enums/EToastStatus";
-import { getFormattedDateString } from "@/utils/date";
+import { compareDates, getFormattedDateString } from "@/utils/date";
 import { fetchChangeSchedule } from "@/api/change-schedule";
 import { Database } from "@/types/_supabase";
 import { calculateNextScheduleChange } from "@/utils/schedule";
@@ -91,6 +91,10 @@ const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniq
 
     if (!startDate) {
       errors.startDate = "Start date is required";
+    }
+
+    if (compareDates(startDate, today) > 0) {
+      errors.startDate = "Start date cannot be in the future";
     }
 
     if (!grade) {
@@ -178,10 +182,10 @@ const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniq
                   defaultValue={today}
                   maxValue={today}
                   setDate={(date) => setStartDate(date)}>
-                  {!startDate && <Text variant="error">{errorMessages.startDate}</Text>}
+                  {errorMessages.startDate && <Text variant="error">{errorMessages.startDate}</Text>}
                 </DateSelect>
                 <GradeSelect grades={grades} setGrade={(grade) => setGrade(grade)}>
-                  {!grade && <Text variant="error">{errorMessages.grade}</Text>}
+                  {errorMessages.grade && <Text variant="error">{errorMessages.grade}</Text>}
                 </GradeSelect>
                 <LocationClimbingZoneSelect
                   defaultLocation={locations[0]}
@@ -189,8 +193,8 @@ const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniq
                   climbingZones={climbingZones}
                   setLocation={(location) => setLocation(location)}
                   setClimbingZone={setClimbingZone}>
-                  {!location && <Text variant="error">{errorMessages.location}</Text>}
-                  {!climbingZone && <Text variant="error">{errorMessages.climbingZone}</Text>}
+                  {errorMessages.location && <Text variant="error">{errorMessages.location}</Text>}
+                  {errorMessages.climbingZone && <Text variant="error">{errorMessages.climbingZone}</Text>}
                 </LocationClimbingZoneSelect>
                 <TechniqueSelect techniques={techniques} setSelectedTechniques={setSelectedTechniques} />
               </Stack>
