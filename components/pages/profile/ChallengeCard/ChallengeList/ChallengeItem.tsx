@@ -1,9 +1,10 @@
 import { Challenge, ClimbingLocation, ClimbingZone, Grade } from "@/types/database";
 import { FC } from "react";
 import { Badge, Box, color, Flex, HStack, Progress, Square, Stack, Tag, Text, Wrap } from "@chakra-ui/react";
-import { daysBetweenDates, hoursBetweenDates } from "@/utils/date";
+import { daysBetweenDates, getFormattedDateString, hoursBetweenDates } from "@/utils/date";
 import { DAY_IN_MS, WEEK_IN_MS } from "@/constants";
 import { formatAmountWithUnit } from "@/utils/string";
+import { getGradeColor } from "@/utils/grade";
 
 interface ChallengeItemProps {
   challenge: Challenge;
@@ -19,7 +20,7 @@ const ChallengeItem: FC<ChallengeItemProps> = ({ challenge, climbingZone, locati
 
   const isEnded: boolean = challengeEnd.getTime() < now.getTime();
 
-  const gradeColor: string = grade.name === "black" ? "black" : `${grade.name}.400`;
+  const gradeColor: string = getGradeColor(grade.name);
 
   const getElapsedTimePercentage = (): number => {
     return ((now.getTime() - challengeStart.getTime()) / (challengeEnd.getTime() - challengeStart.getTime())) * 100;

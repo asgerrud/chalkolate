@@ -26,12 +26,14 @@ import GradeSelect from "./GradeSelect";
 import LocationClimbingZoneSelect from "./LocationClimbingZoneSelect";
 import DateSelect from "./DateSelect";
 import TechniqueSelect from "./TechniqueSelect";
-import { useSession } from "@supabase/auth-helpers-react";
+import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import useSnackbar from "@/hooks/use-snackbar";
 import { EToastStatus } from "@/types/enums/EToastStatus";
 import { getFormattedDateString, getNextScheduleChange } from "@/utils/date";
 import { fetchChangeSchedule } from "@/api/change-schedule";
 import { createChallenge } from "@/api/challenge";
+import { supabase } from "@/lib/supabase";
+import { Database } from "@/types/_supabase";
 
 interface FormErrors {
   startDate?: string;
@@ -49,6 +51,7 @@ interface AddChallengeProps {
 }
 
 const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniques, grades, onAddChallenge }) => {
+  const supabase = useSupabaseClient<Database>();
   const session = useSession();
   const showToast = useSnackbar();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -142,10 +145,14 @@ const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniq
       techniques: selectedTechniques
     };
 
-    const { data, error } = await createChallenge(formData);
+    const { data, error } = await supabase
+      .from("challenge")
+      .insert<CreateChallenge>(formData)
+      .select()
+      .single<Challenge>();
 
     if (error) {
-      showToast(EToastStatus.ERROR, "Challenge creation failed");
+      showToast(EToastStatus.ERROR, "Challenge creation failed", error.message);
     }
 
     if (data) {

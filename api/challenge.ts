@@ -1,8 +1,7 @@
 import { supabase } from "@/lib/supabase";
-import { Challenge, CreateChallenge } from "@/types/database";
-import { PostgrestError } from "@supabase/supabase-js";
+import { Challenge } from "@/types/database";
 
-export async function getUserChallenges(userId: string): Promise<Challenge[]> {
+export async function fetchUserChallenges(userId: string): Promise<Challenge[]> {
   "use server";
 
   const { data, error } = await supabase
@@ -18,15 +17,4 @@ export async function getUserChallenges(userId: string): Promise<Challenge[]> {
   if (data) {
     return data;
   }
-}
-
-export async function createChallenge(formData: CreateChallenge): Promise<{ data: Challenge; error: PostgrestError }> {
-  "use server";
-
-  const { data, error } = await supabase
-    .from("challenge")
-    .insert<CreateChallenge>(formData)
-    .select()
-    .single<Challenge>();
-  return { data, error };
 }
