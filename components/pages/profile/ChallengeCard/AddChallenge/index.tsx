@@ -173,7 +173,11 @@ const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniq
           <ModalBody>
             {session ? (
               <Stack spacing={4}>
-                <DateSelect label="Select start day" defaultValue={today} setDate={(date) => setStartDate(date)}>
+                <DateSelect
+                  label="Select start day"
+                  defaultValue={today}
+                  maxValue={today}
+                  setDate={(date) => setStartDate(date)}>
                   {!startDate && <Text variant="error">{errorMessages.startDate}</Text>}
                 </DateSelect>
                 <GradeSelect grades={grades} setGrade={(grade) => setGrade(grade)}>
