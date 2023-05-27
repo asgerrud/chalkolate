@@ -1,112 +1,65 @@
 import Layout from "@/components/Layout";
-import ActivityList from "@/components/pages/profile/ActivityList";
-import { Card, CardBody } from "@chakra-ui/card";
-import { supabase } from "@/lib/supabase";
-import { Activity, Challenge, ClimbingLocation, ClimbingZone, Grade, Technique } from "@/types/database";
-import { FC, useEffect, useState } from "react";
-import { getWeeklyStreak } from "@/utils/streak";
+import { Activity, ChangeSchedule, ClimbingLocation, ClimbingZone, Grade, Technique } from "@/types/database";
+import { FC } from "react";
 import { Stack } from "@chakra-ui/react";
-import StreakStats from "@/components/pages/profile/StreakStats/StreakStats";
-import AddChallenge from "@/components/pages/profile/AddChallenge";
-import { Streak } from "@/utils/types/interfaces/Streak";
-import { ChallengeList } from "@/components/pages/profile/ChallengeList";
-import { useSession } from "@supabase/auth-helpers-react";
+import { fetchLocations } from "@/api/location";
+import { fetchActivities } from "@/api/activity";
+import { fetchClimbingZones } from "@/api/climbing-zone";
+import { fetchTechniques } from "@/api/technique";
+import { fetchGrades } from "@/api/grade";
+import ChallengeCard from "@/components/pages/profile/ChallengeCard";
+import ActivityCard from "@/components/pages/profile/ActivityCard";
+import { fetchChangeSchedules } from "@/api/change-schedule";
 
 interface ProfilePageProps {
   activities: Activity[];
   locations: ClimbingLocation[];
   climbingZones: ClimbingZone[];
-  challenges: Challenge[];
+  changeSchedules: ChangeSchedule[];
   techniques: Technique[];
   grades: Grade[];
-  weeklyStreak: Streak;
 }
 
 const ProfilePage: FC<ProfilePageProps> = ({
   activities,
   locations,
   climbingZones,
-  challenges,
+  changeSchedules,
   techniques,
-  grades,
-  weeklyStreak
+  grades
 }) => {
-  const [userChallenges, setUserChallenges] = useState<Challenge[]>([]);
-
-  const session = useSession();
-
-  useEffect(() => {
-    async function fetchChallenges() {
-      try {
-        if (!session) {
-          return;
-        }
-
-        const { data: challenges, error } = await supabase
-          .from("challenge")
-          .select("*")
-          .eq("user_id", session?.user.id);
-
-        if (error) {
-          throw error;
-        }
-
-        setUserChallenges(challenges);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    fetchChallenges();
-  }, [session]);
-
-  const onAddChallenge = (challenge: Challenge): void => {
-    // TODO: implement
-    setUserChallenges([...challenges, challenge]);
-  };
-
   return (
     <Layout>
       <Stack direction="column">
-        <Card width="lg">
-          <CardBody>
-            <AddChallenge
-              locations={locations}
-              climbingZones={climbingZones}
-              techniques={techniques}
-              grades={grades}
-              onAddChallenge={onAddChallenge}
-            />
-            <ChallengeList challenges={userChallenges} />
-            <StreakStats currentStreak={weeklyStreak.current} highestStreak={weeklyStreak.highest} unit="week" />
-            <ActivityList initialActivities={activities} locations={locations} />
-          </CardBody>
-        </Card>
+        <ChallengeCard
+          locations={locations}
+          climbingZones={climbingZones}
+          changeSchedules={changeSchedules}
+          techniques={techniques}
+          grades={grades}
+        />
+        <ActivityCard activities={activities} locations={locations} />
       </Stack>
     </Layout>
   );
 };
 
 export async function getStaticProps() {
-  const { data: locations } = await supabase.from("locations").select("*");
-  const { data: activities } = await supabase
-    .from("activities")
-    .select("*")
-    .order("activity_date", { ascending: false });
-  const { data: climbingZones } = await supabase.from("climbing_zone").select("*");
-  const { data: techniques } = await supabase.from("technique").select("*");
-  const { data: grades } = await supabase.from("grade").select("*");
-
-  const activityDates = activities.map((activity: Activity) => new Date(activity.activity_date));
-  const weeklyStreak: Streak = getWeeklyStreak(activityDates);
+  const locations: ClimbingLocation[] = await fetchLocations();
+  const activities: Activity[] = await fetchActivities();
+  const climbingZones: ClimbingZone[] = await fetchClimbingZones();
+  const changeSchedules: ChangeSchedule[] = await fetchChangeSchedules();
+  const techniques: Technique[] = await fetchTechniques();
+  const grades: Grade[] = await fetchGrades();
 
   return {
     props: {
-      locations,
       activities,
-      grades,
+      locations,
       climbingZones,
+      changeSchedules,
       techniques,
-      weeklyStreak
+      grades
     }
   };
 }

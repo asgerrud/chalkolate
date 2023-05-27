@@ -1,4 +1,5 @@
 import { Grade } from "@/types/database";
+import { getGradeColor } from "@/utils/grade";
 import { Card, CardBody, CardHeader, Flex, Heading, SimpleGrid } from "@chakra-ui/react";
 import { Dispatch, FC, ReactNode, SetStateAction, useState } from "react";
 
@@ -17,15 +18,11 @@ const GradeSelect: FC<GradeSelectProps> = ({ grades, setGrade: onGradeSelect, ch
     return selectedGrade?.id === grade.id;
   };
 
-  const getGradeColor = (grade: Grade): string => {
-    const color: string = grade.name;
-    const colorActive: string = color === "black" ? "black" : `${color}.400`;
-    const colorInactive: string = color === "black" ? "gray.500" : `${color}.100`;
-
+  const gradeColor = (grade: Grade): string => {
     if (selectedGrade != null) {
-      return isActiveColor(grade) ? colorActive : colorInactive;
+      return getGradeColor(grade.name, !isActiveColor(grade));
     } else {
-      return colorActive;
+      return getGradeColor(grade.name);
     }
   };
 
@@ -47,7 +44,7 @@ const GradeSelect: FC<GradeSelectProps> = ({ grades, setGrade: onGradeSelect, ch
               key={grade.id}
               h={16}
               cursor="pointer"
-              bgColor={getGradeColor(grade)}
+              bgColor={gradeColor(grade)}
               transition="background-color 50ms ease-out"
               onClick={() => handleGradeSelect(grade)}
             />

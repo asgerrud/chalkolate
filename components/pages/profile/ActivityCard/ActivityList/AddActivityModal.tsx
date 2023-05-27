@@ -34,6 +34,8 @@ import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "@/types/_supabase";
 import { Activity, ClimbingLocation, CreateActivity } from "@/types/database";
 import { getDistanceBetween } from "@/utils/geo";
+import DateSelect from "@/components/pages/profile/ChallengeCard/AddChallenge/DateSelect";
+import DateInput from "@/components/common/DateInput";
 
 interface AddActivityProps {
   locations: ClimbingLocation[];
@@ -122,15 +124,7 @@ const AddActivityModal: FC<AddActivityProps> = ({ locations, onAddActivity }) =>
             <VStack justifyContent="flex-start" alignItems="stretch" spacing={6}>
               <FormControl isInvalid={isInvalid} isRequired>
                 <FormLabel>Activity date</FormLabel>
-                <InputGroup>
-                  <InputLeftElement pointerEvents="none">
-                    <Calendar size={18} />
-                  </InputLeftElement>
-                  <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} isRequired />
-                  <Box px={2}>
-                    <Button onClick={() => setDate(today)}>Today</Button>
-                  </Box>
-                </InputGroup>
+                <DateInput defaultValue={today} maxValue={today} setDate={(date) => setDate(date)} />
               </FormControl>
               <FormControl>
                 <FormLabel>Duration</FormLabel>

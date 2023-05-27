@@ -9,7 +9,7 @@ interface TechniqueSelectProps {
 
 const TechniqueSelect: FC<TechniqueSelectProps> = ({ techniques, setSelectedTechniques: onSelectedChange }) => {
   const [techniquesSelectedList, setTechniquesSelectedList] = useState<boolean[]>(
-    new Array(techniques.length).fill(false)
+    new Array(techniques?.length).fill(false)
   );
 
   function onTechniqueSelected(index: number, selected: boolean) {
