@@ -29,11 +29,10 @@ import TechniqueSelect from "./TechniqueSelect";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import useSnackbar from "@/hooks/use-snackbar";
 import { EToastStatus } from "@/types/enums/EToastStatus";
-import { getFormattedDateString, getNextScheduleChange } from "@/utils/date";
+import { getFormattedDateString } from "@/utils/date";
 import { fetchChangeSchedule } from "@/api/change-schedule";
-import { createChallenge } from "@/api/challenge";
-import { supabase } from "@/lib/supabase";
 import { Database } from "@/types/_supabase";
+import { calculateNextScheduleChange } from "@/utils/schedule";
 
 interface FormErrors {
   startDate?: string;
@@ -53,8 +52,8 @@ interface AddChallengeProps {
 const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniques, grades, onAddChallenge }) => {
   const supabase = useSupabaseClient<Database>();
   const session = useSession();
-  const showToast = useSnackbar();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const showToast = useSnackbar();
 
   const today = getFormattedDateString(new Date());
 
@@ -84,8 +83,7 @@ const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniq
   const getChallengeEndDate = (startDate: string) => {
     const scheduleStartDate: Date = new Date(zoneChangeSchedule.schedule_start_date);
     const challengeStartDate: Date = new Date(startDate);
-
-    return getNextScheduleChange(scheduleStartDate, challengeStartDate, zoneChangeSchedule.change_interval_weeks);
+    return calculateNextScheduleChange(scheduleStartDate, challengeStartDate, zoneChangeSchedule.change_interval_weeks);
   };
 
   const validateForm = (): boolean => {
@@ -132,7 +130,7 @@ const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniq
       return;
     }
 
-    const scheduleChangeDate = getChallengeEndDate(startDate);
+    const scheduleChangeDate: Date = getChallengeEndDate(startDate);
     const challengeEndDate: string = getFormattedDateString(scheduleChangeDate);
 
     const formData: CreateChallenge = {
