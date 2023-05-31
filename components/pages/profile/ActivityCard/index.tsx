@@ -16,7 +16,7 @@ const ActivityCard: FC<ActivityCardProps> = ({ activities, locations }) => {
   const weeklyStreak: Streak = getWeeklyStreak(activityDates);
 
   return (
-    <Card width="lg">
+    <Card w="100%" maxWidth="lg">
       <CardBody>
         <StreakStats currentStreak={weeklyStreak.current} highestStreak={weeklyStreak.highest} unit="week" />
         <ActivityList initialActivities={activities} locations={locations} />

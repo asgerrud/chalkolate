@@ -44,7 +44,7 @@ const ChallengeCard: FC<ChallengeCardProps> = ({ climbingZones, changeSchedules,
   };
 
   return (
-    <Card width="lg">
+    <Card w="100%" maxWidth="lg">
       <CardHeader pb={0}>
         <Heading size="md">Challenges</Heading>
       </CardHeader>
