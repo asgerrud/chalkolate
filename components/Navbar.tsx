@@ -11,8 +11,7 @@ const Navbar = () => {
 
   return (
     <Box py={4} px={8}>
-      <HStack justifyContent="space-between">
-        <Link href="/">Home</Link>
+      <HStack justifyContent="flex-end">
         {session ? (
           <Menu>
             <MenuButton as={Button} variant="ghost" rightIcon={<ChevronDownIcon />}>
