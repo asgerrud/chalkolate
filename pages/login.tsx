@@ -19,15 +19,11 @@ const LoginPage = () => {
   });
 
   return (
-    <Layout>
+    <Layout navbarDisabled>
       <Container>
         <Flex justifyContent="center" alignItems="center">
           <Card p={4} w="100%">
-            <Auth
-              supabaseClient={supabase}
-              appearance={{ theme: ThemeSupa }}
-              providers={["google", "github"]}
-            />
+            <Auth supabaseClient={supabase} appearance={{ theme: ThemeSupa }} providers={["google", "github"]} />
           </Card>
         </Flex>
       </Container>
