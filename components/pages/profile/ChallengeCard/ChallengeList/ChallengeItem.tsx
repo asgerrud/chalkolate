@@ -1,9 +1,7 @@
 import { Challenge, ChangeSchedule, ClimbingLocation, ClimbingZone, Grade } from "@/types/database";
 import { FC } from "react";
 import { Box, Flex, HStack, Progress, Square, Text } from "@chakra-ui/react";
-import { getFormattedDateString } from "@/utils/date";
-import { DAY_IN_MS, WEEK_IN_MS } from "@/constants";
-import { formatAmountWithUnit } from "@/utils/string";
+import { getFormattedDateString, getTimeTo } from "@/utils/date";
 import { getGradeColor } from "@/utils/grade";
 import { calculateScheduleStart } from "@/utils/schedule";
 
@@ -28,18 +26,7 @@ const ChallengeItem: FC<ChallengeItemProps> = ({ challenge, climbingZone, change
   }
 
   function displayTimeRemaining(): string {
-    const remainingTime: number = challengeEnd.getTime() - now.getTime();
-
-    if (remainingTime > WEEK_IN_MS) {
-      const weeks = Math.floor(remainingTime / WEEK_IN_MS);
-      return formatAmountWithUnit("week", weeks);
-    } else if (remainingTime > DAY_IN_MS) {
-      const days = Math.floor(remainingTime / DAY_IN_MS);
-      return formatAmountWithUnit("day", days);
-    } else if (remainingTime > 0) {
-      const hours = Math.floor(remainingTime / (1000 * 60 * 60));
-      return formatAmountWithUnit("hour", hours);
-    }
+    return getTimeTo(now, challengeEnd);
   }
 
   return (

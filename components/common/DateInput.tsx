@@ -1,3 +1,4 @@
+import { getFormattedDateString } from "@/utils/date";
 import { InputGroup, Input, Button, Box } from "@chakra-ui/react";
 import { Dispatch, FC, SetStateAction, useState } from "react";
 
@@ -10,7 +11,7 @@ interface DateInputProps {
 const DateInput: FC<DateInputProps> = ({ defaultValue, maxValue, setDate: onDateChange }) => {
   const [date, setDate] = useState<string>(defaultValue);
 
-  const today = new Date().toISOString().substring(0, 10);
+  const today = getFormattedDateString(new Date());
 
   function handleDateSelect(date: string) {
     setDate(date);

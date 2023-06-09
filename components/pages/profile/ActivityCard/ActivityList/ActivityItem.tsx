@@ -1,6 +1,7 @@
 import { useHydrationSafeDate } from "@/hooks/use-hydration-safe-date";
 import { Activity, ClimbingLocation } from "@/types/database";
 import { EDialogType } from "@/types/enums/EDialogType";
+import { getFormattedDateString } from "@/utils/date";
 import { Flex, HStack, Text } from "@chakra-ui/react";
 import { FC } from "react";
 import { ConfirmDialog } from "../../../../common/dialogs/ConfirmDialog";
@@ -12,7 +13,7 @@ type ActivityItemProps = {
 };
 
 export const ActivityItem: FC<ActivityItemProps> = ({ activity, locations, onRemoveActivity }) => {
-  const formattedDate = useHydrationSafeDate(activity.activity_date);
+  const formattedDate = getFormattedDateString(activity.activity_date);
 
   const getLocationName = (id: string): string => {
     const location = locations.find((location: ClimbingLocation) => location.id === id);
