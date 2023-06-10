@@ -28,6 +28,9 @@ const Navbar = () => {
               <MenuItem as={Link} href={EPageRoute.PROFILE}>
                 View Profile
               </MenuItem>
+              <MenuItem as={Link} href={EPageRoute.SETTINGS}>
+                Settings
+              </MenuItem>
               <MenuItem onClick={handleSignOut}>Sign out</MenuItem>
             </MenuList>
           </Menu>
