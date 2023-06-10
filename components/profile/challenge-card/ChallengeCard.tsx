@@ -1,8 +1,8 @@
 import { fetchUserChallenges } from "@/api/challenge";
-import { ClimbingZone, ClimbingLocation, Technique, Grade, Challenge, ChangeSchedule } from "@/types/database";
-import { Card, CardHeader, CardBody, Heading } from "@chakra-ui/react";
+import { Challenge, ChangeSchedule, ClimbingLocation, ClimbingZone, Grade, Technique } from "@/types/database";
+import { Card, CardBody, CardHeader, Heading } from "@chakra-ui/react";
 import { useSession } from "@supabase/auth-helpers-react";
-import { FC, useState, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import AddChallenge from "./add-challenge/AddChallenge";
 import { ChallengeList } from "./challenge-list/ChallengeList";
 
@@ -31,6 +31,7 @@ const ChallengeCard: FC<ChallengeCardProps> = ({ climbingZones, changeSchedules,
         setChallenges(challenges);
       }
     }
+
     fetchChallenges();
   }, [session]);
 
@@ -44,11 +45,11 @@ const ChallengeCard: FC<ChallengeCardProps> = ({ climbingZones, changeSchedules,
   };
 
   return (
-    <Card w="100%" maxWidth="lg">
-      <CardHeader pb={0}>
+    <Card>
+      <CardHeader>
         <Heading size="md">Challenges</Heading>
       </CardHeader>
-      <CardBody pb={0}>
+      <CardBody>
         <ChallengeList
           challenges={challenges}
           climbingZones={climbingZones}

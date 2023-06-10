@@ -1,6 +1,6 @@
 import SelectInput from "@/components/common/SelectInput";
 import { ClimbingLocation, ClimbingZone } from "@/types/database";
-import { Card, CardHeader, CardBody, Divider, Heading, Text } from "@chakra-ui/react";
+import { Card, CardBody, CardHeader, Divider, Heading, Text } from "@chakra-ui/react";
 import { Dispatch, FC, ReactNode, SetStateAction, useState } from "react";
 
 type locationId = ClimbingLocation["id"];
@@ -46,7 +46,7 @@ const LocationClimbingZoneSelect: FC<LocationClimbingZoneSelect> = ({
       <CardHeader>
         <Heading size="md">Location and zone</Heading>
       </CardHeader>
-      <CardBody pt={0}>
+      <CardBody>
         <SelectInput
           nameColumn="name"
           options={locations}

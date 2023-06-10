@@ -1,4 +1,4 @@
-import AddActivityModal from "@/components/profile/activity-card/activity-list/add-activity-modal/AddActivityModal";
+import AddActivityModal from "@/components/profile/activity-card/add-activity-modal/AddActivityModal";
 import { supabase } from "@/lib/supabase";
 import { Activity, ClimbingLocation } from "@/types/database";
 import { compareDates } from "@/utils/date";

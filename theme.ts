@@ -1,4 +1,20 @@
-import { extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
+import { createMultiStyleConfigHelpers, extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
+import { cardAnatomy } from "@chakra-ui/anatomy";
+
+const { defineMultiStyleConfig } = createMultiStyleConfigHelpers(cardAnatomy.keys);
+
+
+const cardTheme = defineMultiStyleConfig({
+  baseStyle: {
+    container: {
+      width: "100%",
+      maxWidth: "480px"
+    },
+    header: {
+      paddingBottom: 0
+    }
+  }
+});
 
 const extendedTheme = extendTheme(
   {
@@ -17,6 +33,7 @@ const extendedTheme = extendTheme(
       useSystemColorMode: false
     },
     components: {
+      Card: cardTheme,
       Text: {
         variants: {
           error: {

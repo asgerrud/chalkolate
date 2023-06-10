@@ -26,7 +26,7 @@ const TechniqueSelect: FC<TechniqueSelectProps> = ({ techniques, setSelectedTech
       <CardHeader>
         <Heading size="md">Techniques</Heading>
       </CardHeader>
-      <CardBody pt={0}>
+      <CardBody>
         <Stack spacing={2}>
           {techniques &&
             techniques.map((technique: Technique, index: number) => (

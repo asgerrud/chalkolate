@@ -37,7 +37,7 @@ const GradeSelect: FC<GradeSelectProps> = ({ grades, setGrade: onGradeSelect, ch
       <CardHeader>
         <Heading size="md">Grade</Heading>
       </CardHeader>
-      <CardBody pt={0}>
+      <CardBody>
         <SimpleGrid minChildWidth="120px" spacing={2} mb={4}>
           {grades.map((grade: Grade) => (
             <Flex

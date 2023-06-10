@@ -16,7 +16,7 @@ const DateSelect: FC<DateSelectProps> = ({ label, defaultValue, maxValue, setDat
       <CardHeader>
         <Heading size="md">{label}</Heading>
       </CardHeader>
-      <CardBody pt={0}>
+      <CardBody>
         <DateInput defaultValue={defaultValue} maxValue={maxValue} setDate={setDate} />
         {children}
       </CardBody>
