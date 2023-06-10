@@ -1,4 +1,4 @@
-import { Box, HStack, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
+import { Box, HStack, Menu, MenuButton, MenuDivider, MenuItem, MenuList } from "@chakra-ui/react";
 import { Button } from "@chakra-ui/button";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
@@ -31,6 +31,7 @@ const Navbar = () => {
               <MenuItem as={Link} href={EPageRoute.SETTINGS}>
                 Settings
               </MenuItem>
+              <MenuDivider />
               <MenuItem onClick={handleSignOut}>Sign out</MenuItem>
             </MenuList>
           </Menu>

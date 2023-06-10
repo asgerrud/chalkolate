@@ -3,8 +3,8 @@ import { ClimbingZone, ClimbingLocation, Technique, Grade, Challenge, ChangeSche
 import { Card, CardHeader, CardBody, Heading } from "@chakra-ui/react";
 import { useSession } from "@supabase/auth-helpers-react";
 import { FC, useState, useEffect } from "react";
-import AddChallenge from "./AddChallenge";
-import { ChallengeList } from "./ChallengeList";
+import AddChallenge from "./add-challenge/AddChallenge";
+import { ChallengeList } from "./challenge-list/ChallengeList";
 
 interface ChallengeCardProps {
   climbingZones: ClimbingZone[];

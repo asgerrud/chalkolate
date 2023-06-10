@@ -1,10 +1,10 @@
-import AddActivityModal from "@/components/pages/profile/ActivityCard/ActivityList/AddActivityModal";
+import AddActivityModal from "@/components/profile/activity-card/activity-list/add-activity-modal/AddActivityModal";
 import { supabase } from "@/lib/supabase";
 import { Activity, ClimbingLocation } from "@/types/database";
 import { compareDates } from "@/utils/date";
 import { List, ListItem } from "@chakra-ui/react";
 import { FC, useState } from "react";
-import { ActivityItem } from "./ActivityItem";
+import { ActivityItem } from "./activity-item/ActivityItem";
 
 interface ActivityListProps {
   initialActivities: Activity[];

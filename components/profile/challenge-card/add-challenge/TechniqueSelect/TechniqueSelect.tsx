@@ -1,6 +1,6 @@
 import { Technique } from "@/types/database";
-import { Card, CardHeader, CardBody, Stack, Checkbox, Heading } from "@chakra-ui/react";
-import { Dispatch, FC, ReactNode, SetStateAction, useState } from "react";
+import { Card, CardBody, CardHeader, Checkbox, Heading, Stack } from "@chakra-ui/react";
+import { Dispatch, FC, SetStateAction, useState } from "react";
 
 interface TechniqueSelectProps {
   techniques: Technique[];

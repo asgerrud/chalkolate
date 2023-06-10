@@ -1,12 +1,4 @@
-import {
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay
-} from "@chakra-ui/modal";
+import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from "@chakra-ui/modal";
 import { Button } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
 import {
@@ -14,27 +6,22 @@ import {
   AlertDescription,
   AlertIcon,
   AlertTitle,
-  Box,
   Divider,
   Flex,
   FormControl,
   FormLabel,
   HStack,
-  Input,
-  InputGroup,
-  InputLeftElement,
   Select,
   Text,
   VStack
 } from "@chakra-ui/react";
-import { Calendar, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import NumberInput from "@/components/common/NumberInput";
 import { FC, useState } from "react";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "@/types/_supabase";
 import { Activity, ClimbingLocation, CreateActivity } from "@/types/database";
 import { getDistanceBetween } from "@/utils/geo";
-import DateSelect from "@/components/pages/profile/ChallengeCard/AddChallenge/DateSelect";
 import DateInput from "@/components/common/DateInput";
 
 interface AddActivityProps {

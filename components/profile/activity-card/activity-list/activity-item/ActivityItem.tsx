@@ -1,10 +1,9 @@
-import { useHydrationSafeDate } from "@/hooks/use-hydration-safe-date";
+import { ConfirmDialog } from "@/components/common/dialogs/ConfirmDialog";
 import { Activity, ClimbingLocation } from "@/types/database";
 import { EDialogType } from "@/types/enums/EDialogType";
 import { getFormattedDateString } from "@/utils/date";
 import { Flex, HStack, Text } from "@chakra-ui/react";
 import { FC } from "react";
-import { ConfirmDialog } from "../../../../common/dialogs/ConfirmDialog";
 
 type ActivityItemProps = {
   activity: Activity;

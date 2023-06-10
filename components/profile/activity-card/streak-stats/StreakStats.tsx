@@ -1,4 +1,4 @@
-import { Card, CardBody, Flex, Stat, StatLabel, StatNumber } from "@chakra-ui/react";
+import { Flex, Stat, StatLabel, StatNumber } from "@chakra-ui/react";
 import React, { FC } from "react";
 import { getPluralizedWord } from "@/utils/string";
 

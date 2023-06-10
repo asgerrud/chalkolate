@@ -9,7 +9,7 @@ export async function middleware(req: NextRequest) {
   const supabase = createMiddlewareSupabaseClient({ req, res });
   // Check if we have a session
   const {
-    data: { session },
+    data: { session }
   } = await supabase.auth.getSession();
 
   // return res
@@ -27,5 +27,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/profile"],
+  matcher: ["/profile", "/settings"]
 };

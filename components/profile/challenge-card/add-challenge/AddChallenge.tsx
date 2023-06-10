@@ -22,10 +22,10 @@ import {
   Technique
 } from "@/types/database";
 import { ModalFooter } from "@chakra-ui/modal";
-import GradeSelect from "./GradeSelect";
-import LocationClimbingZoneSelect from "./LocationClimbingZoneSelect";
-import DateSelect from "./DateSelect";
-import TechniqueSelect from "./TechniqueSelect";
+import GradeSelect from "./GradeSelect/GradeSelect";
+import LocationClimbingZoneSelect from "./LocationClimbingZoneSelect/LocationClimbingZoneSelect";
+import DateSelect from "./DateSelect/DateSelect";
+import TechniqueSelect from "./TechniqueSelect/TechniqueSelect";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import useSnackbar from "@/hooks/use-snackbar";
 import { EToastStatus } from "@/types/enums/EToastStatus";

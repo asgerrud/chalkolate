@@ -3,8 +3,8 @@ import { getWeeklyStreak } from "@/utils/streak";
 import { Streak } from "@/utils/types/interfaces/Streak";
 import { Card, CardBody } from "@chakra-ui/react";
 import { FC } from "react";
-import ActivityList from "./ActivityList";
-import StreakStats from "./StreakStats/StreakStats";
+import ActivityList from "./activity-list/ActivityList";
+import StreakStats from "./streak-stats/StreakStats";
 
 interface ActivityCardProps {
   activities: Activity[];

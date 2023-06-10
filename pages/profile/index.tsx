@@ -7,8 +7,8 @@ import { fetchActivities } from "@/api/activity";
 import { fetchClimbingZones } from "@/api/climbing-zone";
 import { fetchTechniques } from "@/api/technique";
 import { fetchGrades } from "@/api/grade";
-import ChallengeCard from "@/components/pages/profile/ChallengeCard";
-import ActivityCard from "@/components/pages/profile/ActivityCard";
+import ChallengeCard from "@/components/profile/challenge-card/ChallengeCard";
+import ActivityCard from "@/components/profile/activity-card/ActivityCard";
 import { fetchChangeSchedules } from "@/api/change-schedule";
 
 interface ProfilePageProps {
