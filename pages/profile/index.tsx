@@ -30,7 +30,8 @@ const ProfilePage: FC<ProfilePageProps> = ({
 }) => {
   return (
     <Layout>
-      <Stack direction="column">
+      <Stack w="100%" direction="column" alignItems="center" spacing={6}>
+        <ActivityCard activities={activities} locations={locations} />
         <ChallengeCard
           locations={locations}
           climbingZones={climbingZones}
@@ -38,7 +39,6 @@ const ProfilePage: FC<ProfilePageProps> = ({
           techniques={techniques}
           grades={grades}
         />
-        <ActivityCard activities={activities} locations={locations} />
       </Stack>
     </Layout>
   );

@@ -4,6 +4,7 @@ import { Box, Flex, HStack, Progress, Square, Text } from "@chakra-ui/react";
 import { getFormattedDateString, getTimeTo } from "@/utils/date";
 import { getGradeColor } from "@/utils/grade";
 import { calculateScheduleStart } from "@/utils/schedule";
+import dayjs from "dayjs";
 
 interface ChallengeItemProps {
   challenge: Challenge;
@@ -14,15 +15,15 @@ interface ChallengeItemProps {
 }
 
 const ChallengeItem: FC<ChallengeItemProps> = ({ challenge, climbingZone, changeSchedule, location, grade }) => {
-  const challengeEnd: Date = new Date(challenge.end_date);
-
   const now: Date = new Date();
-  const isEnded: boolean = challengeEnd.getTime() < now.getTime();
+  const challengeEnd: Date = new Date(challenge.end_date);
+  const isEnded: boolean = dayjs(challengeEnd).isBefore(now);
   const isEndingSoon: boolean = !isEnded && getElapsedTimePercentage() > 75;
 
   function getElapsedTimePercentage(): number {
     const scheduleStart: Date = calculateScheduleStart(challengeEnd, changeSchedule.change_interval_weeks);
-    return ((now.getTime() - scheduleStart.getTime()) / (challengeEnd.getTime() - scheduleStart.getTime())) * 100;
+    const percentage = ((now.getTime() - scheduleStart.getTime()) / (challengeEnd.getTime() - scheduleStart.getTime())) * 100;
+    return percentage >= 0 ? percentage : 0;
   }
 
   function displayTimeRemaining(): string {

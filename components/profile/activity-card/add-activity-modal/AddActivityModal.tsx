@@ -23,6 +23,7 @@ import { Database } from "@/types/_supabase";
 import { Activity, ClimbingLocation, CreateActivity } from "@/types/database";
 import { getDistanceBetween } from "@/utils/geo";
 import DateInput from "@/components/common/DateInput";
+import dayjs from "dayjs";
 
 interface AddActivityProps {
   locations: ClimbingLocation[];
@@ -35,7 +36,7 @@ const AddActivityModal: FC<AddActivityProps> = ({ locations, onAddActivity }) =>
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const today = new Date().toISOString().substring(0, 10);
+  const today = dayjs().format("YYYY-MM-DD");
 
   const [hours, setHours] = useState<string>("");
   const [minutes, setMinutes] = useState<string>("00");
@@ -99,7 +100,7 @@ const AddActivityModal: FC<AddActivityProps> = ({ locations, onAddActivity }) =>
 
   return (
     <>
-      <Button colorScheme="primary" mb={4} onClick={onOpen}>
+      <Button colorScheme="primary" onClick={onOpen}>
         Add activity
       </Button>
       <Modal size="lg" isOpen={isOpen} onClose={onClose} isCentered>

@@ -8,7 +8,7 @@ export async function fetchUserChallenges(userId: string): Promise<Challenge[]> 
     .from("challenge")
     .select("*")
     .eq("user_id", userId)
-    .order("end_date", { ascending: true });
+    .order("end_date", { ascending: false });
 
   if (error) {
     throw error;

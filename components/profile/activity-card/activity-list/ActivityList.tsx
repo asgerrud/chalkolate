@@ -2,7 +2,7 @@ import AddActivityModal from "@/components/profile/activity-card/add-activity-mo
 import { supabase } from "@/lib/supabase";
 import { Activity, ClimbingLocation } from "@/types/database";
 import { compareDates } from "@/utils/date";
-import { List, ListItem } from "@chakra-ui/react";
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Divider, Heading, List } from "@chakra-ui/react";
 import { FC, useState } from "react";
 import { ActivityItem } from "./activity-item/ActivityItem";
 
@@ -30,19 +30,34 @@ const ActivityList: FC<ActivityListProps> = ({ initialActivities, locations }) =
   return (
     <>
       <AddActivityModal locations={locations} onAddActivity={onAddActivity} />
-      <List spacing={3}>
-        <ListItem>Show list of activities</ListItem>
-        {activities.map((activity: Activity) => {
-          return (
-            <ActivityItem
-              key={activity.id}
-              activity={activity}
-              locations={locations}
-              onRemoveActivity={removeActivity}
-            />
-          );
-        })}
-      </List>
+      <Divider my={4} />
+      <Accordion variant="flat" allowToggle>
+        <AccordionItem>
+          <Heading>
+            <AccordionButton>
+              <Box as="span" flex="1" textAlign="left">
+                Show activities
+              </Box>
+              <AccordionIcon />
+            </AccordionButton>
+          </Heading>
+          <AccordionPanel py={4}>
+            <List spacing={3}>
+              {activities.map((activity: Activity) => {
+                return (
+                  <ActivityItem
+                    key={activity.id}
+                    activity={activity}
+                    locations={locations}
+                    onRemoveActivity={removeActivity}
+                  />
+                );
+              })}
+            </List>
+          </AccordionPanel>
+        </AccordionItem>
+      </Accordion>
+
     </>
   );
 };

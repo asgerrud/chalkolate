@@ -19,19 +19,19 @@ const ChallengeCard: FC<ChallengeCardProps> = ({ climbingZones, changeSchedules,
 
   const session = useSession();
 
-  useEffect(() => {
-    async function fetchChallenges() {
-      if (!session) {
-        return;
-      }
-
-      const challenges: Challenge[] = await fetchUserChallenges(session?.user.id);
-
-      if (challenges) {
-        setChallenges(challenges);
-      }
+  async function fetchChallenges() {
+    if (!session) {
+      return;
     }
 
+    const challenges: Challenge[] = await fetchUserChallenges(session?.user.id);
+
+    if (challenges) {
+      setChallenges(challenges);
+    }
+  }
+
+  useEffect(() => {
     fetchChallenges();
   }, [session]);
 
