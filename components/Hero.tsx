@@ -1,14 +1,14 @@
 import { EPageRoute } from "@/types/enums/EPageRoute";
-import { Box, Button, Card, Center, Spinner } from "@chakra-ui/react";
+import { Box, Button, Center, Spinner } from "@chakra-ui/react";
 import { useSession } from "@supabase/auth-helpers-react";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
-import { use, useEffect } from "react";
+import { useEffect } from "react";
 
-const bgImage: string =
+const bgImage =
   "https://images.unsplash.com/photo-1522163182402-834f871fd851?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1103&q=80";
 
-const Hero = () => {
+export default function Hero() {
   const session = useSession();
   const router = useRouter();
 
@@ -33,6 +33,4 @@ const Hero = () => {
       </Center>
     </Box>
   );
-};
-
-export default Hero;
+}

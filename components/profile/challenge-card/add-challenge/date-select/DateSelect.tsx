@@ -1,6 +1,6 @@
 import DateInput from "@/components/common/DateInput";
 import { Card, CardBody, CardHeader, Heading } from "@chakra-ui/react";
-import { Dispatch, FC, ReactNode, SetStateAction } from "react";
+import { Dispatch, ReactNode, SetStateAction } from "react";
 
 interface DateSelectProps {
   label: string;
@@ -10,7 +10,7 @@ interface DateSelectProps {
   children?: ReactNode;
 }
 
-const DateSelect: FC<DateSelectProps> = ({ label, defaultValue, maxValue, setDate: setDate, children }) => {
+export default function DateSelect({ label, defaultValue, maxValue, setDate: setDate, children }: DateSelectProps) {
   return (
     <Card>
       <CardHeader>
@@ -22,6 +22,4 @@ const DateSelect: FC<DateSelectProps> = ({ label, defaultValue, maxValue, setDat
       </CardBody>
     </Card>
   );
-};
-
-export default DateSelect;
+}

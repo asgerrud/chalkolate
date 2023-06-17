@@ -12,7 +12,6 @@ import {
   ListItem,
   Text
 } from "@chakra-ui/react";
-import { FC } from "react";
 import ChallengeItem from "./ChallengeItem";
 import { arrayToObject } from "@/utils/array";
 import dayjs from "dayjs";
@@ -25,27 +24,25 @@ interface ChallengeListProps {
   grades: Grade[];
 }
 
-export const ChallengeList: FC<ChallengeListProps> = ({
+export default function ChallengeList({
   challenges,
   climbingZones,
   changeSchedules,
   locations,
   grades
-}) => {
-  if (challenges.length === 0) {
-    return <Text>No challenges added</Text>;
-  }
-
+}: ChallengeListProps) {
   const gradesById: Record<string, Grade> = arrayToObject(grades);
   const climbingZonesById: Record<string, ClimbingZone> = arrayToObject(climbingZones);
   const locationsById: Record<string, ClimbingLocation> = arrayToObject(locations);
-
   const activeChallenges = challenges.filter((challenge: Challenge) => dayjs().isBefore(challenge.end_date));
   const endedChallenges = challenges.filter((challenge: Challenge) => dayjs().isAfter(challenge.end_date));
 
-
   function getChangeSchedule(climbingZoneId: string): ChangeSchedule {
     return changeSchedules.find((changeSchedule: ChangeSchedule) => changeSchedule.climbing_zone === climbingZoneId);
+  }
+
+  if (challenges.length === 0) {
+    return <Text>No challenges added</Text>;
   }
 
   return (
@@ -91,4 +88,4 @@ export const ChallengeList: FC<ChallengeListProps> = ({
       </Accordion>
     </>
   );
-};
+}

@@ -17,23 +17,22 @@ import {
 } from "@chakra-ui/react";
 import { MapPin } from "lucide-react";
 import NumberInput from "@/components/common/NumberInput";
-import { FC, useState } from "react";
+import { useState } from "react";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "@/types/_supabase";
 import { Activity, ClimbingLocation, CreateActivity } from "@/types/database";
-import { getDistanceBetween } from "@/utils/geo";
 import DateInput from "@/components/common/DateInput";
 import dayjs from "dayjs";
+import { getNearestLocationFromUser } from "@/utils/geo";
 
 interface AddActivityProps {
   locations: ClimbingLocation[];
   onAddActivity: (activity: Activity) => void;
 }
 
-const AddActivityModal: FC<AddActivityProps> = ({ locations, onAddActivity }) => {
+export default function AddActivityModal({ locations, onAddActivity }: AddActivityProps) {
   const supabase = useSupabaseClient<Database>();
   const session = useSession();
-
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const today = dayjs().format("YYYY-MM-DD");
@@ -46,35 +45,23 @@ const AddActivityModal: FC<AddActivityProps> = ({ locations, onAddActivity }) =>
 
   const isInvalid = date === "";
 
-  const getNearestLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        const { latitude, longitude } = position.coords;
-        const userCoords = { lat: latitude, lon: longitude };
-        const nearestLocation: ClimbingLocation = locations.reduce((a: ClimbingLocation, b: ClimbingLocation) => {
-          const distA = getDistanceBetween(userCoords, {
-            lat: a.latitude,
-            lon: a.longitude
-          });
-          const distB = getDistanceBetween(userCoords, {
-            lat: b.latitude,
-            lon: b.longitude
-          });
-          return distA < distB ? a : b;
-        });
-        setLocation(nearestLocation.id);
-      });
-    } else {
-      alert("An error occurred fetching your location");
-    }
-  };
+function getNearestLocation() {
+  const nearestLocation = getNearestLocationFromUser(locations);
 
-  const getDurationInMinutes = (): number => {
+  if (nearestLocation) {
+    setLocation(nearestLocation);
+  } else {
+    alert("An error occurred fetching your location");
+  }
+
+}
+
+  function getDurationInMinutes(): number {
     const hoursInMinutes = (Number.parseInt(hours) ?? 0) * 60;
     return (Number.parseInt(minutes) ?? 0) + hoursInMinutes;
-  };
+  }
 
-  const handleSubmit = async () => {
+  async function handleSubmit(): Promise<void> {
     if (!session || isInvalid) {
       return;
     }
@@ -96,7 +83,7 @@ const AddActivityModal: FC<AddActivityProps> = ({ locations, onAddActivity }) =>
       onAddActivity(activity);
       onClose();
     }
-  };
+  }
 
   return (
     <>
@@ -167,6 +154,4 @@ const AddActivityModal: FC<AddActivityProps> = ({ locations, onAddActivity }) =>
       </Modal>
     </>
   );
-};
-
-export default AddActivityModal;
+}

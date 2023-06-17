@@ -1,9 +1,9 @@
 import Layout from "@/components/Layout";
 import { Box, Card, CardBody, CardHeader, Container, Heading, Stack, Text } from "@chakra-ui/react";
-import { ConfirmButton } from "@/components/common/dialogs/ConfirmButton";
+import ConfirmButton from "@/components/common/dialogs/ConfirmButton";
 import { EDialogType } from "@/types/enums/EDialogType";
 
-export const SettingsPage = () => {
+export default function SettingsPage() {
 
   const deleteAccount = () => {
     // TODO: implement
@@ -30,6 +30,5 @@ export const SettingsPage = () => {
       </Container>
     </Layout>
   );
-};
+}
 
-export default SettingsPage;

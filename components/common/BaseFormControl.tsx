@@ -9,7 +9,7 @@ export interface BaseFormControlProps {
   children: ReactNode;
 }
 
-const BaseFormControl = ({ label, isRequired, isError, errorMessage, children }: BaseFormControlProps) => {
+export default function BaseFormControl({ label, isRequired, isError, errorMessage, children }: BaseFormControlProps) {
   return (
     <FormControl w="auto" isRequired={isRequired} isInvalid={isError}>
       {label && <FormLabel>{label}</FormLabel>}
@@ -17,6 +17,4 @@ const BaseFormControl = ({ label, isRequired, isError, errorMessage, children }:
       {isError && errorMessage && <FormErrorMessage>{errorMessage}</FormErrorMessage>}
     </FormControl>
   );
-};
-
-export default BaseFormControl;
+}

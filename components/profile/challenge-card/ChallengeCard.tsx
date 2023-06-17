@@ -2,9 +2,9 @@ import { fetchUserChallenges } from "@/api/challenge";
 import { Challenge, ChangeSchedule, ClimbingLocation, ClimbingZone, Grade, Technique } from "@/types/database";
 import { Card, CardBody, CardHeader, Heading } from "@chakra-ui/react";
 import { useSession } from "@supabase/auth-helpers-react";
-import { FC, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import AddChallenge from "./add-challenge/AddChallenge";
-import { ChallengeList } from "./challenge-list/ChallengeList";
+import ChallengeList from "./challenge-list/ChallengeList";
 
 interface ChallengeCardProps {
   climbingZones: ClimbingZone[];
@@ -14,12 +14,13 @@ interface ChallengeCardProps {
   grades: Grade[];
 }
 
-const ChallengeCard: FC<ChallengeCardProps> = ({ climbingZones, changeSchedules, locations, techniques, grades }) => {
+
+export default function ChallengeCard({ climbingZones, changeSchedules, locations, techniques, grades }: ChallengeCardProps) {
   const [challenges, setChallenges] = useState<Challenge[]>([]);
 
   const session = useSession();
 
-  async function fetchChallenges() {
+  async function fetchChallenges(): Promise<void> {
     if (!session) {
       return;
     }
@@ -31,13 +32,14 @@ const ChallengeCard: FC<ChallengeCardProps> = ({ climbingZones, changeSchedules,
     }
   }
 
-  useEffect(() => {
-    fetchChallenges();
-  }, [session]);
-
   const getChallengesSorted = (challenges: Challenge[]): Challenge[] => {
     return challenges.sort((a, b) => a.end_date.localeCompare(b.end_date));
   };
+
+
+  useEffect(() => {
+    fetchChallenges();
+  }, [session]);
 
   const onAddChallenge = (challenge: Challenge): void => {
     const newChallenges = getChallengesSorted([...challenges, challenge]);
@@ -67,6 +69,4 @@ const ChallengeCard: FC<ChallengeCardProps> = ({ climbingZones, changeSchedules,
       </CardBody>
     </Card>
   );
-};
-
-export default ChallengeCard;
+}

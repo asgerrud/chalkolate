@@ -1,6 +1,6 @@
 import { getFormattedDateString } from "@/utils/date";
-import { InputGroup, Input, Button, Box } from "@chakra-ui/react";
-import { Dispatch, FC, SetStateAction, useState } from "react";
+import { Box, Button, Input, InputGroup } from "@chakra-ui/react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 interface DateInputProps {
   defaultValue: string;
@@ -8,12 +8,11 @@ interface DateInputProps {
   setDate: Dispatch<SetStateAction<string>>;
 }
 
-const DateInput: FC<DateInputProps> = ({ defaultValue, maxValue, setDate: onDateChange }) => {
-  const [date, setDate] = useState<string>(defaultValue);
-
+export default function DateInput({ defaultValue, maxValue, setDate: onDateChange }: DateInputProps) {
   const today = getFormattedDateString(new Date());
-
-  function handleDateSelect(date: string) {
+  const [date, setDate] = useState<string>(defaultValue);
+  
+  function handleDateSelect(date: string): void {
     setDate(date);
     onDateChange(date);
   }
@@ -26,6 +25,4 @@ const DateInput: FC<DateInputProps> = ({ defaultValue, maxValue, setDate: onDate
       </Box>
     </InputGroup>
   );
-};
-
-export default DateInput;
+}

@@ -1,18 +1,18 @@
 import { Technique } from "@/types/database";
 import { Card, CardBody, CardHeader, Checkbox, Heading, Stack } from "@chakra-ui/react";
-import { Dispatch, FC, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 interface TechniqueSelectProps {
   techniques: Technique[];
   setSelectedTechniques: Dispatch<SetStateAction<string[]>>;
 }
 
-const TechniqueSelect: FC<TechniqueSelectProps> = ({ techniques, setSelectedTechniques: onSelectedChange }) => {
+export default function TechniqueSelect({ techniques, setSelectedTechniques: onSelectedChange }: TechniqueSelectProps) {
   const [techniquesSelectedList, setTechniquesSelectedList] = useState<boolean[]>(
     new Array(techniques?.length).fill(false)
   );
 
-  function onTechniqueSelected(index: number, selected: boolean) {
+  function onTechniqueSelected(index: number, selected: boolean): void {
     techniquesSelectedList[index] = selected;
     setTechniquesSelectedList([...techniquesSelectedList]);
     const selectedTechniques = techniques
@@ -42,6 +42,5 @@ const TechniqueSelect: FC<TechniqueSelectProps> = ({ techniques, setSelectedTech
       </CardBody>
     </Card>
   );
-};
+}
 
-export default TechniqueSelect;

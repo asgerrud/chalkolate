@@ -12,7 +12,6 @@ import {
   PopoverTrigger
 } from "@chakra-ui/react";
 import { X } from "lucide-react";
-import { FC } from "react";
 
 interface ConfirmDialogProps {
   type: EDialogType;
@@ -22,9 +21,9 @@ interface ConfirmDialogProps {
   onConfirm: () => void;
 }
 
-export const ConfirmButton: FC<ConfirmDialogProps> = ({ type, heading, description, buttonLabel, onConfirm }) => {
+export default function ConfirmButton({ type, heading, description, buttonLabel, onConfirm }: ConfirmDialogProps) {
 
-  const renderButton = () => {
+  function renderButton(): JSX.Element {
     if (buttonLabel) {
       return (
         <Button colorScheme="red">{buttonLabel}</Button>
@@ -36,7 +35,7 @@ export const ConfirmButton: FC<ConfirmDialogProps> = ({ type, heading, descripti
         </Button>
       );
     }
-  };
+  }
 
   return (
     <Popover>
@@ -60,4 +59,4 @@ export const ConfirmButton: FC<ConfirmDialogProps> = ({ type, heading, descripti
       </PopoverContent>
     </Popover>
   );
-};
+}

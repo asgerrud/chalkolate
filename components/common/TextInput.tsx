@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import BaseFormControl, { BaseFormControlProps } from "@/components/common/BaseFormControl";
 import { Input } from "@chakra-ui/react";
 
@@ -6,16 +6,16 @@ interface TextInputProps extends BaseFormControlProps {
   onInputChange?: (string) => void;
 }
 
-const TextInput = ({ onInputChange, ...props }: TextInputProps) => {
+export default function TextInput({ onInputChange, ...props }: TextInputProps) {
   const [input, setInput] = useState("");
 
-  const handleInputChange = (e) => {
+  function handleInputChange(e: ChangeEvent<HTMLInputElement>): void {
     const value = e.target.value;
     setInput(value);
     if (onInputChange) {
       onInputChange(value);
     }
-  };
+  }
 
   return (
     <BaseFormControl
@@ -26,6 +26,5 @@ const TextInput = ({ onInputChange, ...props }: TextInputProps) => {
       <Input type="text" value={input} onChange={handleInputChange} {...props}></Input>
     </BaseFormControl>
   );
-};
+}
 
-export default TextInput;

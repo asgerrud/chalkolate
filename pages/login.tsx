@@ -7,7 +7,7 @@ import { Card } from "@chakra-ui/card";
 import { Container, Flex } from "@chakra-ui/react";
 import Layout from "@/components/Layout";
 
-const LoginPage = () => {
+export default function LoginPage() {
   const router = useRouter();
   const session = useSession();
   const supabase = useSupabaseClient();
@@ -29,6 +29,4 @@ const LoginPage = () => {
       </Container>
     </Layout>
   );
-};
-
-export default LoginPage;
+}

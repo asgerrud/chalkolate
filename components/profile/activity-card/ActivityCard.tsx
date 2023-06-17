@@ -2,7 +2,6 @@ import { Activity, ClimbingLocation } from "@/types/database";
 import { getWeeklyStreak } from "@/utils/streak";
 import { Streak } from "@/utils/types/interfaces/Streak";
 import { Card, CardBody } from "@chakra-ui/react";
-import { FC } from "react";
 import ActivityList from "./activity-list/ActivityList";
 import StreakStats from "./streak-stats/StreakStats";
 
@@ -11,7 +10,7 @@ interface ActivityCardProps {
   locations: ClimbingLocation[];
 }
 
-const ActivityCard: FC<ActivityCardProps> = ({ activities, locations }) => {
+export default function ActivityCard({ activities, locations }: ActivityCardProps)  {
   const activityDates = activities.map((activity: Activity) => new Date(activity.activity_date));
   const weeklyStreak: Streak = getWeeklyStreak(activityDates);
 
@@ -23,6 +22,4 @@ const ActivityCard: FC<ActivityCardProps> = ({ activities, locations }) => {
       </CardBody>
     </Card>
   );
-};
-
-export default ActivityCard;
+}

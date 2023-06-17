@@ -1,6 +1,6 @@
 import Layout from "@/components/Layout";
 import { Activity, ChangeSchedule, ClimbingLocation, ClimbingZone, Grade, Technique } from "@/types/database";
-import { FC } from "react";
+
 import { Stack } from "@chakra-ui/react";
 import { fetchLocations } from "@/api/location";
 import { fetchActivities } from "@/api/activity";
@@ -20,14 +20,14 @@ interface ProfilePageProps {
   grades: Grade[];
 }
 
-const ProfilePage: FC<ProfilePageProps> = ({
+export function ProfilePage({
   activities,
   locations,
   climbingZones,
   changeSchedules,
   techniques,
   grades
-}) => {
+}: ProfilePageProps) {
   return (
     <Layout>
       <Stack w="100%" direction="column" alignItems="center" spacing={6}>
@@ -42,7 +42,7 @@ const ProfilePage: FC<ProfilePageProps> = ({
       </Stack>
     </Layout>
   );
-};
+}
 
 export async function getStaticProps() {
   const locations: ClimbingLocation[] = await fetchLocations();

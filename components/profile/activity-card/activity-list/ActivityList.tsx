@@ -3,29 +3,29 @@ import { supabase } from "@/lib/supabase";
 import { Activity, ClimbingLocation } from "@/types/database";
 import { compareDates } from "@/utils/date";
 import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Divider, Heading, List } from "@chakra-ui/react";
-import { FC, useState } from "react";
-import { ActivityItem } from "./activity-item/ActivityItem";
+import { useState } from "react";
+import ActivityItem from "./activity-item/ActivityItem";
 
 interface ActivityListProps {
   initialActivities: Activity[];
   locations: ClimbingLocation[];
 }
 
-const ActivityList: FC<ActivityListProps> = ({ initialActivities, locations }) => {
+export default function ActivityList({ initialActivities, locations }: ActivityListProps) {
   const [activities, setActivities] = useState<Activity[]>(initialActivities);
 
-  const onAddActivity = (newActivity: Activity) => {
+  function onAddActivity(newActivity: Activity) {
     setActivities([...activities, newActivity].sort((a, b) => compareDates(b.activity_date, a.activity_date)));
-  };
+  }
 
-  const removeActivity = async (id: string) => {
+  async function removeActivity(id: string) {
     const { error } = await supabase.from("activities").delete().eq("id", id);
     if (error) {
       alert(error.message);
     }
 
     setActivities(activities.filter((activity: Activity) => activity.id !== id));
-  };
+  }
 
   return (
     <>
@@ -60,6 +60,4 @@ const ActivityList: FC<ActivityListProps> = ({ initialActivities, locations }) =
 
     </>
   );
-};
-
-export default ActivityList;
+}

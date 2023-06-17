@@ -6,7 +6,6 @@ import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import extendedTheme from "@/theme";
 
 export default function App({ Component, pageProps }: AppProps<{ initialSession: Session }>) {
-  // Create a new supabase browser client on every first render.
   const [supabaseClient] = useState(() => createBrowserSupabaseClient());
 
   return (

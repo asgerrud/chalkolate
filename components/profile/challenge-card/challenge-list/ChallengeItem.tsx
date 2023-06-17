@@ -1,5 +1,4 @@
 import { Challenge, ChangeSchedule, ClimbingLocation, ClimbingZone, Grade } from "@/types/database";
-import { FC } from "react";
 import { Box, Flex, HStack, Progress, Square, Text } from "@chakra-ui/react";
 import { getFormattedDateString, getTimeTo } from "@/utils/date";
 import { getGradeColor } from "@/utils/grade";
@@ -14,7 +13,7 @@ interface ChallengeItemProps {
   grade: Grade;
 }
 
-const ChallengeItem: FC<ChallengeItemProps> = ({ challenge, climbingZone, changeSchedule, location, grade }) => {
+export default function ChallengeItem({ challenge, climbingZone, changeSchedule, location, grade }: ChallengeItemProps) {
   const now: Date = new Date();
   const challengeEnd: Date = new Date(challenge.end_date);
   const isEnded: boolean = dayjs(challengeEnd).isBefore(now);
@@ -34,9 +33,9 @@ const ChallengeItem: FC<ChallengeItemProps> = ({ challenge, climbingZone, change
     <Flex
       pointerEvents={isEnded ? "none" : "all"}
       opacity={isEnded ? 0.5 : 1}
+      transition="all 0.100s ease"
       _hover={{
         transform: "scale(1.02)",
-        transition: "all 0.100s ease"
       }}>
       <Box w="100%" p={4} py={2} bgColor="lightGreen">
         <HStack spacing={4}>
@@ -61,6 +60,4 @@ const ChallengeItem: FC<ChallengeItemProps> = ({ challenge, climbingZone, change
       </Box>
     </Flex>
   );
-};
-
-export default ChallengeItem;
+}

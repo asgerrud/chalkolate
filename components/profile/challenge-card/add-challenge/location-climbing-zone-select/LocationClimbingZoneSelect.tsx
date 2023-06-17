@@ -1,7 +1,7 @@
 import SelectInput from "@/components/common/SelectInput";
 import { ClimbingLocation, ClimbingZone } from "@/types/database";
 import { Card, CardBody, CardHeader, Divider, Heading, Text } from "@chakra-ui/react";
-import { Dispatch, FC, ReactNode, SetStateAction, useState } from "react";
+import { Dispatch, ReactNode, SetStateAction, useState } from "react";
 
 type locationId = ClimbingLocation["id"];
 type climbingZoneId = ClimbingZone["id"];
@@ -15,24 +15,24 @@ interface LocationClimbingZoneSelect {
   children?: ReactNode;
 }
 
-const LocationClimbingZoneSelect: FC<LocationClimbingZoneSelect> = ({
+export default function LocationClimbingZoneSelect({
   defaultLocation,
   locations,
   climbingZones,
   setLocation: onLocationSelect,
   setClimbingZone: onClimbingZoneSelect,
   children
-}) => {
+}: LocationClimbingZoneSelect) {
   const defaultClimbingZones = getClimbingZonesByLocation(defaultLocation.id) ?? [];
 
   const [location, setLocation] = useState<string>(defaultLocation.id);
   const [locationClimbingZones, setLocationClimbingZones] = useState<ClimbingZone[]>(defaultClimbingZones);
 
-  function getClimbingZonesByLocation(locationId: string) {
+  function getClimbingZonesByLocation(locationId: string): ClimbingZone[] {
     return climbingZones.filter((climbingZone: ClimbingZone) => climbingZone.location === locationId);
   }
 
-  function handleLocationChanged(locationId: string) {
+  function handleLocationChanged(locationId: string): void {
     if (locationId !== location) {
       setLocation(locationId);
       setLocationClimbingZones(getClimbingZonesByLocation(locationId));
@@ -68,6 +68,4 @@ const LocationClimbingZoneSelect: FC<LocationClimbingZoneSelect> = ({
       </CardBody>
     </Card>
   );
-};
-
-export default LocationClimbingZoneSelect;
+}

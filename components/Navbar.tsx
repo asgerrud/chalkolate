@@ -6,7 +6,7 @@ import Link from "next/link";
 import { EPageRoute } from "@/types/enums/EPageRoute";
 import { useRouter } from "next/navigation";
 
-const Navbar = () => {
+export default function Navbar() {
   const session = useSession();
   const router = useRouter();
   const supabase = useSupabaseClient();
@@ -41,6 +41,4 @@ const Navbar = () => {
       </HStack>
     </Box>
   );
-};
-
-export default Navbar;
+}

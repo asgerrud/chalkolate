@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { useState } from "react";
 import { Select } from "@chakra-ui/react";
 import BaseFormControl from "@/components/common/BaseFormControl";
 import { Row, TABLE_NAME } from "@/types/database";
@@ -12,7 +12,7 @@ interface SelectInputProps {
   defaultValue?: string;
   onSelect: (string) => void;
 }
-const SelectInput: FC<SelectInputProps> = ({
+export default function SelectInput({
   label,
   nameColumn,
   options,
@@ -20,13 +20,13 @@ const SelectInput: FC<SelectInputProps> = ({
   placeholder,
   defaultValue,
   onSelect
-}) => {
+}: SelectInputProps){
   const [value, setValue] = useState(placeholder || defaultValue || options?.[0]?.id);
 
-  const handleSelect = (value: string) => {
+  function handleSelect(value: string): void {
     setValue(value);
     onSelect(value);
-  };
+  }
 
   return (
     <BaseFormControl label={label} isError={!value} isRequired={isRequired}>
@@ -40,6 +40,4 @@ const SelectInput: FC<SelectInputProps> = ({
       </Select>
     </BaseFormControl>
   );
-};
-
-export default SelectInput;
+}

@@ -1,5 +1,5 @@
 import { Flex, Stat, StatLabel, StatNumber } from "@chakra-ui/react";
-import React, { FC } from "react";
+import React from "react";
 import { getPluralizedWord } from "@/utils/string";
 
 interface StreakStatsProps {
@@ -8,7 +8,7 @@ interface StreakStatsProps {
   unit: string;
 }
 
-const StreakStats: FC<StreakStatsProps> = ({ currentStreak, highestStreak, unit }) => {
+export default function StreakStats({ currentStreak, highestStreak, unit }: StreakStatsProps) {
   return (
     <Flex mb={4}>
       {currentStreak != null && (
@@ -29,6 +29,4 @@ const StreakStats: FC<StreakStatsProps> = ({ currentStreak, highestStreak, unit 
       )}
     </Flex>
   );
-};
-
-export default StreakStats;
+}

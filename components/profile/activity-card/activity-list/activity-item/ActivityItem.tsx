@@ -1,9 +1,8 @@
-import { ConfirmButton } from "@/components/common/dialogs/ConfirmButton";
 import { Activity, ClimbingLocation } from "@/types/database";
 import { EDialogType } from "@/types/enums/EDialogType";
 import { getFormattedDateString } from "@/utils/date";
 import { Flex, HStack, Text } from "@chakra-ui/react";
-import { FC } from "react";
+import ConfirmButton from "@/components/common/dialogs/ConfirmButton";
 
 type ActivityItemProps = {
   activity: Activity;
@@ -11,17 +10,17 @@ type ActivityItemProps = {
   onRemoveActivity: (activityId: string) => void;
 };
 
-export const ActivityItem: FC<ActivityItemProps> = ({ activity, locations, onRemoveActivity }) => {
+export default function ActivityItem({ activity, locations, onRemoveActivity }: ActivityItemProps) {
   const formattedDate = getFormattedDateString(activity.activity_date);
 
-  const getLocationName = (id: string): string => {
+  function getLocationName(id: string): string {
     const location = locations.find((location: ClimbingLocation) => location.id === id);
     return location?.name || null;
-  };
+  }
 
-  const removeActivity = () => {
+  function removeActivity(): void {
     onRemoveActivity(activity.id);
-  };
+  }
 
   return (
     <Flex key={activity.id} w="100%" justifyContent="space-between" alignItems="center" px={3} py={2} bg="lightGreen">
@@ -40,4 +39,4 @@ export const ActivityItem: FC<ActivityItemProps> = ({ activity, locations, onRem
       </HStack>
     </Flex>
   );
-};
+}

@@ -11,21 +11,13 @@ import {
   Text,
   useDisclosure
 } from "@chakra-ui/react";
-import { FC, useEffect, useState } from "react";
-import {
-  Challenge,
-  ChangeSchedule,
-  ClimbingLocation,
-  ClimbingZone,
-  CreateChallenge,
-  Grade,
-  Technique
-} from "@/types/database";
+import { useEffect, useState } from "react";
+import { Challenge, ChangeSchedule, ClimbingLocation, ClimbingZone, CreateChallenge, Grade, Technique } from "@/types/database";
 import { ModalFooter } from "@chakra-ui/modal";
-import GradeSelect from "./GradeSelect/GradeSelect";
-import LocationClimbingZoneSelect from "./LocationClimbingZoneSelect/LocationClimbingZoneSelect";
-import DateSelect from "./DateSelect/DateSelect";
-import TechniqueSelect from "./TechniqueSelect/TechniqueSelect";
+import GradeSelect from "./grade-select/GradeSelect";
+import LocationClimbingZoneSelect from "./location-climbing-zone-select/LocationClimbingZoneSelect";
+import DateSelect from "./date-select/DateSelect";
+import TechniqueSelect from "./technique-select/TechniqueSelect";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import useSnackbar from "@/hooks/use-snackbar";
 import { EToastStatus } from "@/types/enums/EToastStatus";
@@ -49,11 +41,11 @@ interface AddChallengeProps {
   onAddChallenge: (challenge: Challenge) => void;
 }
 
-const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniques, grades, onAddChallenge }) => {
+export default function AddChallenge({ locations, climbingZones, techniques, grades, onAddChallenge }: AddChallengeProps){
   const supabase = useSupabaseClient<Database>();
   const session = useSession();
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const showToast = useSnackbar();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const today = getFormattedDateString(new Date());
 
@@ -66,7 +58,7 @@ const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniq
   const [errorMessages, setErrorMessages] = useState<FormErrors>({});
 
   useEffect(() => {
-    async function fetchZoneChangeSchedule() {
+    async function fetchZoneChangeSchedule(): Promise<void> {
       const changeSchedule = await fetchChangeSchedule(climbingZone);
       setZoneChangeSchedule(changeSchedule);
     }
@@ -75,18 +67,18 @@ const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniq
     }
   }, [climbingZone]);
 
-  const closeMenu = () => {
+  function closeMenu(): void {
     resetFormValues();
     onClose();
-  };
+  }
 
-  const getChallengeEndDate = (startDate: string) => {
+  function getChallengeEndDate(startDate: string): Date {
     const scheduleStartDate: Date = new Date(zoneChangeSchedule.schedule_start_date);
     const challengeStartDate: Date = new Date(startDate);
     return calculateNextScheduleChange(scheduleStartDate, challengeStartDate, zoneChangeSchedule.change_interval_weeks);
-  };
+  }
 
-  const validateForm = (): boolean => {
+  function validateForm(): boolean {
     const errors: FormErrors = {};
 
     if (!startDate) {
@@ -113,18 +105,18 @@ const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniq
     setErrorMessages(hasErrors ? errors : {});
 
     return !hasErrors;
-  };
+  }
 
-  const resetFormValues = () => {
+  function resetFormValues(): void {
     setStartDate(today);
     setGrade(null);
     setLocation(locations[0].id);
     setClimbingZone(null);
     setZoneChangeSchedule(null);
     setSelectedTechniques([]);
-  };
+  }
 
-  const submitForm = async () => {
+  async function submitForm(): Promise<void> {
     if (!validateForm()) {
       return;
     }
@@ -162,7 +154,7 @@ const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniq
       onAddChallenge(data);
       closeMenu();
     }
-  };
+  }
 
   return (
     <Flex my={4}>
@@ -211,6 +203,4 @@ const AddChallenge: FC<AddChallengeProps> = ({ locations, climbingZones, techniq
       </Modal>
     </Flex>
   );
-};
-
-export default AddChallenge;
+}

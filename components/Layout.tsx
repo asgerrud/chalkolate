@@ -9,7 +9,7 @@ type LayoutProps = {
   children?: ReactNode;
 };
 
-const Layout = ({ pageTitle = "Climbing App", navbarDisabled, children }: LayoutProps) => {
+export default function Layout({ pageTitle = "Climbing App", navbarDisabled, children }: LayoutProps) {
   return (
     <>
       <Head>
@@ -23,6 +23,4 @@ const Layout = ({ pageTitle = "Climbing App", navbarDisabled, children }: Layout
       </Flex>
     </>
   );
-};
-
-export default Layout;
+}
