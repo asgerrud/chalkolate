@@ -1,4 +1,4 @@
-import { ConfirmDialog } from "@/components/common/dialogs/ConfirmDialog";
+import { ConfirmButton } from "@/components/common/dialogs/ConfirmButton";
 import { Activity, ClimbingLocation } from "@/types/database";
 import { EDialogType } from "@/types/enums/EDialogType";
 import { getFormattedDateString } from "@/utils/date";
@@ -31,7 +31,7 @@ export const ActivityItem: FC<ActivityItemProps> = ({ activity, locations, onRem
       </HStack>
       <HStack spacing={4}>
         <Text>{activity.duration}</Text>
-        <ConfirmDialog
+        <ConfirmButton
           type={EDialogType.DELETE}
           heading="Delete activity"
           description="Are you sure you want to delete the activity?"

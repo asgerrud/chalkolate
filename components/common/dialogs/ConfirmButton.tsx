@@ -1,5 +1,6 @@
 import { EDialogType } from "@/types/enums/EDialogType";
 import {
+  Box,
   Button,
   Flex,
   Popover,
@@ -17,23 +18,37 @@ interface ConfirmDialogProps {
   type: EDialogType;
   heading: string;
   description: string;
+  buttonLabel?: string;
   onConfirm: () => void;
 }
 
-export const ConfirmDialog: FC<ConfirmDialogProps> = ({ type, heading, description, onConfirm }) => {
+export const ConfirmButton: FC<ConfirmDialogProps> = ({ type, heading, description, buttonLabel, onConfirm }) => {
+
+  const renderButton = () => {
+    if (buttonLabel) {
+      return (
+        <Button colorScheme="red">{buttonLabel}</Button>
+      );
+    } else {
+      return (
+        <Button size="xs" variant="unstyled">
+          <X />
+        </Button>
+      );
+    }
+  };
+
   return (
     <Popover>
       <PopoverTrigger>
-        <Button size="xs" variant="unstyled">
-          {type === EDialogType.DELETE && <X />}
-        </Button>
+        {type === EDialogType.DELETE && renderButton()}
       </PopoverTrigger>
       <PopoverContent>
         <PopoverArrow />
         <PopoverCloseButton />
         <PopoverHeader>{heading}</PopoverHeader>
         <PopoverBody>
-          {description}
+          <Box>{description}</Box>
           <Flex justifyContent="flex-end">
             {type === EDialogType.DELETE && (
               <Button colorScheme="red" onClick={() => onConfirm()}>
