@@ -23,7 +23,7 @@ import { Database } from "@/types/_supabase";
 import { Activity, ClimbingLocation, CreateActivity } from "@/types/database";
 import DateInput from "@/components/common/DateInput";
 import dayjs from "dayjs";
-import { getNearestLocationFromUser } from "@/utils/geo";
+import { getDistanceBetween } from "@/utils/geo";
 
 interface AddActivityProps {
   locations: ClimbingLocation[];
@@ -46,14 +46,26 @@ export default function AddActivityModal({ locations, onAddActivity }: AddActivi
   const isInvalid = date === "";
 
 function getNearestLocation() {
-  const nearestLocation = getNearestLocationFromUser(locations);
-
-  if (nearestLocation) {
-    setLocation(nearestLocation);
-  } else {
-    alert("An error occurred fetching your location");
-  }
-
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude } = position.coords;
+        const userCoords = { lat: latitude, lon: longitude };
+        const nearestLocation: ClimbingLocation = locations.reduce((a: ClimbingLocation, b: ClimbingLocation) => {
+          const distA = getDistanceBetween(userCoords, {
+            lat: a.latitude,
+            lon: a.longitude
+          });
+          const distB = getDistanceBetween(userCoords, {
+            lat: b.latitude,
+            lon: b.longitude
+          });
+          return distA < distB ? a : b;
+        });
+        setLocation(nearestLocation.id);
+      });
+    } else {
+      alert("An error occurred fetching your location");
+    }
 }
 
   function getDurationInMinutes(): number {
