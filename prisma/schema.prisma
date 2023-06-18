@@ -64,6 +64,7 @@ model VerificationToken {
 }
 
 // Chalkolate schema
+
 model Grade {
   id        String      @id @default(cuid())
   name      String
@@ -77,7 +78,7 @@ model Technique {
   challenges  Challenge[]
 }
 
-model Gym {
+model Location {
   id   String @id @default(cuid())
   name String
 
@@ -85,33 +86,33 @@ model Gym {
   longitude Float
 
   challenge Challenge[]
-  wall      Wall[]
+  zone      Zone[]
   Activity  Activity[]
 }
 
-model Wall {
+model Zone {
   id   String @id @default(cuid())
   name String
 
-  gym   Gym    @relation(fields: [gymId], references: [id])
-  gymId String
+  location   Location @relation(fields: [locationId], references: [id])
+  locationId String
 
   type String
 
-  schedule RouteChangeSchedule?
+  changeSchedule ChangeSchedule?
 
-  @@index([gymId])
+  @@index([locationId])
 }
 
-model RouteChangeSchedule {
+model ChangeSchedule {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
 
-  climbingZone   Wall   @relation(fields: [climbingZoneId], references: [id])
-  climbingZoneId String @unique
+  zone   Zone   @relation(fields: [zoneId], references: [id])
+  zoneId String @unique
 
-  schedule_start_date   DateTime
-  change_interval_weeks Int
+  startDate           DateTime
+  changeIntervalWeeks Int
 }
 
 model Challenge {
@@ -121,8 +122,8 @@ model Challenge {
   user   User?   @relation(fields: [userId], references: [id])
   userId String?
 
-  gym   Gym    @relation(fields: [gymId], references: [id])
-  gymId String
+  location   Location @relation(fields: [locationId], references: [id])
+  locationId String
 
   grade   Grade  @relation(fields: [gradeId], references: [id])
   gradeId String
@@ -133,21 +134,21 @@ model Challenge {
   endTime   DateTime
 
   @@index([userId])
-  @@index([gymId])
+  @@index([locationId])
   @@index([gradeId])
 }
 
 model Activity {
-  id            String   @id @default(cuid())
-  activity_date DateTime
-  duration      Int?
+  id           String   @id @default(cuid())
+  activityDate DateTime
+  duration     Int?
 
   user   User?   @relation(fields: [userId], references: [id])
   userId String?
 
-  gym   Gym    @relation(fields: [gymId], references: [id])
-  gymId String
+  location   Location @relation(fields: [locationId], references: [id])
+  locationId String
 
   @@index([userId])
-  @@index([gymId])
+  @@index([locationId])
 }
