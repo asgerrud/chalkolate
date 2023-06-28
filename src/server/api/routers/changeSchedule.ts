@@ -6,13 +6,17 @@ export const changeScheduleRouter = createTRPCRouter({
     return ctx.prisma.changeSchedule.findMany();
   }),
 
-  getByZoneId: publicProcedure.input(z.object({
-    zoneId: z.string(),
-  })).query(({input: {zoneId}, ctx }) => {
-    return ctx.prisma.changeSchedule.findUnique({
-      where: {
-        zoneId: zoneId,
-      },
-    });
-  })
+  getByZoneId: publicProcedure
+    .input(
+      z.object({
+        zoneId: z.string()
+      })
+    )
+    .query(({ input: { zoneId }, ctx }) => {
+      return ctx.prisma.changeSchedule.findUnique({
+        where: {
+          zoneId: zoneId
+        }
+      });
+    })
 });

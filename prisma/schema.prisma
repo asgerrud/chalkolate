@@ -55,6 +55,7 @@ model User {
   challenges Challenge[]
 }
 
+/// @@Gen.model(hide: true)
 model VerificationToken {
   identifier String
   token      String   @unique
@@ -66,16 +67,9 @@ model VerificationToken {
 // Chalkolate schema
 
 model Grade {
-  id        String      @id @default(cuid())
+  id        Int         @id @default(autoincrement())
   name      String
   challenge Challenge[]
-}
-
-model Technique {
-  id          String      @id @default(cuid())
-  name        String
-  description String?
-  challenges  Challenge[]
 }
 
 model Location {
@@ -85,21 +79,19 @@ model Location {
   latitude  Float
   longitude Float
 
-  challenge Challenge[]
   zone      Zone[]
-  Activity  Activity[]
+  activity  Activity[]
+  challenge Challenge[]
 }
 
 model Zone {
-  id   String @id @default(cuid())
-  name String
-
-  location   Location @relation(fields: [locationId], references: [id])
-  locationId String
-
-  type String
-
+  id             String          @id @default(cuid())
+  name           String
+  type           String
+  location       Location        @relation(fields: [locationId], references: [id])
+  locationId     String
   changeSchedule ChangeSchedule?
+  challenge      Challenge[]
 
   @@index([locationId])
 }
@@ -125,26 +117,37 @@ model Challenge {
   location   Location @relation(fields: [locationId], references: [id])
   locationId String
 
-  grade   Grade  @relation(fields: [gradeId], references: [id])
-  gradeId String
+  zone   Zone   @relation(fields: [zoneId], references: [id])
+  zoneId String
+
+  grade   Grade @relation(fields: [gradeId], references: [id])
+  gradeId Int
+
+  startDate DateTime
+  endDate   DateTime
 
   techniques Technique[]
 
-  startTime DateTime
-  endTime   DateTime
-
   @@index([userId])
+  @@index([zoneId])
   @@index([locationId])
   @@index([gradeId])
 }
 
-model Activity {
-  id           String   @id @default(cuid())
-  activityDate DateTime
-  duration     Int?
+model Technique {
+  id          Int         @id @default(autoincrement())
+  name        String
+  description String?
+  Challenge   Challenge[]
+}
 
-  user   User?   @relation(fields: [userId], references: [id])
-  userId String?
+model Activity {
+  id       String   @id @default(cuid())
+  date     DateTime
+  duration Int?
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 
   location   Location @relation(fields: [locationId], references: [id])
   locationId String

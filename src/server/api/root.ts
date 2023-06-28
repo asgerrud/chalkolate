@@ -19,7 +19,7 @@ export const appRouter = createTRPCRouter({
   location: locationRouter,
   changeSchedule: changeScheduleRouter,
   technique: techniqueRouter,
-  zone: zoneRouter,
+  zone: zoneRouter
 });
 
 // export type definition of API
