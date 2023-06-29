@@ -68,13 +68,13 @@ model VerificationToken {
 
 model Grade {
   id        Int         @id @default(autoincrement())
-  name      String
+  name      String      @unique
   challenge Challenge[]
 }
 
 model Location {
   id   String @id @default(cuid())
-  name String
+  name String @unique
 
   latitude  Float
   longitude Float
@@ -85,24 +85,24 @@ model Location {
 }
 
 model Zone {
-  id             String          @id @default(cuid())
-  name           String
-  type           String
-  location       Location        @relation(fields: [locationId], references: [id])
-  locationId     String
-  changeSchedule ChangeSchedule?
-  challenge      Challenge[]
+  id               String         @id @default(cuid())
+  name             String
+  location         Location       @relation(fields: [locationId], references: [id])
+  locationId       String
+  changeSchedule   ChangeSchedule @relation(fields: [changeScheduleId], references: [id])
+  changeScheduleId String
+  challenge        Challenge[]
 
+  @@unique([name, locationId])
   @@index([locationId])
+  @@index([changeScheduleId])
 }
 
 model ChangeSchedule {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
 
-  zone   Zone   @relation(fields: [zoneId], references: [id])
-  zoneId String @unique
-
+  Zone                Zone[]
   startDate           DateTime
   changeIntervalWeeks Int
 }
@@ -136,7 +136,7 @@ model Challenge {
 
 model Technique {
   id          Int         @id @default(autoincrement())
-  name        String
+  name        String      @unique
   description String?
   Challenge   Challenge[]
 }
