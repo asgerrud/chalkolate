@@ -2,7 +2,7 @@
  * This is the client-side entrypoint for your tRPC API. It is used to create the `api` object which
  * contains the Next.js App-wrapper, as well as your type-safe React Query hooks.
  *
- * We also create a few inference helpers for input and output types.
+ * We also create a few inference helpers for input and output schema.
  */
 import { httpBatchLink, loggerLink } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
@@ -35,13 +35,12 @@ export const api = createTRPCNext<AppRouter>({
       links: [
         loggerLink({
           enabled: (opts) =>
-            process.env.NODE_ENV === "development" ||
-            (opts.direction === "down" && opts.result instanceof Error),
+            process.env.NODE_ENV === "development" || (opts.direction === "down" && opts.result instanceof Error)
         }),
         httpBatchLink({
-          url: `${getBaseUrl()}/api/trpc`,
-        }),
-      ],
+          url: `${getBaseUrl()}/api/trpc`
+        })
+      ]
     };
   },
   /**
@@ -49,7 +48,7 @@ export const api = createTRPCNext<AppRouter>({
    *
    * @see https://trpc.io/docs/nextjs#ssr-boolean-default-false
    */
-  ssr: false,
+  ssr: false
 });
 
 /**

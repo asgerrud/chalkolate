@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { grades, locations, techniques, zones } from "./data";
+import { grades, locations, zones } from "./data";
 
 const prisma = new PrismaClient();
 async function main() {
@@ -8,12 +8,6 @@ async function main() {
     skipDuplicates: true
   });
   console.log("Added grades", _grades.count);
-
-  const _techniques = await prisma.technique.createMany({
-    data: techniques,
-    skipDuplicates: true
-  });
-  console.log("Added techniques", _techniques.count);
 
   const _locations = await prisma.location.createMany({
     data: locations,

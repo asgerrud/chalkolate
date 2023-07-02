@@ -6,7 +6,7 @@ import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
 
 /**
- * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
+ * Module augmentation for `next-auth` schema. Allows us to add custom properties to the `session`
  * object and keep type safety.
  *
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
@@ -37,16 +37,16 @@ export const authOptions: NextAuthOptions = {
       ...session,
       user: {
         ...session.user,
-        id: user.id,
-      },
-    }),
+        id: user.id
+      }
+    })
   },
   adapter: PrismaAdapter(prisma),
   providers: [
     DiscordProvider({
       clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
-    }),
+      clientSecret: env.DISCORD_CLIENT_SECRET
+    })
     /**
      * ...add more providers here.
      *
@@ -56,7 +56,7 @@ export const authOptions: NextAuthOptions = {
      *
      * @see https://next-auth.js.org/providers/github
      */
-  ],
+  ]
 };
 
 /**

@@ -1,5 +1,5 @@
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { type inferRouterInputs } from "@trpc/server";
+import { type inferRouterOutputs } from "@trpc/server";
 import { type AppRouter } from "~/server/api/root";
 import { z } from "zod";
 import { Prisma } from ".prisma/client";
@@ -8,15 +8,12 @@ import ChallengeWhereInput = Prisma.ChallengeWhereInput;
 
 export const challengeRouter = createTRPCRouter({
   create: protectedProcedure.input(ChallengeCreateInputSchema).mutation(async ({ ctx, input }) => {
-    const { location, zone, grade, startDate, endDate, techniques } = input;
+    const { location, zone, grade, startDate, endDate } = input;
 
     return await ctx.prisma.challenge.create({
       data: {
         startDate,
         endDate,
-        techniques: {
-          connect: techniques?.map((id) => ({ id })) ?? []
-        },
         user: {
           connect: {
             id: ctx.session.user?.id
@@ -60,9 +57,35 @@ export const challengeRouter = createTRPCRouter({
 
       return ctx.prisma.challenge.findMany({
         where: whereClause,
+        select: {
+          id: true,
+          startDate: true,
+          endDate: true,
+          grade: {
+            select: {
+              name: true
+            }
+          },
+          location: {
+            select: {
+              name: true
+            }
+          },
+          zone: {
+            select: {
+              name: true,
+              changeSchedule: {
+                select: {
+                  id: true,
+                  changeIntervalWeeks: true
+                }
+              }
+            }
+          }
+        },
         orderBy: { endDate: "desc" }
       });
     })
 });
 
-export type ChallengeCreate = inferRouterInputs<AppRouter>["challenge"]["create"];
+export type ChallengeDetails = inferRouterOutputs<AppRouter>["challenge"]["findUserChallenges"];

@@ -51,7 +51,6 @@ model User {
   sessions      Session[]
 
   // Non-Next Auth
-  activities Activity[]
   challenges Challenge[]
 }
 
@@ -80,7 +79,6 @@ model Location {
   longitude Float
 
   zone      Zone[]
-  activity  Activity[]
   challenge Challenge[]
 }
 
@@ -126,32 +124,8 @@ model Challenge {
   startDate DateTime
   endDate   DateTime
 
-  techniques Technique[]
-
   @@index([userId])
   @@index([zoneId])
   @@index([locationId])
   @@index([gradeId])
-}
-
-model Technique {
-  id          Int         @id @default(autoincrement())
-  name        String      @unique
-  description String?
-  Challenge   Challenge[]
-}
-
-model Activity {
-  id       String   @id @default(cuid())
-  date     DateTime
-  duration Int?
-
-  user   User   @relation(fields: [userId], references: [id])
-  userId String
-
-  location   Location @relation(fields: [locationId], references: [id])
-  locationId String
-
-  @@index([userId])
-  @@index([locationId])
 }
