@@ -1,11 +1,27 @@
-import { Button, FormControl, FormErrorMessage, FormLabel, Input, Select, Stack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  Select,
+  Stack,
+  useDisclosure
+} from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChallengeCreateInputSchema } from "~/schema/challenge.schema";
 import { GRADES, LOCATIONS, ZONES } from "../../prisma/data";
 import dayjs from "dayjs";
 
-export function NewChallengeForm() {
+function FormComponent() {
   const {
     register,
     formState: { errors, isSubmitting },
@@ -99,5 +115,27 @@ export function NewChallengeForm() {
         Submit
       </Button>
     </form>
+  );
+}
+
+export function NewChallengeForm() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  return (
+    <>
+      <Button onClick={onOpen}>Create challenge</Button>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Create challenge</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Box pb={2}>
+              <FormComponent />
+            </Box>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    </>
   );
 }
