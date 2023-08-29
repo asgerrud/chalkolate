@@ -1,22 +1,21 @@
 import { PrismaClient } from "@prisma/client";
-import { grades, locations, zones } from "./data";
 
 const prisma = new PrismaClient();
 async function main() {
-  const _grades = await prisma.grade.createMany({
-    data: grades,
+  /*const _grades = await prisma.grade.createMany({
+    data: GRADES,
     skipDuplicates: true
   });
   console.log("Added grades", _grades.count);
 
   const _locations = await prisma.location.createMany({
-    data: locations,
+    data: LOCATIONS,
     skipDuplicates: true
   });
   console.log("Added climbing locations", _locations.count);
 
   await prisma.zone.deleteMany();
-  for (const zone of zones) {
+  for (const zone of ZONES) {
     await prisma.zone.create({
       data: {
         ...zone,
@@ -28,7 +27,7 @@ async function main() {
       }
     });
   }
-  console.log("Added climbing zones", zones.length);
+  console.log("Added climbing zones", ZONES.length);*/
 }
 
 main()

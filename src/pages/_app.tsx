@@ -3,10 +3,7 @@ import { api } from "~/utils/api";
 import extendedTheme from "../../theme";
 import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 
-function ChalkolateApp({
-  Component,
-  pageProps: { session, ...pageProps },
-}) {
+function ChalkolateApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
     <SessionProvider session={session}>
       <ColorModeScript initialColorMode={extendedTheme.config.initialColorMode} />
