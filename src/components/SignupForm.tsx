@@ -1,5 +1,6 @@
 import { type InferGetServerSidePropsType } from "next";
 import { signIn } from "next-auth/react";
+import { type getServerSideProps } from "~/pages";
 
 export default function SignInForm({ providers }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (

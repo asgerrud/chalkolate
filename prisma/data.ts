@@ -70,145 +70,143 @@ const linkToBouldersSydhavn = {
   }
 };
 
-export const ZONES = {
-  boulders_sydhavn: [
-    {
-      name: "Slab to 15°",
-      changeSchedule: {
-        create: {
-          startDate: new Date("2022-08-01"),
-          changeIntervalWeeks: 6
-        }
-      }
-    },
-    {
-      name: "Amfi",
-      changeSchedule: {
-        create: {
-          startDate: new Date("2022-08-15"),
-          changeIntervalWeeks: 6
-        }
-      }
-    },
-    {
-      name: "10° Vest",
-      changeSchedule: {
-        create: {
-          startDate: new Date("2022-08-18"),
-          changeIntervalWeeks: 6
-        }
-      }
-    },
-    {
-      name: "20° Vest",
-      changeSchedule: {
-        create: {
-          startDate: new Date("2022-08-18"),
-          changeIntervalWeeks: 6
-        }
-      }
-    },
-    {
-      name: "Taget",
-      changeSchedule: {
-        create: {
-          startDate: new Date("2022-08-22"),
-          changeIntervalWeeks: 6
-        }
-      }
-    },
-    {
-      name: "35° Vest",
-      changeSchedule: {
-        create: {
-          startDate: new Date("2022-08-25"),
-          changeIntervalWeeks: 6
-        }
-      }
-    },
-    {
-      name: "50° Vest",
-      changeSchedule: {
-        create: {
-          startDate: new Date("2022-08-25"),
-          changeIntervalWeeks: 6
-        }
-      }
-    },
-    {
-      name: "Bambus 5° - 15°",
-      changeSchedule: {
-        create: {
-          startDate: new Date("2022-08-29"),
-          changeIntervalWeeks: 6
-        }
-      }
-    },
-    {
-      name: "Skibet",
-      changeSchedule: {
-        create: {
-          startDate: new Date("2022-09-01"),
-          changeIntervalWeeks: 6
-        }
-      }
-    },
-    {
-      name: "Bambus slab",
-      changeSchedule: {
-        create: {
-          startDate: new Date("2022-09-05"),
-          changeIntervalWeeks: 6
-        }
-      }
-    },
-    {
-      name: "Bambus 10°",
-      changeSchedule: {
-        create: {
-          startDate: new Date("2022-09-12"),
-          changeIntervalWeeks: 6
-        }
-      }
-    },
-    {
-      name: "Slab",
-      changeSchedule: {
-        create: {
-          startDate: new Date("2022-09-26"),
-          changeIntervalWeeks: 6
-        }
-      }
-    },
-    {
-      name: "Compface",
-      changeSchedule: {
-        create: {
-          startDate: new Date("2022-09-26"),
-          changeIntervalWeeks: 6
-        }
-      }
-    },
-    {
-      name: "20° East",
-      changeSchedule: {
-        create: {
-          startDate: new Date("2022-10-10"),
-          changeIntervalWeeks: 6
-        }
-      }
-    },
-    {
-      name: "35° East",
-      changeSchedule: {
-        create: {
-          startDate: new Date("2022-10-10"),
-          changeIntervalWeeks: 6
-        }
+export const ZONES = [
+  {
+    name: "Slab to 15°",
+    changeSchedule: {
+      create: {
+        startDate: new Date("2022-08-01"),
+        changeIntervalWeeks: 6
       }
     }
-  ]
-};
+  },
+  {
+    name: "Amfi",
+    changeSchedule: {
+      create: {
+        startDate: new Date("2022-08-15"),
+        changeIntervalWeeks: 6
+      }
+    }
+  },
+  {
+    name: "10° Vest",
+    changeSchedule: {
+      create: {
+        startDate: new Date("2022-08-18"),
+        changeIntervalWeeks: 6
+      }
+    }
+  },
+  {
+    name: "20° Vest",
+    changeSchedule: {
+      create: {
+        startDate: new Date("2022-08-18"),
+        changeIntervalWeeks: 6
+      }
+    }
+  },
+  {
+    name: "Taget",
+    changeSchedule: {
+      create: {
+        startDate: new Date("2022-08-22"),
+        changeIntervalWeeks: 6
+      }
+    }
+  },
+  {
+    name: "35° Vest",
+    changeSchedule: {
+      create: {
+        startDate: new Date("2022-08-25"),
+        changeIntervalWeeks: 6
+      }
+    }
+  },
+  {
+    name: "50° Vest",
+    changeSchedule: {
+      create: {
+        startDate: new Date("2022-08-25"),
+        changeIntervalWeeks: 6
+      }
+    }
+  },
+  {
+    name: "Bambus 5° - 15°",
+    changeSchedule: {
+      create: {
+        startDate: new Date("2022-08-29"),
+        changeIntervalWeeks: 6
+      }
+    }
+  },
+  {
+    name: "Skibet",
+    changeSchedule: {
+      create: {
+        startDate: new Date("2022-09-01"),
+        changeIntervalWeeks: 6
+      }
+    }
+  },
+  {
+    name: "Bambus slab",
+    changeSchedule: {
+      create: {
+        startDate: new Date("2022-09-05"),
+        changeIntervalWeeks: 6
+      }
+    }
+  },
+  {
+    name: "Bambus 10°",
+    changeSchedule: {
+      create: {
+        startDate: new Date("2022-09-12"),
+        changeIntervalWeeks: 6
+      }
+    }
+  },
+  {
+    name: "Slab",
+    changeSchedule: {
+      create: {
+        startDate: new Date("2022-09-26"),
+        changeIntervalWeeks: 6
+      }
+    }
+  },
+  {
+    name: "Compface",
+    changeSchedule: {
+      create: {
+        startDate: new Date("2022-09-26"),
+        changeIntervalWeeks: 6
+      }
+    }
+  },
+  {
+    name: "20° East",
+    changeSchedule: {
+      create: {
+        startDate: new Date("2022-10-10"),
+        changeIntervalWeeks: 6
+      }
+    }
+  },
+  {
+    name: "35° East",
+    changeSchedule: {
+      create: {
+        startDate: new Date("2022-10-10"),
+        changeIntervalWeeks: 6
+      }
+    }
+  }
+];
 
 export const TECHNIQUES = [
   {

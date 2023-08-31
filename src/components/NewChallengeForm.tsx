@@ -18,10 +18,13 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChallengeCreateInputSchema } from "~/schema/challenge.schema";
-import { GRADES, LOCATIONS, ZONES } from "../../prisma/data";
 import dayjs from "dayjs";
+import { api } from "~/utils/api";
 
 function FormComponent() {
+  const { data: locations } = api.location.findAll.useQuery();
+  const { data: grades } = api.grade.findAll.useQuery();
+
   const {
     register,
     formState: { errors, isSubmitting },
@@ -42,8 +45,15 @@ function FormComponent() {
       }, 1000);
     });
   }
-  function getLocationZones(_location) {
-    return ZONES[_location] ?? [];
+
+  function getZonesByLocation(locationId: string) {
+    const location = locations?.find((location) => location.id === locationId);
+
+    if (location) {
+      return location.zone;
+    } else {
+      return [];
+    }
   }
 
   return (
@@ -71,7 +81,7 @@ function FormComponent() {
         <FormControl isInvalid={Boolean(errors.location)}>
           <FormLabel>Location</FormLabel>
           <Select placeholder="Select location" {...register("location")}>
-            {LOCATIONS.map((location) => (
+            {locations?.map((location) => (
               <option key={location.id} value={location.id}>
                 {location.name}
               </option>
@@ -85,9 +95,9 @@ function FormComponent() {
         <FormControl isInvalid={Boolean(errors.zone)} isDisabled={!watchLocation}>
           <FormLabel>Zone</FormLabel>
           <Select placeholder="Select zone" {...register("zone")}>
-            {getLocationZones(watchLocation).map(({ name: zoneName }) => (
-              <option key={zoneName} value={zoneName}>
-                {zoneName}
+            {getZonesByLocation(watchLocation).map((zone) => (
+              <option key={zone.id} value={zone.id}>
+                {zone.name}
               </option>
             ))}
           </Select>
@@ -99,9 +109,9 @@ function FormComponent() {
         <FormControl isInvalid={Boolean(errors.grade)}>
           <FormLabel>Grade</FormLabel>
           <Select placeholder="Select grade" {...register("grade")}>
-            {GRADES.map(({ name: gradeName }) => (
-              <option key={gradeName} value={gradeName}>
-                {gradeName}
+            {grades?.map((grade) => (
+              <option key={grade.id} value={grade.id}>
+                {grade.name}
               </option>
             ))}
           </Select>
