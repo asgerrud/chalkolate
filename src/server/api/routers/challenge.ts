@@ -12,8 +12,8 @@ export const challengeRouter = createTRPCRouter({
 
     return await ctx.prisma.challenge.create({
       data: {
-        startDate,
-        endDate,
+        startDate: new Date(startDate),
+        endDate: new Date(endDate),
         user: {
           connect: {
             id: ctx.session.user?.id
@@ -26,7 +26,7 @@ export const challengeRouter = createTRPCRouter({
         },
         grade: {
           connect: {
-            id: grade
+            id: parseInt(grade)
           }
         },
         zone: {

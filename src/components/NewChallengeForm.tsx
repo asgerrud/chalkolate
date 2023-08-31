@@ -22,6 +22,11 @@ import dayjs from "dayjs";
 import { api } from "~/utils/api";
 
 function FormComponent() {
+  const createChallenge = api.challenge.create.useMutation({
+    onSuccess: () => {
+      console.log("success");
+    }
+  });
   const { data: locations } = api.location.findAll.useQuery();
   const { data: grades } = api.grade.findAll.useQuery();
 
@@ -38,12 +43,13 @@ function FormComponent() {
   const watchLocation = watch("location");
 
   function onSubmit(formData: ChallengeCreateInputSchema) {
-    return new Promise((resolve) => {
-      console.log(formData);
-      setTimeout(() => {
-        resolve(null);
-      }, 1000);
-    });
+    const parsedFormData = {
+      ...formData,
+      startDate: formData.startDate,
+      endDate: formData.endDate
+    };
+
+    createChallenge.mutate(parsedFormData);
   }
 
   function getZonesByLocation(locationId: string) {
