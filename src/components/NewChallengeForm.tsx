@@ -19,7 +19,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChallengeCreateInputSchema } from "~/schema/challenge.schema";
 import dayjs from "dayjs";
-import { api } from "~/utils/api";
+import { api } from "~/lib/api";
 
 function FormComponent() {
   const createChallenge = api.challenge.create.useMutation({

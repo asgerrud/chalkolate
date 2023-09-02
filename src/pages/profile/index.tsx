@@ -1,5 +1,5 @@
 import Layout from "~/components/Layout";
-import { requireAuth } from "~/utils/requireAuth";
+import { requireAuth } from "~/lib/requireAuth";
 import ChallengeList from "~/components/ChallengeList";
 import { Stack } from "@chakra-ui/react";
 

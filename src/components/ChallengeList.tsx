@@ -1,4 +1,4 @@
-import { api } from "~/utils/api";
+import { api } from "~/lib/api";
 import { Box, Card, CardBody, Center, Flex, Heading, Spinner, Stack, Text } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";

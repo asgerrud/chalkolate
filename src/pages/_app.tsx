@@ -1,5 +1,5 @@
 import { SessionProvider } from "next-auth/react";
-import { api } from "~/utils/api";
+import { api } from "~/lib/api";
 import extendedTheme from "../../theme";
 import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import "../globals.css";
