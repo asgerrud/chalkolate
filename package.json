@@ -45,10 +45,13 @@
     "@types/react-dom": "^18.2.4",
     "@typescript-eslint/eslint-plugin": "^5.59.6",
     "@typescript-eslint/parser": "^5.59.6",
+    "autoprefixer": "^10.4.15",
     "eslint": "^8.40.0",
     "eslint-config-next": "^13.4.2",
+    "postcss": "^8.4.29",
     "prettier": "^2.8.8",
     "prisma": "^4.16.1",
+    "tailwindcss": "^3.3.3",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
   },
