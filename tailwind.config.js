@@ -12,6 +12,20 @@ module.exports = {
     },
     extend: {
       colors: {
+        /*custom: {
+          primary: {
+            500: "#20b887",
+            600: "#118968"
+          },
+          secondary: {
+            500: "#ebebeb",
+            600: "#dbdbdb"
+          },
+          white: "#FFFFFF",
+          background: "#f7f7f7",
+          lightGreen: "#e0eeee",
+          black: "#1e293a"
+        },*/
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

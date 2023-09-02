@@ -1,7 +1,6 @@
 import Head from "next/head";
 import { type ReactNode } from "react";
 import Navbar from "~/components/Navbar";
-import { Center, Flex } from "@chakra-ui/react";
 
 type LayoutProps = {
   pageTitle?: string;
@@ -17,10 +16,10 @@ export default function Layout({ pageTitle = "Climbing App", navbarDisabled, chi
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Flex as="main" flexDirection="column" minH="100vh" bgColor="background">
+      <main className="flex flex-col min-h-screen bg-background">
         {!navbarDisabled && <Navbar />}
-        <Center flex={1}>{children}</Center>
-      </Flex>
+        <div className="flex flex-auto items-center justify-center">{children}</div>
+      </main>
     </>
   );
 }
