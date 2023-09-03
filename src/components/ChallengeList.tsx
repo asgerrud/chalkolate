@@ -1,13 +1,14 @@
 import { api } from "~/lib/api";
-import { Box, Card, CardBody, Center, Flex, Heading, Spinner, Stack, Text } from "@chakra-ui/react";
+import { ReloadIcon } from "@radix-ui/react-icons";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { NewChallengeForm } from "~/components/NewChallengeForm";
 
 dayjs.extend(relativeTime);
 
 function NoChallengesFound() {
-  return <Text>No challenges found</Text>;
+  return <p>No challenges found</p>;
 }
 
 export default function ChallengeList() {
@@ -17,47 +18,48 @@ export default function ChallengeList() {
 
   if (challenges.isLoading) {
     return (
-      <Center>
-        <Spinner />
-      </Center>
+      <div className="flex flex-auto items-center justify-center">
+        <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+        Loading
+      </div>
     );
   }
 
   return (
-    <Box p={4} my={2} bgColor="lightGreen">
-      <Heading size="md" mb={4}>
-        Challenges
-      </Heading>
-      <Stack spacing={4}>
+    <Card>
+      <CardHeader>
+        <CardTitle>Challenges</CardTitle>
+      </CardHeader>
+      <CardContent>
         {hasChallenges ? (
-          <Stack spacing={4}>
+          <div className="flex flex-col space-y-4">
             {challenges?.data?.map((challenge) => {
               const { id, grade, location, zone, endDate } = challenge;
               const timeToChallengeEnd = dayjs(endDate).fromNow(true);
 
               return (
-                <Card key={id}>
-                  <CardBody>
-                    <Flex justifyContent="space-between">
-                      <Stack>
-                        <Text fontWeight="bold">{location.name}</Text>
-                        <Text>{zone.name}</Text>
-                      </Stack>
-                      <Stack textAlign="end">
-                        <Text>{timeToChallengeEnd} remaining</Text>
-                        <Text>{grade.name}</Text>
-                      </Stack>
-                    </Flex>
-                  </CardBody>
-                </Card>
+                <div key={id} className="pb-2 border-b-[1px] ">
+                  <div className="flex items-center space-x-2">
+                    <div className="flex w-[36px] h-[36px] items-center bg-gray-300"></div>
+                    <div className="flex flex-1 justify-between">
+                      <div className="flex flex-col">
+                        <p className="bold">{location.name}</p>
+                        <p className="text-sm">{zone.name}</p>
+                      </div>
+                      <div className="text-right text-sm">{timeToChallengeEnd} remaining</div>
+                    </div>
+                  </div>
+                </div>
               );
             })}
-          </Stack>
+          </div>
         ) : (
           <NoChallengesFound />
         )}
-        <NewChallengeForm />
-      </Stack>
-    </Box>
+        <div className="w-full mt-4">
+          <NewChallengeForm />
+        </div>
+      </CardContent>
+    </Card>
   );
 }

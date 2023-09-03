@@ -5,21 +5,18 @@ import { api } from "~/lib/api";
 import { Button } from "~/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "~/components/ui/dialog";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
-import { Calendar as CalendarIcon, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
 import { Input } from "~/components/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
-import { cn } from "~/lib/utils";
-import { format } from "date-fns";
-import { Calendar } from "~/components/ui/calendar";
 import * as React from "react";
+import { DatePicker } from "~/components/ui/datepicker";
 import dayjs from "dayjs";
 
 export function NewChallengeForm() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Create challenge</Button>
+        <Button className="w-full">Create challenge</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -87,31 +84,13 @@ function FormComponent() {
             <FormItem className="flex flex-col">
               <FormLabel>Start date</FormLabel>
               <FormDescription>The day you began the challenge</FormDescription>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant={"outline"}
-                      className={cn("w-[240px] pl-3 text-left font-normal", !field.value && "text-muted-foreground")}>
-                      {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value}
-                    onSelect={(date) => {
-                      field.onChange(date);
-                      const endDate: Date = dayjs(date).add(6, "week").toDate();
-                      form.setValue("endDate", endDate);
-                    }}
-                    disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
+              <DatePicker
+                field={field}
+                onSelect={(date) => {
+                  const endDate: Date = dayjs(date).add(6, "week").toDate();
+                  form.setValue("endDate", endDate);
+                }}
+              />
               <FormMessage />
             </FormItem>
           )}

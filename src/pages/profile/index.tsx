@@ -1,14 +1,13 @@
 import Layout from "~/components/Layout";
 import { requireAuth } from "~/lib/requireAuth";
 import ChallengeList from "~/components/ChallengeList";
-import { Stack } from "@chakra-ui/react";
 
 export function ProfilePage() {
   return (
     <Layout>
-      <Stack maxW="480px" w="100%" px={6}>
+      <div className="max-w-[480px] w-full px-6">
         <ChallengeList />
-      </Stack>
+      </div>
     </Layout>
   );
 }
