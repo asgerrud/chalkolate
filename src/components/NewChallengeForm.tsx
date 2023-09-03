@@ -1,46 +1,61 @@
-import {
-  Box,
-  Button,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Input,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
-  Select,
-  Stack,
-  useDisclosure
-} from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChallengeCreateInputSchema } from "~/schema/challenge.schema";
-import dayjs from "dayjs";
 import { api } from "~/lib/api";
+import { Button } from "~/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "~/components/ui/dialog";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
+import { Calendar as CalendarIcon, Loader2 } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
+import { Input } from "~/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
+import { cn } from "~/lib/utils";
+import { format } from "date-fns";
+import { Calendar } from "~/components/ui/calendar";
+import * as React from "react";
+import dayjs from "dayjs";
+
+export function NewChallengeForm() {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button>Create challenge</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Create challenge</DialogTitle>
+        </DialogHeader>
+        <FormComponent />
+      </DialogContent>
+    </Dialog>
+  );
+}
 
 function FormComponent() {
-  const createChallenge = api.challenge.create.useMutation({
-    onSuccess: () => {
-      console.log("success");
-    }
-  });
-  const { data: locations } = api.location.findAll.useQuery();
-  const { data: grades } = api.grade.findAll.useQuery();
+  // const { toast } = useToast();
 
-  const {
-    register,
-    formState: { errors, isSubmitting },
-    watch,
-    setValue,
-    handleSubmit
-  } = useForm<ChallengeCreateInputSchema>({
+  const form = useForm<ChallengeCreateInputSchema>({
     resolver: zodResolver(ChallengeCreateInputSchema)
   });
 
-  const watchLocation = watch("location");
+  const {
+    register,
+    formState: { isSubmitting }
+  } = form;
+
+  const { data: locations } = api.location.findAll.useQuery();
+  const { data: grades } = api.grade.findAll.useQuery();
+  const createChallenge = api.challenge.create.useMutation({
+    onSuccess: () => {
+      console.log("submitted");
+      // TODO: fix toast
+      /*toast({
+        title: "Challenge created"
+      });*/
+    }
+  });
+
+  const watchLocation = form.watch("location");
 
   function onSubmit(formData: ChallengeCreateInputSchema) {
     const parsedFormData = {
@@ -63,95 +78,126 @@ function FormComponent() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing={3}>
-        <FormControl isInvalid={Boolean(errors.startDate)}>
-          <FormLabel htmlFor="name">Start date</FormLabel>
-          <Input
-            type="date"
-            {...register("startDate", {
-              required: "This is required"
-            })}
-            onChange={(e) => {
-              const endDate = dayjs(e.target.value).add(6, "week").format("YYYY-MM-DD");
-              setValue("endDate", endDate);
-            }}
-          />
-          <FormErrorMessage>
-            <span>{errors.startDate && errors.startDate.message}</span>
-          </FormErrorMessage>
-        </FormControl>
+    <Form {...form}>
+      <form className="flex flex-col space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name="startDate"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Start date</FormLabel>
+              <FormDescription>The day you began the challenge</FormDescription>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={"outline"}
+                      className={cn("w-[240px] pl-3 text-left font-normal", !field.value && "text-muted-foreground")}>
+                      {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={(date) => {
+                      field.onChange(date);
+                      const endDate: Date = dayjs(date).add(6, "week").toDate();
+                      form.setValue("endDate", endDate);
+                    }}
+                    disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <Input type="hidden" {...register("endDate")} />
 
-        <FormControl isInvalid={Boolean(errors.location)}>
-          <FormLabel>Location</FormLabel>
-          <Select placeholder="Select location" {...register("location")}>
-            {locations?.map((location) => (
-              <option key={location.id} value={location.id}>
-                {location.name}
-              </option>
-            ))}
-          </Select>
-          <FormErrorMessage>
-            <span>{errors.location && errors.location.message}</span>
-          </FormErrorMessage>
-        </FormControl>
+        <FormField
+          name="location"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Location</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select climbing gym" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {locations?.map((location) => (
+                    <SelectItem key={location.id} value={location.id}>
+                      {location.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-        <FormControl isInvalid={Boolean(errors.zone)} isDisabled={!watchLocation}>
-          <FormLabel>Zone</FormLabel>
-          <Select placeholder="Select zone" {...register("zone")}>
-            {getZonesByLocation(watchLocation).map((zone) => (
-              <option key={zone.id} value={zone.id}>
-                {zone.name}
-              </option>
-            ))}
-          </Select>
-          <FormErrorMessage>
-            <span>{errors.zone && errors.zone.message}</span>
-          </FormErrorMessage>
-        </FormControl>
+        <FormField
+          name="zone"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Zone</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value} disabled={!watchLocation}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select climbing zone" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {getZonesByLocation(watchLocation).map((zone) => (
+                    <SelectItem key={zone.id} value={zone.id}>
+                      {zone.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-        <FormControl isInvalid={Boolean(errors.grade)}>
-          <FormLabel>Grade</FormLabel>
-          <Select placeholder="Select grade" {...register("grade")}>
-            {grades?.map((grade) => (
-              <option key={grade.id} value={grade.id}>
-                {grade.name}
-              </option>
-            ))}
-          </Select>
-          <FormErrorMessage>
-            <span>{errors.grade && errors.grade.message}</span>
-          </FormErrorMessage>
-        </FormControl>
-      </Stack>
+        <FormField
+          name="grade"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Grade</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select grade" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {grades?.map((grade) => (
+                    <SelectItem key={grade.id} value={grade.id.toString()}>
+                      {grade.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      <Button mt={4} colorScheme="teal" isLoading={isSubmitting} type="submit">
-        Submit
-      </Button>
-    </form>
-  );
-}
-
-export function NewChallengeForm() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  return (
-    <>
-      <Button onClick={onOpen}>Create challenge</Button>
-
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Create challenge</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Box pb={2}>
-              <FormComponent />
-            </Box>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-    </>
+        <Button type="submit">
+          {!isSubmitting ? <span>Submit</span> : <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+        </Button>
+      </form>
+    </Form>
   );
 }

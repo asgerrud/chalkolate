@@ -4,20 +4,15 @@ import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 
 dayjs.extend(isSameOrBefore);
 
+// TODO: use required_error instead of refine
+
 export const ChallengeCreateInputSchema = z
   .object({
-    location: z.string().refine((location) => !!location, "Enter a location"),
-    zone: z.string().refine((zone) => !!zone, "Enter a zone"),
-    grade: z.string().refine((grade) => !!grade, "Enter a grade"),
-    startDate: z
-      .string()
-      .refine((date) => {
-        return dayjs(date).isValid();
-      }, "Enter a valid date")
-      .refine((date) => {
-        return dayjs(date).isSameOrBefore(dayjs());
-      }, "The date cannot be in the future"),
-    endDate: z.string()
+    location: z.string({ required_error: "Select a location" }),
+    zone: z.string({ required_error: "Select a zone" }),
+    grade: z.string({ required_error: "Select a grade" }),
+    startDate: z.date({ required_error: "Pick a date" }),
+    endDate: z.date()
   })
   .strict();
 
