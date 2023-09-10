@@ -9,13 +9,20 @@ import { Loader2 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
 import { Input } from "~/components/ui/input";
 import * as React from "react";
+import { useState } from "react";
 import { DatePicker } from "~/components/ui/datepicker";
 import dayjs from "dayjs";
 import { useToast } from "~/components/ui/use-toast";
 
 export function NewChallengeForm() {
+  const [open, setOpen] = useState(false);
+
+  function handleFormSubmit() {
+    setOpen(false);
+  }
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="w-full">Create challenge</Button>
       </DialogTrigger>
@@ -23,13 +30,17 @@ export function NewChallengeForm() {
         <DialogHeader>
           <DialogTitle>Create challenge</DialogTitle>
         </DialogHeader>
-        <FormComponent />
+        <FormComponent onFormSubmitted={handleFormSubmit} />
       </DialogContent>
     </Dialog>
   );
 }
 
-function FormComponent() {
+interface FormComponentProps {
+  onFormSubmitted: () => void;
+}
+
+function FormComponent({ onFormSubmitted }: FormComponentProps) {
   const { toast } = useToast();
 
   const form = useForm<ChallengeCreateInputSchema>({
@@ -49,6 +60,7 @@ function FormComponent() {
       toast({
         title: "Challenge created!"
       });
+      onFormSubmitted();
     }
   });
 
