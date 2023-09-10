@@ -1,4 +1,4 @@
 export enum EPageRoute {
-  HOME = "/",
-  PROFILE = "/profile"
+  PROFILE = "/profile",
+  SETTINGS = "/settings"
 }

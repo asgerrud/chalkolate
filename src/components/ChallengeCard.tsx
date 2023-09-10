@@ -12,7 +12,7 @@ function NoChallengesFound() {
   return <p>No challenges found</p>;
 }
 
-export default function ChallengeList() {
+export default function ChallengeCard() {
   const challenges = api.challenge.findUserChallenges.useQuery({});
 
   const hasChallenges = challenges.data?.length;
@@ -27,7 +27,7 @@ export default function ChallengeList() {
   }
 
   return (
-    <Card>
+    <Card className="max-w-[480px] w-full px-6">
       <CardHeader>
         <CardTitle>Challenges</CardTitle>
       </CardHeader>
