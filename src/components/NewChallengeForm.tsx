@@ -11,6 +11,7 @@ import { Input } from "~/components/ui/input";
 import * as React from "react";
 import { DatePicker } from "~/components/ui/datepicker";
 import dayjs from "dayjs";
+import { useToast } from "~/components/ui/use-toast";
 
 export function NewChallengeForm() {
   return (
@@ -29,7 +30,7 @@ export function NewChallengeForm() {
 }
 
 function FormComponent() {
-  // const { toast } = useToast();
+  const { toast } = useToast();
 
   const form = useForm<ChallengeCreateInputSchema>({
     resolver: zodResolver(ChallengeCreateInputSchema)
@@ -44,11 +45,10 @@ function FormComponent() {
   const { data: grades } = api.grade.findAll.useQuery();
   const createChallenge = api.challenge.create.useMutation({
     onSuccess: () => {
-      console.log("submitted");
-      // TODO: fix toast
-      /*toast({
-        title: "Challenge created"
-      });*/
+      // TODO: Close dialog
+      toast({
+        title: "Challenge created!"
+      });
     }
   });
 

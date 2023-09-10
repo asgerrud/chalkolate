@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { NewChallengeForm } from "~/components/NewChallengeForm";
+import { Toaster } from "~/components/ui/toaster";
 
 dayjs.extend(relativeTime);
 
@@ -58,6 +59,7 @@ export default function ChallengeList() {
         )}
         <div className="w-full mt-4">
           <NewChallengeForm />
+          <Toaster />
         </div>
       </CardContent>
     </Card>
