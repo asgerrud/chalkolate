@@ -92,20 +92,24 @@ function FormComponent({ onFormSubmitted }: FormComponentProps) {
         <FormField
           control={form.control}
           name="startDate"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Start date</FormLabel>
-              <FormDescription>The day you began the challenge</FormDescription>
-              <DatePicker
-                field={field}
-                onSelect={(date) => {
-                  const endDate: Date = dayjs(date).add(6, "week").toDate();
-                  form.setValue("endDate", endDate);
-                }}
-              />
-              <FormMessage />
-            </FormItem>
-          )}
+          render={({ field }) => {
+            field.value = new Date();
+
+            return (
+              <FormItem className="flex flex-col">
+                <FormLabel>Start date</FormLabel>
+                <FormDescription>The day you began the challenge</FormDescription>
+                <DatePicker
+                  field={field}
+                  onSelect={(date) => {
+                    const endDate: Date = dayjs(date).add(6, "week").toDate();
+                    form.setValue("endDate", endDate);
+                  }}
+                />
+                <FormMessage />
+              </FormItem>
+            );
+          }}
         />
 
         <Input type="hidden" {...register("endDate")} />
