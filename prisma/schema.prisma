@@ -68,6 +68,7 @@ model VerificationToken {
 model Grade {
   id        Int         @id @default(autoincrement())
   name      String      @unique
+  hex       String      @default("#FFFFFF")
   challenge Challenge[]
 }
 

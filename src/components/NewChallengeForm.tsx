@@ -43,8 +43,14 @@ interface FormComponentProps {
 function FormComponent({ onFormSubmitted }: FormComponentProps) {
   const { toast } = useToast();
 
+  const today = new Date();
+
   const form = useForm<ChallengeCreateInputSchema>({
-    resolver: zodResolver(ChallengeCreateInputSchema)
+    resolver: zodResolver(ChallengeCreateInputSchema),
+    defaultValues: {
+      startDate: today,
+      endDate: getChallengeEndDate(today)
+    }
   });
 
   const {
@@ -64,7 +70,13 @@ function FormComponent({ onFormSubmitted }: FormComponentProps) {
     }
   });
 
+  const watchStartDate = form.watch("startDate");
   const watchLocation = form.watch("location");
+  const watchGrade = form.watch("grade");
+
+  function getChallengeEndDate(date: Date): Date {
+    return dayjs(date).add(6, "week").toDate();
+  }
 
   function onSubmit(formData: ChallengeCreateInputSchema) {
     const parsedFormData = {
@@ -93,8 +105,6 @@ function FormComponent({ onFormSubmitted }: FormComponentProps) {
           control={form.control}
           name="startDate"
           render={({ field }) => {
-            field.value = new Date();
-
             return (
               <FormItem className="flex flex-col">
                 <FormLabel>Start date</FormLabel>
@@ -102,8 +112,7 @@ function FormComponent({ onFormSubmitted }: FormComponentProps) {
                 <DatePicker
                   field={field}
                   onSelect={(date) => {
-                    const endDate: Date = dayjs(date).add(6, "week").toDate();
-                    form.setValue("endDate", endDate);
+                    form.setValue("endDate", getChallengeEndDate(date));
                   }}
                 />
                 <FormMessage />
@@ -170,24 +179,31 @@ function FormComponent({ onFormSubmitted }: FormComponentProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Grade</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select grade" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {grades?.map((grade) => (
-                    <SelectItem key={grade.id} value={grade.id.toString()}>
-                      {grade.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <FormDescription>The color grade of the problem</FormDescription>
+              <div className="grid grid-cols-2 gap-2">
+                {grades?.map((grade) => {
+                  const gradeId = String(grade.id);
+                  const colorHighlighted = watchGrade === undefined || watchGrade === gradeId;
+
+                  return (
+                    <div
+                      key={grade.id}
+                      className="flex flex-1 h-16 justify-center transition-opacity duration-75 cursor-pointer"
+                      style={{ backgroundColor: grade.hex, opacity: colorHighlighted ? "1" : "0.35" }}
+                      onClick={() => {
+                        if (watchGrade === gradeId) {
+                          form.resetField("grade");
+                        } else {
+                          form.setValue("grade", gradeId);
+                        }
+                      }}
+                    />
+                  );
+                })}
+              </div>
               <FormMessage />
             </FormItem>
-          )}
-        />
+          )}></FormField>
 
         <Button type="submit">
           {!isSubmitting ? <span>Submit</span> : <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
