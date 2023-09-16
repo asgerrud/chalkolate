@@ -1,6 +1,5 @@
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { type inferRouterOutputs } from "@trpc/server";
-import { type AppRouter } from "~/server/api/root";
+import { type QueryResult } from "~/server/api/root";
 import { z } from "zod";
 import { Prisma } from ".prisma/client";
 import { ChallengeCreateInputSchema } from "~/schema/challenge.schema";
@@ -88,4 +87,4 @@ export const challengeRouter = createTRPCRouter({
     })
 });
 
-export type ChallengeDetails = inferRouterOutputs<AppRouter>["challenge"]["findUserChallenges"];
+export type ChallengeDetails = QueryResult<"challenge", "findUserChallenges">;

@@ -7,4 +7,4 @@ export const gradeRouter = createTRPCRouter({
   })
 });
 
-export type Grade = QueryResult<"grade", "findAll">;
+export type Grades = QueryResult<"grade", "findAll">;

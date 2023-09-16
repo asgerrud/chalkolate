@@ -27,4 +27,4 @@ export type AppRouter = typeof appRouter;
 export type QueryResult<
   RouteName extends keyof inferRouterOutputs<AppRouter>,
   Action extends keyof inferRouterInputs<AppRouter>[RouteName]
-> = UseTRPCQueryResult<inferRouterOutputs<AppRouter>[RouteName][Action], TRPCClientErrorLike<AppRouter>>["data"];
+> = UseTRPCQueryResult<inferRouterOutputs<AppRouter>[RouteName][Action], TRPCClientErrorLike<AppRouter>>;
