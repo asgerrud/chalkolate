@@ -1,15 +1,15 @@
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { type inferRouterInputs } from "@trpc/server";
-import { type AppRouter } from "~/server/api/root";
+import { type QueryResult } from "~/server/api/root";
 
 export const locationRouter = createTRPCRouter({
   findAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.location.findMany({
+    const locationsFound = ctx.prisma.location.findMany({
       include: {
         zone: true
       }
     });
+    return locationsFound ?? [];
   })
 });
 
-export type Location = inferRouterInputs<AppRouter>["location"]["findAll"];
+export type ClimbingLocation = QueryResult<"location", "findAll">;
