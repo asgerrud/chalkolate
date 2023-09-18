@@ -94,6 +94,8 @@ function FormComponent({ locations, grades, onFormSubmitted }: FormComponentProp
 
   return (
     <Form {...form}>
+      <input type="file" accept="image/*" capture="environment" />
+
       <form className="flex flex-col space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
@@ -172,7 +174,7 @@ function FormComponent({ locations, grades, onFormSubmitted }: FormComponentProp
             <FormItem>
               <FormLabel>Grade</FormLabel>
               <FormDescription>The color grade of the problem</FormDescription>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-4 md:grid-cols-8 gap-4">
                 {grades?.map((grade) => {
                   const gradeId = String(grade.id);
                   const colorHighlighted = watchGrade === undefined || watchGrade === gradeId;
@@ -180,7 +182,7 @@ function FormComponent({ locations, grades, onFormSubmitted }: FormComponentProp
                   return (
                     <div
                       key={grade.id}
-                      className="flex flex-1 h-16 justify-center transition-opacity duration-75 cursor-pointer"
+                      className="flex max-h-16 aspect-square rounded-md justify-center transition-opacity duration-75 cursor-pointer"
                       style={{ backgroundColor: grade.hex, opacity: colorHighlighted ? "1" : "0.35" }}
                       onClick={() => {
                         if (watchGrade === gradeId) {
