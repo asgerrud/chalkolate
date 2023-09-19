@@ -8,6 +8,7 @@ import CreateChallengeForm from "~/components/CreateChallengeForm";
 import { type ClimbingLocations } from "~/server/api/routers/location";
 import { type Grades } from "~/server/api/routers/grade";
 import { type ChallengeDetails } from "~/server/api/routers/challenge";
+import ChallengeItem from "~/components/ChallengeItem";
 
 dayjs.extend(relativeTime);
 
@@ -17,8 +18,6 @@ export default function ChallengeCard() {
   const { data: grades }: Grades = api.grade.findAll.useQuery();
 
   const hasChallenges = challenges.data?.length;
-
-  const getTimeUntilDate = (date: Date) => dayjs(date).fromNow(true);
 
   if (challenges.isLoading) {
     return (
@@ -40,20 +39,7 @@ export default function ChallengeCard() {
             {challenges?.data?.map((challenge) => {
               const { id, location, zone, endDate } = challenge;
 
-              return (
-                <div key={id} className="pb-2 border-b-[1px] ">
-                  <div className="flex items-center space-x-2">
-                    <div className="flex w-[36px] h-[36px] items-center bg-gray-300"></div>
-                    <div className="flex flex-1 justify-between">
-                      <div className="flex flex-col">
-                        <p className="bold">{location.name}</p>
-                        <p className="text-sm">{zone.name}</p>
-                      </div>
-                      <div className="text-right text-sm">{getTimeUntilDate(endDate)} remaining</div>
-                    </div>
-                  </div>
-                </div>
-              );
+              return <ChallengeItem key={id} location={location.name} zone={zone.name} endDate={endDate} />;
             })}
           </div>
         ) : (
