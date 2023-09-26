@@ -4,7 +4,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from "~/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChallengeCreateInputSchema } from "~/schema/challenge.schema";
 import { api } from "~/lib/api";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
 import { Loader2 } from "lucide-react";
@@ -15,6 +14,7 @@ import dayjs from "dayjs";
 import { useToast } from "~/components/ui/use-toast";
 import { type Grades } from "~/server/api/routers/grade";
 import { type ClimbingLocations } from "~/server/api/routers/location";
+import { ChallengeCreateInputSchema } from "~/server/api/routers/challenge";
 
 interface CreateChallengeFormProps {
   locations: ClimbingLocations["data"];

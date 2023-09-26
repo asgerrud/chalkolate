@@ -7,6 +7,7 @@ import { changeScheduleRouter } from "~/server/api/routers/changeSchedule";
 import { type UseTRPCQueryResult } from "@trpc/react-query/shared";
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
 import { type TRPCClientErrorLike } from "@trpc/client";
+import { r2Router } from "~/server/api/routers/r2";
 
 /**
  * This is the primary router for your server.
@@ -18,7 +19,8 @@ export const appRouter = createTRPCRouter({
   grade: gradeRouter,
   location: locationRouter,
   changeSchedule: changeScheduleRouter,
-  zone: zoneRouter
+  zone: zoneRouter,
+  r2: r2Router
 });
 
 // export type definition of API

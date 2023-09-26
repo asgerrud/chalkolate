@@ -4,11 +4,11 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Toaster } from "~/components/ui/toaster";
-import CreateChallengeForm from "~/components/CreateChallengeForm";
+import CreateChallengeForm from "~/components/profile/challenge-card/CreateChallengeForm";
 import { type ClimbingLocations } from "~/server/api/routers/location";
 import { type Grades } from "~/server/api/routers/grade";
 import { type ChallengeDetails } from "~/server/api/routers/challenge";
-import ChallengeItem from "~/components/ChallengeItem";
+import ChallengeItem from "~/components/profile/challenge-card/ChallengeItem";
 
 dayjs.extend(relativeTime);
 
