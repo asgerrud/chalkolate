@@ -4,8 +4,6 @@ import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 
 dayjs.extend(isSameOrBefore);
 
-// TODO: use required_error instead of refine
-
 export const ChallengeCreateInputSchema = z
   .object({
     location: z.string({ required_error: "Select a location" }),
