@@ -1,12 +1,12 @@
 import Layout from "~/components/Layout";
 import { getProviders, signIn } from "next-auth/react";
-import { type GetServerSidePropsContext, type InferGetServerSidePropsType } from "next";
+import { type GetServerSidePropsContext } from "next";
 import { RiDiscordFill, RiGoogleFill } from "react-icons/ri";
 import { getServerSession } from "next-auth";
 import { authOptions } from "~/server/auth";
 import { Button } from "~/components/ui/button";
 
-export default function Home({ providers }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Home({ providers }) {
   const { discord, google } = providers;
 
   return (
