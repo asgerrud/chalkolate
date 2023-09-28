@@ -7,22 +7,20 @@ interface ImageUploadProps {
 }
 
 export default function ImageUpload({ onImageUploaded }: ImageUploadProps) {
-  const [file, setFile] = useState<File | null>(null);
+  const [imageFile, setImageFile] = useState<File>(null);
 
   const getSignedUrl = api.r2.getSignedUrl.useMutation({
     onSuccess: (res) => {
-      uploadFileToStorage(file, res.url).then((fileName) => onImageUploaded(fileName));
+      uploadFileToStorage(imageFile, res.url).then((fileName) => onImageUploaded(fileName));
     }
   });
 
   const handleFileUpload = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!file) return;
-
-    // TODO: add file constraints
+    if (!imageFile) return;
 
     // TODO: generate uuid and use as key, to avoid files being overwritten
-    getSignedUrl.mutate({ fileName: file.name });
+    getSignedUrl.mutate({ fileName: imageFile.name });
   };
 
   return (
@@ -39,7 +37,10 @@ export default function ImageUpload({ onImageUploaded }: ImageUploadProps) {
             if (!e.target.files || e.target.files.length === 0) {
               return;
             }
-            setFile(e.target.files[0] ?? null);
+
+            // Display error if file is not image
+
+            setImageFile(e.target.files[0] ?? null);
           }}
         />
         <br />

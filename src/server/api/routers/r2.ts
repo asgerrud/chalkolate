@@ -4,13 +4,13 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import z from "zod";
 import { env } from "~/env.mjs";
 
-export const UploadImageSchema = z
+export const GetSignedUrlSchema = z
   .object({
     fileName: z.string()
   })
   .strict();
 
-export const LoadImageSchema = z
+export const LoadFileSchema = z
   .object({
     fileName: z.string()
   })
@@ -26,7 +26,7 @@ const S3 = new S3Client({
 });
 
 export const r2Router = createTRPCRouter({
-  getSignedUrl: protectedProcedure.input(UploadImageSchema).mutation(async ({ input }) => {
+  getSignedUrl: protectedProcedure.input(GetSignedUrlSchema).mutation(async ({ input }) => {
     const preSignedUrl = await getSignedUrl(
       S3,
       new PutObjectCommand({ Bucket: process.env.R2_UPLOAD_BUCKET, Key: input.fileName }),
@@ -39,7 +39,7 @@ export const r2Router = createTRPCRouter({
       url: preSignedUrl
     };
   }),
-  loadImage: protectedProcedure.input(LoadImageSchema).mutation(async ({ input }) => {
+  loadFile: protectedProcedure.input(LoadFileSchema).mutation(async ({ input }) => {
     return {
       url: env.R2_PUBLIC_URL + input.fileName
     };

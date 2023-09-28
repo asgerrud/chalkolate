@@ -1,4 +1,4 @@
-export function uploadFileToStorage(file: File | null, url: string) {
+export function uploadFileToStorage(file: File, url: string) {
   return fetch(url, {
     method: "PUT",
     body: file
