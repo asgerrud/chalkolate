@@ -15,10 +15,16 @@ async function main() {
   });
   console.log("Added climbing locations", _locations.count);
 
-  await prisma.zone.deleteMany();
   for (const zone of ZONES) {
-    await prisma.zone.create({
-      data: {
+    await prisma.zone.upsert({
+      where: {
+        name_locationId: {
+          name: zone.name,
+          locationId: "boulders_sydhavn"
+        }
+      },
+      update: {},
+      create: {
         ...zone,
         location: {
           connect: {
