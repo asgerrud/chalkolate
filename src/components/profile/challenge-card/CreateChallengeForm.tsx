@@ -14,7 +14,7 @@ import dayjs from "dayjs";
 import { useToast } from "~/components/ui/use-toast";
 import { type Grades } from "~/server/api/routers/grade";
 import { type ClimbingLocations } from "~/server/api/routers/location";
-import { ChallengeCreateInputSchema } from "~/server/api/routers/challenge";
+import { ChallengeCreateInputSchema } from "~/schema/challenge.schema";
 
 interface CreateChallengeFormProps {
   locations: ClimbingLocations["data"];
