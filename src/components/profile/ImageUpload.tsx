@@ -1,25 +1,28 @@
 import { type FormEvent, useState } from "react";
 import { api } from "~/lib/api";
+import { uploadFileToStorage } from "~/lib/r2";
 
-export default function ImageUpload() {
-  const uploadFile = api.r2.uploadFile.useMutation({
+interface ImageUploadProps {
+  onImageUploaded: (fileName: string) => void;
+}
+
+export default function ImageUpload({ onImageUploaded }: ImageUploadProps) {
+  const [file, setFile] = useState<File | null>(null);
+
+  const getSignedUrl = api.r2.getSignedUrl.useMutation({
     onSuccess: (res) => {
-      return fetch(res.url, {
-        method: "PUT",
-        body: file
-      }).then((res) => {
-        console.log("Image upload complete");
-        console.log(res);
-      });
+      uploadFileToStorage(file, res.url).then((fileName) => onImageUploaded(fileName));
     }
   });
-
-  const [file, setFile] = useState<File | null>(null);
 
   const handleFileUpload = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!file) return;
-    uploadFile.mutate({ name: file.name });
+
+    // TODO: add file constraints
+
+    // TODO: generate uuid and use as key, to avoid files being overwritten
+    getSignedUrl.mutate({ fileName: file.name });
   };
 
   return (

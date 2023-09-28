@@ -24,7 +24,14 @@ export const env = createEnv({
     DISCORD_CLIENT_ID: z.string(),
     DISCORD_CLIENT_SECRET: z.string(),
     GOOGLE_CLIENT_ID: z.string(),
-    GOOGLE_CLIENT_SECRET: z.string()
+    GOOGLE_CLIENT_SECRET: z.string(),
+
+    // Cloudflare R2 env
+    R2_ACCOUNT_ID: z.string(),
+    R2_ACCESS_KEY: z.string(),
+    R2_SECRET_ACCESS_KEY: z.string(),
+    R2_UPLOAD_BUCKET: z.string(),
+    R2_PUBLIC_URL: z.string()
   },
 
   /**
@@ -49,6 +56,11 @@ export const env = createEnv({
     DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    R2_ACCOUNT_ID: process.env.R2_ACCOUNT_ID,
+    R2_ACCESS_KEY: process.env.R2_ACCESS_KEY,
+    R2_SECRET_ACCESS_KEY: process.env.R2_SECRET_ACCESS_KEY,
+    R2_UPLOAD_BUCKET: process.env.R2_UPLOAD_BUCKET,
+    R2_PUBLIC_URL: process.env.R2_PUBLIC_URL
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

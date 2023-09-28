@@ -2,10 +2,17 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import z from "zod";
+import { env } from "~/env.mjs";
 
-export const UploadFileSchema = z
+export const UploadImageSchema = z
   .object({
-    name: z.string()
+    fileName: z.string()
+  })
+  .strict();
+
+export const LoadImageSchema = z
+  .object({
+    fileName: z.string()
   })
   .strict();
 
@@ -19,10 +26,10 @@ const S3 = new S3Client({
 });
 
 export const r2Router = createTRPCRouter({
-  uploadFile: protectedProcedure.input(UploadFileSchema).mutation(async ({ ctx, input }) => {
+  getSignedUrl: protectedProcedure.input(UploadImageSchema).mutation(async ({ input }) => {
     const preSignedUrl = await getSignedUrl(
       S3,
-      new PutObjectCommand({ Bucket: process.env.R2_UPLOAD_BUCKET, Key: input.name }),
+      new PutObjectCommand({ Bucket: process.env.R2_UPLOAD_BUCKET, Key: input.fileName }),
       {
         expiresIn: 3600
       }
@@ -30,6 +37,11 @@ export const r2Router = createTRPCRouter({
 
     return {
       url: preSignedUrl
+    };
+  }),
+  loadImage: protectedProcedure.input(LoadImageSchema).mutation(async ({ input }) => {
+    return {
+      url: env.R2_PUBLIC_URL + input.fileName
     };
   })
 });
