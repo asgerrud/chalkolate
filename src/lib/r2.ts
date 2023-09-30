@@ -1,3 +1,5 @@
+import { env } from "~/env.mjs";
+
 export function uploadFileToStorage(file: File, url: string) {
   return fetch(url, {
     method: "PUT",
@@ -7,6 +9,10 @@ export function uploadFileToStorage(file: File, url: string) {
       throw Error(res.statusText);
     }
 
-    return new URL(url).pathname.substring(1);
+    // TODO: return public link to image file
+
+    const fileName = new URL(url).pathname.substring(1);
+
+    return env.NEXT_PUBLIC_R2_PUBLIC_URL + fileName;
   });
 }

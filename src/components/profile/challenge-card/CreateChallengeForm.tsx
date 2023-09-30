@@ -15,6 +15,7 @@ import { useToast } from "~/components/ui/use-toast";
 import { type Grades } from "~/server/api/routers/grade";
 import { type ClimbingLocations } from "~/server/api/routers/location";
 import { ChallengeCreateInputSchema } from "~/schema/challenge.schema";
+import ImageUpload from "~/components/profile/challenge-card/ImageUpload";
 
 interface CreateChallengeFormProps {
   locations: ClimbingLocations["data"];
@@ -52,6 +53,14 @@ function FormComponent({ locations, grades, onFormSubmitted }: FormComponentProp
 
   const today = new Date();
   const getChallengeEndDate = (date: Date) => dayjs(date).add(6, "week").toDate();
+  const createChallenge = api.challenge.create.useMutation({
+    onSuccess: () => {
+      toast({
+        title: "Challenge created!"
+      });
+      onFormSubmitted();
+    }
+  });
 
   const form = useForm<ChallengeCreateInputSchema>({
     resolver: zodResolver(ChallengeCreateInputSchema),
@@ -63,14 +72,6 @@ function FormComponent({ locations, grades, onFormSubmitted }: FormComponentProp
 
   const watchLocation = form.watch("location");
   const watchGrade = form.watch("grade");
-  const createChallenge = api.challenge.create.useMutation({
-    onSuccess: () => {
-      toast({
-        title: "Challenge created!"
-      });
-      onFormSubmitted();
-    }
-  });
 
   function onSubmit(formData: ChallengeCreateInputSchema) {
     const parsedFormData = {
@@ -94,9 +95,18 @@ function FormComponent({ locations, grades, onFormSubmitted }: FormComponentProp
 
   return (
     <Form {...form}>
-      <input type="file" accept="image/*" capture="environment" />
-
       <form className="flex flex-col space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name="imageUrl"
+          render={({ field }) => (
+            <ImageUpload
+              onImageUploaded={(fileName) => {
+                console.log("filename", fileName);
+              }}
+            />
+          )}
+        />
         <FormField
           control={form.control}
           name="startDate"
