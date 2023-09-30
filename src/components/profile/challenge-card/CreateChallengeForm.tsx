@@ -98,6 +98,7 @@ function FormComponent({ locations, grades, onFormSubmitted }: FormComponentProp
           render={() => (
             <FormItem className="flex flex-col">
               <ImageUpload
+                autoOpen={true}
                 onImageUploaded={(fileUrl) => {
                   form.setValue("imageUrl", fileUrl);
                 }}
