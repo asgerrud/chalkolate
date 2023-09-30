@@ -100,11 +100,14 @@ function FormComponent({ locations, grades, onFormSubmitted }: FormComponentProp
           control={form.control}
           name="imageUrl"
           render={({ field }) => (
-            <ImageUpload
-              onImageUploaded={(fileName) => {
-                console.log("filename", fileName);
-              }}
-            />
+            <FormItem className="flex flex-col">
+              <ImageUpload
+                onImageUploaded={(fileUrl) => {
+                  form.setValue("imageUrl", fileUrl);
+                }}
+              />
+              <FormMessage />
+            </FormItem>
           )}
         />
         <FormField

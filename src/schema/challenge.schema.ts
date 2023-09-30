@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const ChallengeCreateInputSchema = z
   .object({
-    imageUrl: z.string(),
+    imageUrl: z.string({ required_error: "Select an image" }),
     location: z.string({ required_error: "Select a location" }),
     zone: z.string({ required_error: "Select a zone" }),
     grade: z.string({ required_error: "Select a grade" }),

@@ -11,12 +11,13 @@ dayjs.extend(isSameOrBefore);
 
 export const challengeRouter = createTRPCRouter({
   create: protectedProcedure.input(ChallengeCreateInputSchema).mutation(async ({ ctx, input }) => {
-    const { location, zone, grade, startDate, endDate } = input;
+    const { imageUrl, location, zone, grade, startDate, endDate } = input;
 
     return await ctx.prisma.challenge.create({
       data: {
         startDate: new Date(startDate),
         endDate: new Date(endDate),
+        imageUrl: imageUrl,
         user: {
           connect: {
             id: ctx.session.user?.id
