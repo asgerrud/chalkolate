@@ -8,8 +8,6 @@ import { api } from "~/lib/api";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
 import { Loader2 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
-import { Input } from "~/components/ui/input";
-import { DatePicker } from "~/components/ui/datepicker";
 import dayjs from "dayjs";
 import { useToast } from "~/components/ui/use-toast";
 import { type Grades } from "~/server/api/routers/grade";
@@ -75,9 +73,7 @@ function FormComponent({ locations, grades, onFormSubmitted }: FormComponentProp
 
   function onSubmit(formData: ChallengeCreateInputSchema) {
     const parsedFormData = {
-      ...formData,
-      startDate: formData.startDate,
-      endDate: formData.endDate
+      ...formData
     };
 
     createChallenge.mutate(parsedFormData);
@@ -99,7 +95,7 @@ function FormComponent({ locations, grades, onFormSubmitted }: FormComponentProp
         <FormField
           control={form.control}
           name="imageUrl"
-          render={({ field }) => (
+          render={() => (
             <FormItem className="flex flex-col">
               <ImageUpload
                 onImageUploaded={(fileUrl) => {
@@ -110,25 +106,6 @@ function FormComponent({ locations, grades, onFormSubmitted }: FormComponentProp
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="startDate"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Start date</FormLabel>
-              <FormDescription>The day you began the challenge</FormDescription>
-              <DatePicker
-                field={field}
-                onSelect={(date) => {
-                  form.setValue("endDate", getChallengeEndDate(date));
-                }}
-              />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <Input type="hidden" {...form.register("endDate")} />
 
         <FormField
           name="location"
