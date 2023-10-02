@@ -4,10 +4,17 @@ import { DeleteAccountButton } from "~/components/settings/DeleteAccountButton";
 import { api } from "~/lib/api";
 import { signOut } from "next-auth/react";
 import { requireAuth } from "~/lib/requireAuth";
+import { useToast } from "~/components/ui/use-toast";
 
 export function SettingsPage() {
+  const { toast } = useToast();
+
   const deleteAccount = api.account.delete.useMutation({
     onSuccess: () => {
+      toast({
+        title: "Your account was successfully deleted",
+        variant: "destructive"
+      });
       return signOut();
     }
   });
