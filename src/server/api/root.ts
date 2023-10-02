@@ -8,6 +8,7 @@ import { type UseTRPCQueryResult } from "@trpc/react-query/shared";
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
 import { type TRPCClientErrorLike } from "@trpc/client";
 import { r2Router } from "~/server/api/routers/r2";
+import { accountRouter } from "~/server/api/routers/account";
 
 /**
  * This is the primary router for your server.
@@ -15,6 +16,7 @@ import { r2Router } from "~/server/api/routers/r2";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
+  account: accountRouter,
   challenge: challengeRouter,
   grade: gradeRouter,
   location: locationRouter,

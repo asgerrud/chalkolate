@@ -1,34 +1,37 @@
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger
-} from "~/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
+import { useSession } from "next-auth/react";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "~/components/ui/dialog";
 
-export function DeleteAccountButton() {
+interface DeleteAccountButtonProps {
+  onConfirmDelete: () => void;
+}
+
+export function DeleteAccountButton({ onConfirmDelete }: DeleteAccountButtonProps) {
+  const session = useSession();
+
+  const accountEmail = session.data?.user?.email;
+
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
+    <Dialog>
+      <DialogTrigger asChild>
         <Button variant="outline">Delete account</Button>
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your account and remove your data
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction variant="destructive">Delete</AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Are you sure?</DialogTitle>
+          <p>
+            This action <em>cannot</em> be undone. This will permanently delete your account and remove your data
+          </p>
+          <p>
+            Account: <code>{accountEmail}</code>
+          </p>
+        </DialogHeader>
+        <DialogFooter>
+          <Button variant="destructive" onClick={onConfirmDelete}>
+            Delete account
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
