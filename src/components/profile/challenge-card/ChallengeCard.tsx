@@ -3,7 +3,6 @@ import { ReloadIcon } from "@radix-ui/react-icons";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
-import { Toaster } from "~/components/ui/toaster";
 import CreateChallengeForm from "~/components/profile/challenge-card/CreateChallengeForm";
 import { type ClimbingLocations } from "~/server/api/routers/location";
 import { type Grades } from "~/server/api/routers/grade";
@@ -47,7 +46,6 @@ export default function ChallengeCard() {
         )}
         <div className="w-full mt-4">
           <CreateChallengeForm locations={locations} grades={grades} />
-          <Toaster />
         </div>
       </CardContent>
     </Card>
