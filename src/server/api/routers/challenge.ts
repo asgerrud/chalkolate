@@ -2,17 +2,22 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { type QueryResult } from "~/server/api/root";
 import { z } from "zod";
 import { Prisma } from ".prisma/client";
+import dayjs from "dayjs";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import { ChallengeCreateInputSchema } from "~/schema/challenge.schema";
 import ChallengeWhereInput = Prisma.ChallengeWhereInput;
 
+dayjs.extend(isSameOrBefore);
+
 export const challengeRouter = createTRPCRouter({
   create: protectedProcedure.input(ChallengeCreateInputSchema).mutation(async ({ ctx, input }) => {
-    const { location, zone, grade, startDate, endDate } = input;
+    const { imageUrl, location, zone, grade, startDate, endDate } = input;
 
     return await ctx.prisma.challenge.create({
       data: {
         startDate: new Date(startDate),
         endDate: new Date(endDate),
+        imageUrl: imageUrl,
         user: {
           connect: {
             id: ctx.session.user?.id

@@ -125,6 +125,8 @@ model Challenge {
   startDate DateTime
   endDate   DateTime
 
+  imageUrl String?
+
   @@index([userId])
   @@index([zoneId])
   @@index([locationId])

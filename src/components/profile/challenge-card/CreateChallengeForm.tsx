@@ -4,17 +4,16 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from "~/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChallengeCreateInputSchema } from "~/schema/challenge.schema";
 import { api } from "~/lib/api";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
 import { Loader2 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
-import { Input } from "~/components/ui/input";
-import { DatePicker } from "~/components/ui/datepicker";
 import dayjs from "dayjs";
 import { useToast } from "~/components/ui/use-toast";
 import { type Grades } from "~/server/api/routers/grade";
 import { type ClimbingLocations } from "~/server/api/routers/location";
+import { ChallengeCreateInputSchema } from "~/schema/challenge.schema";
+import ImageUpload from "~/components/profile/challenge-card/ImageUpload";
 
 interface CreateChallengeFormProps {
   locations: ClimbingLocations["data"];
@@ -52,6 +51,14 @@ function FormComponent({ locations, grades, onFormSubmitted }: FormComponentProp
 
   const today = new Date();
   const getChallengeEndDate = (date: Date) => dayjs(date).add(6, "week").toDate();
+  const createChallenge = api.challenge.create.useMutation({
+    onSuccess: () => {
+      toast({
+        title: "Challenge created!"
+      });
+      onFormSubmitted();
+    }
+  });
 
   const form = useForm<ChallengeCreateInputSchema>({
     resolver: zodResolver(ChallengeCreateInputSchema),
@@ -63,20 +70,10 @@ function FormComponent({ locations, grades, onFormSubmitted }: FormComponentProp
 
   const watchLocation = form.watch("location");
   const watchGrade = form.watch("grade");
-  const createChallenge = api.challenge.create.useMutation({
-    onSuccess: () => {
-      toast({
-        title: "Challenge created!"
-      });
-      onFormSubmitted();
-    }
-  });
 
   function onSubmit(formData: ChallengeCreateInputSchema) {
     const parsedFormData = {
-      ...formData,
-      startDate: formData.startDate,
-      endDate: formData.endDate
+      ...formData
     };
 
     createChallenge.mutate(parsedFormData);
@@ -94,28 +91,22 @@ function FormComponent({ locations, grades, onFormSubmitted }: FormComponentProp
 
   return (
     <Form {...form}>
-      <input type="file" accept="image/*" capture="environment" />
-
       <form className="flex flex-col space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
-          name="startDate"
-          render={({ field }) => (
+          name="imageUrl"
+          render={() => (
             <FormItem className="flex flex-col">
-              <FormLabel>Start date</FormLabel>
-              <FormDescription>The day you began the challenge</FormDescription>
-              <DatePicker
-                field={field}
-                onSelect={(date) => {
-                  form.setValue("endDate", getChallengeEndDate(date));
+              <ImageUpload
+                autoOpen={true}
+                onImageUploaded={(fileUrl) => {
+                  form.setValue("imageUrl", fileUrl);
                 }}
               />
               <FormMessage />
             </FormItem>
           )}
         />
-
-        <Input type="hidden" {...form.register("endDate")} />
 
         <FormField
           name="location"

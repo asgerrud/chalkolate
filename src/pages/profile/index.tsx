@@ -1,6 +1,6 @@
 import Layout from "~/components/Layout";
 import { requireAuth } from "~/lib/requireAuth";
-import ChallengeCard from "~/components/ChallengeCard";
+import ChallengeCard from "~/components/profile/challenge-card/ChallengeCard";
 
 export function ProfilePage() {
   return (
