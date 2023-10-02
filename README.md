@@ -4,7 +4,7 @@ The app to help you track your climbing progress
 
 ## Live version
 
-Coming soon!
+A live demo of the app can be [found here](https://chalkolate.vercel.app). Note that the app is still in early development  
 
 ## Technologies
 
