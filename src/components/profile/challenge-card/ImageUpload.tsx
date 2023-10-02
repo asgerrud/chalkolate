@@ -39,6 +39,7 @@ export default function ImageUpload({ autoOpen, onImageUploaded }: ImageUploadPr
       ref={fileInput}
       id="file-upload"
       type="file"
+      capture="environment"
       accept="image/*"
       multiple={false}
       onChange={(e) => {
