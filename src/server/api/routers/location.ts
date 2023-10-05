@@ -5,7 +5,7 @@ export const locationRouter = createTRPCRouter({
   findAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.location.findMany({
       include: {
-        zone: true
+        zones: true
       }
     });
   })

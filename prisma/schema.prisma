@@ -79,8 +79,8 @@ model Location {
   latitude  Float
   longitude Float
 
-  zone      Zone[]
-  challenge Challenge[]
+  zones      Zone[]
+  challenges Challenge[]
 }
 
 model Zone {

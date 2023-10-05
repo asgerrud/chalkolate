@@ -41,6 +41,15 @@ export const challengeRouter = createTRPCRouter({
       }
     });
   }),
+  findUserChallengesByLocation: protectedProcedure.query(({ ctx }) => {
+    return ctx.prisma.location.findMany({
+      include: {
+        challenges: {
+          where: { userId: ctx.session.user.id }
+        }
+      }
+    });
+  }),
   findUserChallenges: protectedProcedure
     .input(
       z.object({
