@@ -17,8 +17,8 @@ export default function Layout({ pageTitle = "Climbing App", navbarDisabled, chi
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex flex-col min-h-screen bg-background">
-        {!navbarDisabled && <Navbar />}
-        <div className="flex flex-auto items-center justify-center">{children}</div>
+        <div className="flex flex-auto items-center justify-center px-6 pt-6">{children}</div>
+        {!navbarDisabled && <Navbar />}{" "}
       </main>
     </>
   );
