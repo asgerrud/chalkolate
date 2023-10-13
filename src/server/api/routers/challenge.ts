@@ -2,6 +2,7 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import dayjs from "dayjs";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import { ChallengeCreateInputSchema } from "~/schema/challenge.schema";
+import { type RouterOutput, type Singular } from "~/server/api/root";
 
 dayjs.extend(isSameOrBefore);
 
@@ -45,7 +46,8 @@ export const challengeRouter = createTRPCRouter({
           include: {
             zone: {
               select: {
-                name: true
+                name: true,
+                changeSchedule: true
               }
             },
             grade: {
@@ -59,3 +61,6 @@ export const challengeRouter = createTRPCRouter({
     });
   })
 });
+
+export type UserChallengesByLocation = RouterOutput["challenge"]["findUserChallengesByLocation"];
+export type UserChallenge = Singular<UserChallengesByLocation[number]["challenges"]>;

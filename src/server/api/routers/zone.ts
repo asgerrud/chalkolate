@@ -1,6 +1,6 @@
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { z } from "zod";
-import { type QueryResult } from "~/server/api/root";
+import { type RouterOutput } from "~/server/api/root";
 
 export const zoneRouter = createTRPCRouter({
   findZonesByLocation: publicProcedure.input(z.object({ locationId: z.string() })).query(({ ctx, input }) => {
@@ -15,4 +15,4 @@ export const zoneRouter = createTRPCRouter({
   })
 });
 
-export type FindZonesByLocation = QueryResult<"zone", "findZonesByLocation">;
+export type ZonesByLocation = RouterOutput["zone"]["findZonesByLocation"];
