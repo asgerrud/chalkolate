@@ -1,11 +1,14 @@
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Card, CardContent } from "~/components/ui/card";
+import { Progress } from "~/components/ui/progress";
+import { getChallengeTimePercentagePassed } from "~/util/Challenge.util";
+import { type UserChallenge } from "~/server/api/routers/challenge";
 
 dayjs.extend(relativeTime);
 
 interface ChallengeItemProps {
-  challenge;
+  challenge: UserChallenge;
 }
 
 export default function ChallengeItem({ challenge }: ChallengeItemProps) {
@@ -25,7 +28,7 @@ export default function ChallengeItem({ challenge }: ChallengeItemProps) {
         }}
       />
       <CardContent className="p-3">
-        <div className="flex flex-row items-center space-x-2">
+        <div className="flex flex-col">
           <div className="flex flex-1 justify-between items-center">
             <div className="flex flex-col">
               <p className="text-sm">{zone.name}</p>
@@ -34,6 +37,10 @@ export default function ChallengeItem({ challenge }: ChallengeItemProps) {
               {timeRemaining} remaining
             </div>
           </div>
+          <Progress
+            className="mt-4 h-3"
+            value={getChallengeTimePercentagePassed(endDate, zone.changeSchedule.changeIntervalWeeks)}
+          />
         </div>
       </CardContent>
     </Card>
