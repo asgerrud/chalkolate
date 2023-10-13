@@ -7,6 +7,9 @@ export const zoneRouter = createTRPCRouter({
     return ctx.prisma.zone.findMany({
       where: {
         locationId: input.locationId
+      },
+      include: {
+        changeSchedule: true
       }
     });
   })

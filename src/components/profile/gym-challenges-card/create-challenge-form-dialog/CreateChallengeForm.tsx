@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "~/components/ui/dialog";
 import { Button } from "~/components/ui/button";
 import { api } from "~/lib/api";
-import dayjs from "dayjs";
 import { useToast } from "~/components/ui/use-toast";
 import { useForm } from "react-hook-form";
 import { ChallengeCreateInputSchema } from "~/schema/challenge.schema";
@@ -14,6 +13,8 @@ import ImageUpload from "~/components/profile/gym-challenges-card/create-challen
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
 import { Loader2 } from "lucide-react";
 import { type FindZonesByLocation } from "~/server/api/routers/zone";
+import { Input } from "~/components/ui/input";
+import dayjs from "dayjs";
 
 interface CreateChallengeFormProps {
   location; // define type
@@ -68,15 +69,35 @@ function FormComponent({ location, zones, grades, onFormSubmit }: FormComponentP
     resolver: zodResolver(ChallengeCreateInputSchema),
     defaultValues: {
       location: location.id,
-      startDate: today,
-      endDate: getChallengeEndDate(today)
+      startDate: today
     }
   });
 
   const watchGrade = form.watch("grade");
 
+  const getZoneById = (zoneId: string) => zones.find((zone) => zone.id === zoneId);
+
+  // TODO: add unit test
+  const getChallengeEndDate = (zone, challengeStartDate: Date) => {
+    const { startDate: latestZoneReset, changeIntervalWeeks } = zone.changeSchedule;
+
+    const changeIntervalInDays = changeIntervalWeeks * 7;
+
+    // Calculate difference in days
+    const daysSinceLastChange: number = dayjs(challengeStartDate).diff(latestZoneReset, "day");
+
+    // Calculate days until next schedule change
+    const daysUntilNextChange: number = daysSinceLastChange % changeIntervalInDays;
+
+    // Calculate the next schedule change date
+    const nextChangeDate: Date = dayjs(challengeStartDate)
+      .add(changeIntervalInDays - daysUntilNextChange, "day")
+      .toDate();
+
+    return nextChangeDate;
+  };
+
   const onSubmit = (formData: ChallengeCreateInputSchema) => {
-    console.log("On submit");
     onFormSubmit(formData);
   };
 
@@ -104,7 +125,12 @@ function FormComponent({ location, zones, grades, onFormSubmit }: FormComponentP
           render={({ field }) => (
             <FormItem>
               <FormLabel>Zone</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                defaultValue={field.value}
+                onValueChange={(zoneId: string) => {
+                  field.onChange(zoneId);
+                  form.setValue("endDate", getChallengeEndDate(getZoneById(zoneId), today));
+                }}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select climbing zone" />
@@ -155,6 +181,9 @@ function FormComponent({ location, zones, grades, onFormSubmit }: FormComponentP
             </FormItem>
           )}
         />
+
+        <Input type="hidden" {...form.register("endDate")} />
+
         <Button type="submit">
           {!form.formState.isSubmitting ? <span>Submit</span> : <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
         </Button>
@@ -162,5 +191,3 @@ function FormComponent({ location, zones, grades, onFormSubmit }: FormComponentP
     </Form>
   );
 }
-
-const getChallengeEndDate = (date: Date) => dayjs(date).add(6, "week").toDate();
