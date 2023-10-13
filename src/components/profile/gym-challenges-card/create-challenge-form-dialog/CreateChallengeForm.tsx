@@ -12,14 +12,14 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import ImageUpload from "~/components/profile/gym-challenges-card/create-challenge-form-dialog/ImageUpload";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
 import { Loader2 } from "lucide-react";
-import { type FindZonesByLocation } from "~/server/api/routers/zone";
+import { type ZonesByLocation } from "~/server/api/routers/zone";
 import { Input } from "~/components/ui/input";
-import dayjs from "dayjs";
+import { getChallengeEndDate } from "~/util/Challenge.util";
 
 interface CreateChallengeFormProps {
   location; // define type
-  grades: Grades["data"];
-  zones: FindZonesByLocation["data"];
+  grades: Grades;
+  zones: ZonesByLocation;
 }
 
 export function CreateChallengeForm({ location, zones, grades }: CreateChallengeFormProps) {
@@ -58,8 +58,8 @@ export function CreateChallengeForm({ location, zones, grades }: CreateChallenge
 interface FormComponentProps {
   // TODO: pass location
   location;
-  zones: FindZonesByLocation["data"];
-  grades: Grades["data"];
+  zones: ZonesByLocation;
+  grades: Grades;
   onFormSubmit: (formData: ChallengeCreateInputSchema) => void;
 }
 function FormComponent({ location, zones, grades, onFormSubmit }: FormComponentProps) {
@@ -76,26 +76,6 @@ function FormComponent({ location, zones, grades, onFormSubmit }: FormComponentP
   const watchGrade = form.watch("grade");
 
   const getZoneById = (zoneId: string) => zones.find((zone) => zone.id === zoneId);
-
-  // TODO: add unit test
-  const getChallengeEndDate = (zone, challengeStartDate: Date) => {
-    const { startDate: latestZoneReset, changeIntervalWeeks } = zone.changeSchedule;
-
-    const changeIntervalInDays = changeIntervalWeeks * 7;
-
-    // Calculate difference in days
-    const daysSinceLastChange: number = dayjs(challengeStartDate).diff(latestZoneReset, "day");
-
-    // Calculate days until next schedule change
-    const daysUntilNextChange: number = daysSinceLastChange % changeIntervalInDays;
-
-    // Calculate the next schedule change date
-    const nextChangeDate: Date = dayjs(challengeStartDate)
-      .add(changeIntervalInDays - daysUntilNextChange, "day")
-      .toDate();
-
-    return nextChangeDate;
-  };
 
   const onSubmit = (formData: ChallengeCreateInputSchema) => {
     onFormSubmit(formData);
