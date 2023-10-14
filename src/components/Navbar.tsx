@@ -18,7 +18,7 @@ export default function Navbar() {
   const user = session.data?.user;
 
   return (
-    <div className="px-8 py-3 bg-white">
+    <div className="px-8 py-3 bg-white fixed w-full bottom-0">
       <div className="flex justify-between items-center max-w-[640px] mx-auto">
         {user != null ? (
           <>
