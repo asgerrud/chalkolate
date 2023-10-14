@@ -12,6 +12,7 @@ export function ProfilePage() {
   return (
     <Layout>
       <div className="flex flex-1 flex-col space-y-8 items-center">
+        {/* Add blank state if no challenges created */}
         {getLocationsWithChallenges?.map((location) => (
           <GymChallengeCard key={location.id} location={location} grades={grades} />
         ))}
