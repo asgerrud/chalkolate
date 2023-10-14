@@ -16,6 +16,15 @@ export default function ChallengeItem({ challenge }: ChallengeItemProps) {
 
   const timeRemaining = dayjs(endDate).fromNow(true);
 
+  const percentagePassed = getChallengeTimePercentagePassed(endDate, zone.changeSchedule.changeIntervalWeeks);
+
+  const getPercentagePassedColor = (percentage: number) => {
+    if (percentage > 80) return "bg-red-500";
+    if (percentage > 66) return "bg-orange-500";
+    if (percentage > 50) return "bg-yellow-500";
+    return "bg-green-500";
+  };
+
   return (
     <Card className="w-full">
       {/* TODO: show color if no picture selected */}
@@ -37,10 +46,7 @@ export default function ChallengeItem({ challenge }: ChallengeItemProps) {
               {timeRemaining} remaining
             </div>
           </div>
-          <Progress
-            className="mt-4 h-3"
-            value={getChallengeTimePercentagePassed(endDate, zone.changeSchedule.changeIntervalWeeks)}
-          />
+          <Progress className="mt-4 h-3" color={getPercentagePassedColor(percentagePassed)} value={percentagePassed} />
         </div>
       </CardContent>
     </Card>
