@@ -43,7 +43,7 @@ export default function Navbar() {
 function MenuLinkItem({ item, selected }: { item: (typeof pages)[0]; selected: boolean }) {
   const { href, title, icon } = item;
   return (
-    <Link href={href} className={cn("flex flex-col items-center")}>
+    <Link href={href} className={cn("flex flex-col items-center", selected && "underline")}>
       {icon}
       <MenuItemLabel text={title} />
     </Link>
