@@ -38,7 +38,7 @@ export const challengeRouter = createTRPCRouter({
       }
     });
   }),
-  findUserChallengesByLocation: protectedProcedure.query(({ ctx }) => {
+  findLocationsWithUserChallenges: protectedProcedure.query(({ ctx }) => {
     return ctx.prisma.location.findMany({
       include: {
         challenges: {
@@ -65,4 +65,6 @@ export const challengeRouter = createTRPCRouter({
   })
 });
 
-export type UserChallenge = Singular<RouterOutput["challenge"]["findUserChallengesByLocation"][number]["challenges"]>;
+export type FindLocationsWithUserChallenges = RouterOutput["challenge"]["findLocationsWithUserChallenges"];
+export type LocationWithUserChallenges = Singular<FindLocationsWithUserChallenges>;
+export type ChallengesByLocation = Singular<FindLocationsWithUserChallenges[number]["challenges"]>;

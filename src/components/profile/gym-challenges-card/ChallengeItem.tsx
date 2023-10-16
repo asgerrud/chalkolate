@@ -3,13 +3,13 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { Card, CardContent } from "~/components/ui/card";
 import { Progress } from "~/components/ui/progress";
 import { getChallengeTimePercentagePassed } from "~/util/Challenge.util";
-import { type UserChallenge } from "~/server/api/routers/challenge";
+import { type ChallengesByLocation } from "~/server/api/routers/challenge";
 import { cn } from "~/lib/utils";
 
 dayjs.extend(relativeTime);
 
 interface ChallengeItemProps {
-  challenge: UserChallenge;
+  challenge: ChallengesByLocation;
 }
 
 export default function ChallengeItem({ challenge }: ChallengeItemProps) {
@@ -29,10 +29,10 @@ export default function ChallengeItem({ challenge }: ChallengeItemProps) {
   };
 
   return (
-    <Card className={cn("w-full", !challengeInProgress && "opacity-50")}>
+    <Card className="w-full md:max-w-[294px] hover:scale-[101%] transition duration-200">
       <img
         src={challenge.imageUrl}
-        className="object-cover w-full h-[200px]"
+        className={cn("object-cover w-full h-[200px]", !challengeInProgress && "opacity-75")}
         style={{
           backgroundColor: challenge.grade.hex
         }}
@@ -43,7 +43,11 @@ export default function ChallengeItem({ challenge }: ChallengeItemProps) {
             <div className="flex flex-col">
               <p className="text-sm">{zone.name}</p>
             </div>
-            <div className="text-right text-sm text-gray-700 bg-gray-200 px-2 py-0.5 rounded-lg">
+            <div
+              className={cn(
+                "text-right text-sm text-gray-700 bg-gray-200 px-2 py-0.5 rounded-lg",
+                !challengeInProgress && "bg-red-100 text-red-600"
+              )}>
               {timeIndicatorText}
             </div>
           </div>

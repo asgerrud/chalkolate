@@ -1,4 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+
+/* TODO: standardise transition animation */
+
 module.exports = {
   darkMode: ["class"],
   content: ["./src/**/*.{ts,tsx}"],
@@ -7,7 +10,7 @@ module.exports = {
       center: true,
       padding: "2rem",
       screens: {
-        "2xl": "1400px"
+        default: "1000px"
       }
     },
     extend: {

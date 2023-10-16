@@ -11,18 +11,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
 import ImageUpload from "~/components/profile/gym-challenges-card/create-challenge-form-dialog/ImageUpload";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
-import { Loader2 } from "lucide-react";
+import { CopyPlus, Loader2 } from "lucide-react";
 import { type ZonesByLocation } from "~/server/api/routers/zone";
 import { Input } from "~/components/ui/input";
 import { getChallengeEndDate } from "~/util/Challenge.util";
+import { Card } from "~/components/ui/card";
+import { type LocationWithUserChallenges } from "~/server/api/routers/challenge";
 
 interface CreateChallengeFormProps {
-  location; // define type
+  location: LocationWithUserChallenges;
   grades: Grades;
   zones: ZonesByLocation;
 }
 
-export function CreateChallengeForm({ location, zones, grades }: CreateChallengeFormProps) {
+export function CreateChallengeButton({ location, zones, grades }: CreateChallengeFormProps) {
   const [open, setOpen] = useState(false);
 
   const { toast } = useToast();
@@ -43,7 +45,12 @@ export function CreateChallengeForm({ location, zones, grades }: CreateChallenge
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="w-full">Create challenge</Button>
+        <Card className="min-h-[278px] bg-gray-200 text-gray-600 border-4 border-gray-400 border-dotted cursor-pointer">
+          <div className="flex flex-col h-full p-8 justify-center items-center text-md font-medium transition duration-200 hover:scale-[97%]">
+            <CopyPlus size="2.5rem" />
+            <div className="mt-2">Create challenge</div>
+          </div>
+        </Card>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -56,8 +63,7 @@ export function CreateChallengeForm({ location, zones, grades }: CreateChallenge
 }
 
 interface FormComponentProps {
-  // TODO: pass location
-  location;
+  location: LocationWithUserChallenges;
   zones: ZonesByLocation;
   grades: Grades;
   onFormSubmit: (formData: ChallengeCreateInputSchema) => void;
@@ -89,6 +95,7 @@ function FormComponent({ location, zones, grades, onFormSubmit }: FormComponentP
           name="imageUrl"
           render={() => (
             <FormItem className="flex flex-col">
+              <FormLabel>Route image</FormLabel>
               <ImageUpload
                 autoOpen={true}
                 onImageUploaded={(fileUrl) => {
@@ -144,7 +151,7 @@ function FormComponent({ location, zones, grades, onFormSubmit }: FormComponentP
                   return (
                     <div
                       key={grade.id}
-                      className="flex max-h-16 aspect-square rounded-md justify-center transition-opacity duration-75 cursor-pointer"
+                      className="flex max-h-16 aspect-square rounded-md justify-center duration-75 hover:scale-105 transition cursor-pointer"
                       style={{ backgroundColor: grade.hex, opacity: colorHighlighted ? "1" : "0.35" }}
                       onClick={() => {
                         if (watchGrade === gradeId) {

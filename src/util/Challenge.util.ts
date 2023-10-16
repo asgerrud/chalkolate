@@ -3,7 +3,7 @@ import { type Singular } from "~/server/api/root";
 import { type ZonesByLocation } from "~/server/api/routers/zone";
 
 // TODO: add unit test
-export const getChallengeEndDate = (zone: Singular<ZonesByLocation>, startDate: Date) => {
+export const getChallengeEndDate = (zone: Singular<ZonesByLocation>, startDate: Date): Date => {
   const { startDate: latestZoneReset, changeIntervalWeeks } = zone.changeSchedule;
 
   const changeIntervalInDays = changeIntervalWeeks * 7;
@@ -23,7 +23,7 @@ export const getChallengeEndDate = (zone: Singular<ZonesByLocation>, startDate: 
 };
 
 // TODO: fix calculation
-export const getChallengeTimePercentagePassed = (endDate: Date, changeIntervalWeeks: number) => {
+export const getChallengeTimePercentagePassed = (endDate: Date, changeIntervalWeeks: number): number => {
   const now = new Date().getTime();
 
   const latestScheduleReset = dayjs(endDate).subtract(changeIntervalWeeks, "week").toDate();
