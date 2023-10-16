@@ -55,6 +55,9 @@ export const challengeRouter = createTRPCRouter({
                 hex: true
               }
             }
+          },
+          orderBy: {
+            endDate: "asc"
           }
         }
       }
@@ -62,5 +65,4 @@ export const challengeRouter = createTRPCRouter({
   })
 });
 
-export type UserChallengesByLocation = RouterOutput["challenge"]["findUserChallengesByLocation"];
-export type UserChallenge = Singular<UserChallengesByLocation[number]["challenges"]>;
+export type UserChallenge = Singular<RouterOutput["challenge"]["findUserChallengesByLocation"][number]["challenges"]>;

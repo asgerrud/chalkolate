@@ -69,7 +69,7 @@ model Grade {
   id        Int         @id @default(autoincrement())
   name      String      @unique
   hex       String      @default("#FFFFFF")
-  challenge Challenge[]
+  challenge Challenge[] // TODO: grade should be attached to location
 }
 
 model Location {
