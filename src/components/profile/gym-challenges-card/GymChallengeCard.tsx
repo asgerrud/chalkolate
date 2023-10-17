@@ -7,7 +7,7 @@ import { type LocationWithUserChallenges } from "~/server/api/routers/challenge"
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/components/ui/collapsible";
 import { Button } from "~/components/ui/button";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 dayjs.extend(isSameOrBefore);
 
@@ -19,11 +19,16 @@ interface GymChallengeCardProps {
 export function GymChallengeCard({ challengesByLocation, grades }: GymChallengeCardProps) {
   const { data: zones } = api.zone.findZonesByLocation.useQuery({ locationId: challengesByLocation.id });
 
-  const activeChallenges: LocationWithUserChallenges["challenges"] = challengesByLocation.challenges.filter(
-    (challenge) => dayjs().isSameOrBefore(challenge.endDate)
+  const { challenges } = challengesByLocation;
+
+  const activeChallenges: LocationWithUserChallenges["challenges"] = useMemo(
+    () => challenges.filter((challenge) => dayjs().isSameOrBefore(challenge.endDate)),
+    [challenges]
   );
-  const expiredChallenges: LocationWithUserChallenges["challenges"] = challengesByLocation.challenges.filter(
-    (challenge) => dayjs().isAfter(challenge.endDate)
+
+  const expiredChallenges: LocationWithUserChallenges["challenges"] = useMemo(
+    () => challenges.filter((challenge) => dayjs().isAfter(challenge.endDate)),
+    [challenges]
   );
 
   return (
