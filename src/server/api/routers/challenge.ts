@@ -1,11 +1,8 @@
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { type QueryResult } from "~/server/api/root";
-import { z } from "zod";
-import { Prisma } from ".prisma/client";
 import dayjs from "dayjs";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import { ChallengeCreateInputSchema } from "~/schema/challenge.schema";
-import ChallengeWhereInput = Prisma.ChallengeWhereInput;
+import { type RouterOutput, type Singular } from "~/server/api/root";
 
 dayjs.extend(isSameOrBefore);
 
@@ -41,55 +38,33 @@ export const challengeRouter = createTRPCRouter({
       }
     });
   }),
-  findUserChallenges: protectedProcedure
-    .input(
-      z.object({
-        from: z.date().optional(),
-        to: z.date().optional()
-      })
-    )
-    .query(({ input, ctx }) => {
-      const whereClause: ChallengeWhereInput = { userId: ctx.session.user.id };
-
-      if (input.from) {
-        whereClause.startDate = { gte: input.from };
-      }
-
-      if (input.to) {
-        whereClause.endDate = { lte: input.to };
-      }
-
-      return ctx.prisma.challenge.findMany({
-        where: whereClause,
-        select: {
-          id: true,
-          startDate: true,
-          endDate: true,
-          grade: {
-            select: {
-              name: true
-            }
-          },
-          location: {
-            select: {
-              name: true
-            }
-          },
-          zone: {
-            select: {
-              name: true,
-              changeSchedule: {
-                select: {
-                  id: true,
-                  changeIntervalWeeks: true
-                }
+  findLocationsWithUserChallenges: protectedProcedure.query(({ ctx }) => {
+    return ctx.prisma.location.findMany({
+      include: {
+        challenges: {
+          where: { userId: ctx.session.user.id },
+          include: {
+            zone: {
+              select: {
+                name: true,
+                changeSchedule: true
+              }
+            },
+            grade: {
+              select: {
+                hex: true
               }
             }
+          },
+          orderBy: {
+            endDate: "asc"
           }
-        },
-        orderBy: { endDate: "desc" }
-      });
-    })
+        }
+      }
+    });
+  })
 });
 
-export type ChallengeDetails = QueryResult<"challenge", "findUserChallenges">;
+export type FindLocationsWithUserChallenges = RouterOutput["challenge"]["findLocationsWithUserChallenges"];
+export type LocationWithUserChallenges = Singular<FindLocationsWithUserChallenges>;
+export type ChallengesByLocation = Singular<FindLocationsWithUserChallenges[number]["challenges"]>;

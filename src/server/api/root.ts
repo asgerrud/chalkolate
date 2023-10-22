@@ -28,6 +28,11 @@ export const appRouter = createTRPCRouter({
 // export type definition of API
 export type AppRouter = typeof appRouter;
 
+export type RouterOutput = inferRouterOutputs<AppRouter>;
+
+// Extracts type from Array
+export type Singular<T extends unknown[]> = T[number];
+
 export type QueryResult<
   RouteName extends keyof inferRouterOutputs<AppRouter>,
   Action extends keyof inferRouterInputs<AppRouter>[RouteName]

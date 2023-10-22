@@ -1,5 +1,5 @@
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { type QueryResult } from "~/server/api/root";
+import { type RouterOutput } from "~/server/api/root";
 
 export const gradeRouter = createTRPCRouter({
   findAll: publicProcedure.query(({ ctx }) => {
@@ -7,4 +7,4 @@ export const gradeRouter = createTRPCRouter({
   })
 });
 
-export type Grades = QueryResult<"grade", "findAll">;
+export type Grades = RouterOutput["grade"]["findAll"];
