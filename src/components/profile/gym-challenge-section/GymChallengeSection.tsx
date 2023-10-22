@@ -1,5 +1,3 @@
-import ChallengeItem from "~/components/profile/gym-challenges-card/ChallengeItem";
-import { CreateChallengeButton } from "~/components/profile/gym-challenges-card/create-challenge-form-dialog/CreateChallengeButton";
 import { type Grades } from "~/server/api/routers/grade";
 import { api } from "~/lib/api";
 import dayjs from "dayjs";
@@ -8,6 +6,9 @@ import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/components/ui/collapsible";
 import { Button } from "~/components/ui/button";
 import { useMemo, useState } from "react";
+import { CreateChallengeButton } from "./create-challenge-form-dialog/CreateChallengeFormDialog";
+import ChallengeCard from "./challenge-card/ChallengeCard";
+import { cn } from "~/lib/utils";
 
 dayjs.extend(isSameOrBefore);
 
@@ -16,7 +17,7 @@ interface GymChallengeCardProps {
   grades: Grades;
 }
 
-export function GymChallengeCard({ challengesByLocation, grades }: GymChallengeCardProps) {
+export function GymChallengeSection({ challengesByLocation, grades }: GymChallengeCardProps) {
   const { data: zones } = api.zone.findZonesByLocation.useQuery({ locationId: challengesByLocation.id });
 
   const { challenges } = challengesByLocation;
@@ -31,16 +32,20 @@ export function GymChallengeCard({ challengesByLocation, grades }: GymChallengeC
     [challenges]
   );
 
+  const gridClasses = "grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3";
+
   return (
-    <div className="container space-y-6">
+    <div className="container px-0 space-y-6">
       <h3 className="text-2xl font-semibold leading-none tracking-tight">{challengesByLocation.name}</h3>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className={gridClasses}>
         <ChallengeList challenges={activeChallenges} />
         <CreateChallengeButton location={challengesByLocation} zones={zones} grades={grades} />
       </div>
-      <ExpiredChallengeCollapsible>
-        <ChallengeList challenges={expiredChallenges} />
-      </ExpiredChallengeCollapsible>
+      <div className={gridClasses}>
+        <ExpiredChallengeCollapsible>
+          <ChallengeList challenges={expiredChallenges} />
+        </ExpiredChallengeCollapsible>
+      </div>
     </div>
   );
 }
@@ -52,7 +57,7 @@ function ChallengeList({ challenges }: ChallengeListProps) {
   return (
     <>
       {challenges?.map((challenge) => (
-        <ChallengeItem key={challenge.id} challenge={challenge} />
+        <ChallengeCard key={challenge.id} challenge={challenge} />
       ))}
     </>
   );

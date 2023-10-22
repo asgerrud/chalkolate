@@ -1,7 +1,7 @@
 import Layout from "~/components/Layout";
 import { requireAuth } from "~/lib/requireAuth";
 import { api } from "~/lib/api";
-import { GymChallengeCard } from "~/components/profile/gym-challenges-card/GymChallengeCard";
+import { GymChallengeSection } from "~/components/profile/gym-challenge-section/GymChallengeSection";
 
 export function ProfilePage() {
   const { data: userChallengesByLocation } = api.challenge.findLocationsWithUserChallenges.useQuery();
@@ -11,10 +11,10 @@ export function ProfilePage() {
 
   return (
     <Layout>
-      <div className="flex flex-1 flex-col space-y-8 items-center">
+      <div className="flex flex-col items-center flex-1 space-y-8">
         {/* Add blank state if no challenges created */}
         {getLocationsWithChallenges?.map((location) => (
-          <GymChallengeCard key={location.id} challengesByLocation={location} grades={grades} />
+          <GymChallengeSection key={location.id} challengesByLocation={location} grades={grades} />
         ))}
       </div>
     </Layout>

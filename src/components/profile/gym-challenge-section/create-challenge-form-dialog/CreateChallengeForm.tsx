@@ -1,80 +1,30 @@
-import { type Grades } from "~/server/api/routers/grade";
-import * as React from "react";
-import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "~/components/ui/dialog";
-import { Button } from "~/components/ui/button";
-import { api } from "~/lib/api";
-import { useToast } from "~/components/ui/use-toast";
-import { useForm } from "react-hook-form";
-import { ChallengeCreateInputSchema } from "~/schema/challenge.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
-import ImageUpload from "~/components/profile/gym-challenges-card/create-challenge-form-dialog/ImageUpload";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
-import { CopyPlus, Loader2 } from "lucide-react";
-import { type ZonesByLocation } from "~/server/api/routers/zone";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@radix-ui/react-select";
+import { Loader2 } from "lucide-react";
+import { Button } from "react-day-picker";
+import { useForm, Form } from "react-hook-form";
+import { FormField, FormItem, FormLabel, FormMessage, FormControl, FormDescription } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { ChallengeCreateInputSchema } from "~/schema/challenge.schema";
+import { Grades } from "~/server/api/routers/grade";
+import { ZonesByLocation } from "~/server/api/routers/zone";
 import { getChallengeEndDate } from "~/util/Challenge.util";
-import { Card } from "~/components/ui/card";
-import { type LocationWithUserChallenges } from "~/server/api/routers/challenge";
-
-interface CreateChallengeFormProps {
-  location: LocationWithUserChallenges;
-  grades: Grades;
-  zones: ZonesByLocation;
-}
-
-export function CreateChallengeButton({ location, zones, grades }: CreateChallengeFormProps) {
-  const [open, setOpen] = useState(false);
-
-  const { toast } = useToast();
-
-  const createChallenge = api.challenge.create.useMutation({
-    onSuccess: () => {
-      toast({
-        title: "Challenge created!"
-      });
-      setOpen(false);
-    }
-  });
-
-  function handleFormSubmit(parsedFormData: ChallengeCreateInputSchema) {
-    createChallenge.mutate(parsedFormData);
-  }
-
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Card className="min-h-[278px] bg-gray-200 text-gray-600 border-4 border-gray-400 border-dotted cursor-pointer">
-          <div className="flex flex-col h-full p-8 justify-center items-center text-md font-medium transition duration-200 hover:scale-[97%]">
-            <CopyPlus size="2.5rem" />
-            <div className="mt-2">Create challenge</div>
-          </div>
-        </Card>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Create challenge</DialogTitle>
-        </DialogHeader>
-        <FormComponent location={location} zones={zones} grades={grades} onFormSubmit={handleFormSubmit} />
-      </DialogContent>
-    </Dialog>
-  );
-}
+import ImageUpload from "./ImageUpload";
 
 interface FormComponentProps {
-  location: LocationWithUserChallenges;
+  locationId: string;
   zones: ZonesByLocation;
   grades: Grades;
   onFormSubmit: (formData: ChallengeCreateInputSchema) => void;
 }
-function FormComponent({ location, zones, grades, onFormSubmit }: FormComponentProps) {
+
+export function CreateChallengeForm({ locationId, zones, grades, onFormSubmit }: FormComponentProps) {
   const today = new Date();
 
   const form = useForm<ChallengeCreateInputSchema>({
     resolver: zodResolver(ChallengeCreateInputSchema),
     defaultValues: {
-      location: location.id,
+      location: locationId,
       startDate: today
     }
   });
@@ -143,7 +93,7 @@ function FormComponent({ location, zones, grades, onFormSubmit }: FormComponentP
             <FormItem>
               <FormLabel>Grade</FormLabel>
               <FormDescription>The color grade of the problem</FormDescription>
-              <div className="grid grid-cols-4 md:grid-cols-8 gap-4">
+              <div className="grid grid-cols-4 gap-4 md:grid-cols-8">
                 {grades?.map((grade) => {
                   const gradeId = String(grade.id);
                   const colorHighlighted = watchGrade === undefined || watchGrade === gradeId;
@@ -151,7 +101,7 @@ function FormComponent({ location, zones, grades, onFormSubmit }: FormComponentP
                   return (
                     <div
                       key={grade.id}
-                      className="flex max-h-16 aspect-square rounded-md justify-center duration-75 hover:scale-105 transition cursor-pointer"
+                      className="flex justify-center transition duration-75 rounded-md cursor-pointer max-h-16 aspect-square hover:scale-105"
                       style={{ backgroundColor: grade.hex, opacity: colorHighlighted ? "1" : "0.35" }}
                       onClick={() => {
                         if (watchGrade === gradeId) {
@@ -172,7 +122,7 @@ function FormComponent({ location, zones, grades, onFormSubmit }: FormComponentP
         <Input type="hidden" {...form.register("endDate")} />
 
         <Button type="submit">
-          {!form.formState.isSubmitting ? <span>Submit</span> : <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          {!form.formState.isSubmitting ? <span>Submit</span> : <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
         </Button>
       </form>
     </Form>
