@@ -69,18 +69,18 @@ module.exports = {
         sm: "calc(var(--radius) - 4px)"
       },
       keyframes: {
-        "accordion-down": {
-          from: { height: 0 },
-          to: { height: "var(--radix-accordion-content-height)" }
+        slideDown: { 
+          from: { height: 0 }, 
+          to: { height: "var(--radix-accordion-content-height)" } 
         },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: 0 }
+        slideUp: { 
+          from: { height: "var(--radix-accordion-content-height)" }, 
+          to: { height: 0 } 
         }
       },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out"
+      animation: { 
+        "accordion-down": "slideDown 300ms ease-out", 
+        "accordion-up": "slideUp 300ms ease-in" 
       }
     }
   },

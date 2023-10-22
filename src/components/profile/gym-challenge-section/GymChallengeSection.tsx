@@ -9,6 +9,7 @@ import { useMemo, useState } from "react";
 import { CreateChallengeButton } from "./create-challenge-form-dialog/CreateChallengeFormDialog";
 import ChallengeCard from "./challenge-card/ChallengeCard";
 import { cn } from "~/lib/utils";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@radix-ui/react-accordion";
 
 dayjs.extend(isSameOrBefore);
 
@@ -41,10 +42,9 @@ export function GymChallengeSection({ challengesByLocation, grades }: GymChallen
         <ChallengeList challenges={activeChallenges} />
         <CreateChallengeButton location={challengesByLocation} zones={zones} grades={grades} />
       </div>
+      <h3 className="text-lg font-semibold leading-none tracking-tight text-gray-700">Expired challenges</h3>
       <div className={gridClasses}>
-        <ExpiredChallengeCollapsible>
-          <ChallengeList challenges={expiredChallenges} />
-        </ExpiredChallengeCollapsible>
+        <ChallengeList challenges={expiredChallenges} />
       </div>
     </div>
   );
@@ -60,18 +60,5 @@ function ChallengeList({ challenges }: ChallengeListProps) {
         <ChallengeCard key={challenge.id} challenge={challenge} />
       ))}
     </>
-  );
-}
-
-function ExpiredChallengeCollapsible({ children }) {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-      <CollapsibleTrigger asChild>
-        <Button variant="ghost">{isOpen ? "Hide" : "Show"} expired challenges</Button>
-      </CollapsibleTrigger>
-      <CollapsibleContent>{children}</CollapsibleContent>
-    </Collapsible>
   );
 }
