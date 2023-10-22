@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { PrismaClient } from "@prisma/client";
 import { GRADES, LOCATIONS, ZONES } from "./data";
 

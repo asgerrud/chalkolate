@@ -3,13 +3,9 @@ import { api } from "~/lib/api";
 import dayjs from "dayjs";
 import { type LocationWithUserChallenges } from "~/server/api/routers/challenge";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/components/ui/collapsible";
-import { Button } from "~/components/ui/button";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { CreateChallengeButton } from "./create-challenge-form-dialog/CreateChallengeFormDialog";
 import ChallengeCard from "./challenge-card/ChallengeCard";
-import { cn } from "~/lib/utils";
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@radix-ui/react-accordion";
 
 dayjs.extend(isSameOrBefore);
 

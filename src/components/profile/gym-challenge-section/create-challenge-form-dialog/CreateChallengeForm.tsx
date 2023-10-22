@@ -6,8 +6,8 @@ import { useForm, Form } from "react-hook-form";
 import { FormField, FormItem, FormLabel, FormMessage, FormControl, FormDescription } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { ChallengeCreateInputSchema } from "~/schema/challenge.schema";
-import { Grades } from "~/server/api/routers/grade";
-import { ZonesByLocation } from "~/server/api/routers/zone";
+import { type Grades } from "~/server/api/routers/grade";
+import { type ZonesByLocation } from "~/server/api/routers/zone";
 import { getChallengeEndDate } from "~/util/Challenge.util";
 import ImageUpload from "./ImageUpload";
 
