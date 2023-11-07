@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import { type LocationWithUserChallenges } from "~/server/api/routers/challenge";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import { useMemo } from "react";
-import { CreateChallengeButton } from "./create-challenge-form-dialog/CreateChallengeFormDialog";
+import { CreateChallengeCard } from "./create-challenge-card/CreateChallengeCard";
 import ChallengeCard from "./challenge-card/ChallengeCard";
 
 dayjs.extend(isSameOrBefore);
@@ -36,7 +36,7 @@ export function GymChallengeSection({ challengesByLocation, grades }: GymChallen
       <h3 className="text-2xl font-semibold leading-none tracking-tight">{challengesByLocation.name}</h3>
       <div className={gridClasses}>
         <ChallengeList challenges={activeChallenges} />
-        <CreateChallengeButton location={challengesByLocation} zones={zones} grades={grades} />
+        <CreateChallengeCard locationId={challengesByLocation.id} zones={zones} grades={grades} />
       </div>
       <h3 className="text-lg font-semibold leading-none tracking-tight text-gray-700">Expired challenges</h3>
       <div className={gridClasses}>

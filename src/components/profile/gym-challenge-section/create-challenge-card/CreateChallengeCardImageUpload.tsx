@@ -7,7 +7,7 @@ interface ImageUploadProps {
   onImageUploaded?: (fileName: string) => void;
 }
 
-export default function ImageUpload({ autoOpen, onImageUploaded }: ImageUploadProps) {
+export default function CreateChallengeCardImageUpload({ autoOpen, onImageUploaded }: ImageUploadProps) {
   const [imageFile, setImageFile] = useState<File>(null);
 
   const fileInput = useRef<HTMLInputElement>(null);

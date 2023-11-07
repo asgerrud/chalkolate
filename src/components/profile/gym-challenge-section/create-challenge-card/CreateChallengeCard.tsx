@@ -7,16 +7,15 @@ import { type ChallengeCreateInputSchema } from "~/schema/challenge.schema";
 import { CopyPlus } from "lucide-react";
 import { type ZonesByLocation } from "~/server/api/routers/zone";
 import { Card } from "~/components/ui/card";
-import { type LocationWithUserChallenges } from "~/server/api/routers/challenge";
-import { CreateChallengeForm } from "./CreateChallengeForm";
+import { CreateChallengeCardForm } from "./CreateChallengeCardForm";
 
 interface CreateChallengeFormProps {
-  location: LocationWithUserChallenges;
+  locationId: string;
   grades: Grades;
   zones: ZonesByLocation;
 }
 
-export function CreateChallengeButton({ location, zones, grades }: CreateChallengeFormProps) {
+export function CreateChallengeCard({ locationId, zones, grades }: CreateChallengeFormProps) {
   const [open, setOpen] = useState(false);
 
   const { toast } = useToast();
@@ -49,7 +48,12 @@ export function CreateChallengeButton({ location, zones, grades }: CreateChallen
         <DialogHeader>
           <DialogTitle>Create challenge</DialogTitle>
         </DialogHeader>
-        <CreateChallengeForm locationId={location.id} zones={zones} grades={grades} onFormSubmit={handleFormSubmit} />
+        <CreateChallengeCardForm
+          locationId={locationId}
+          zones={zones}
+          grades={grades}
+          onFormSubmit={handleFormSubmit}
+        />
       </DialogContent>
     </Dialog>
   );

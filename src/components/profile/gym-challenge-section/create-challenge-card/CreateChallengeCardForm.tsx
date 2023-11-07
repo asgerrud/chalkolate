@@ -9,7 +9,7 @@ import { ChallengeCreateInputSchema } from "~/schema/challenge.schema";
 import { type Grades } from "~/server/api/routers/grade";
 import { type ZonesByLocation } from "~/server/api/routers/zone";
 import { getChallengeEndDate } from "~/util/Challenge.util";
-import ImageUpload from "./ImageUpload";
+import CreateChallengeCardImageUpload from "./CreateChallengeCardImageUpload";
 
 interface FormComponentProps {
   locationId: string;
@@ -18,7 +18,7 @@ interface FormComponentProps {
   onFormSubmit: (formData: ChallengeCreateInputSchema) => void;
 }
 
-export function CreateChallengeForm({ locationId, zones, grades, onFormSubmit }: FormComponentProps) {
+export function CreateChallengeCardForm({ locationId, zones, grades, onFormSubmit }: FormComponentProps) {
   const today = new Date();
 
   const form = useForm<ChallengeCreateInputSchema>({
@@ -46,7 +46,7 @@ export function CreateChallengeForm({ locationId, zones, grades, onFormSubmit }:
           render={() => (
             <FormItem className="flex flex-col">
               <FormLabel>Route image</FormLabel>
-              <ImageUpload
+              <CreateChallengeCardImageUpload
                 autoOpen={true}
                 onImageUploaded={(fileUrl) => {
                   form.setValue("imageUrl", fileUrl);
