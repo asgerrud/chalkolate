@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@radix-ui/react-select";
 import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { FormField, FormItem, FormLabel, FormMessage, FormControl, FormDescription, Form } from "~/components/ui/form";
@@ -10,6 +9,7 @@ import { type ZonesByLocation } from "~/server/api/routers/zone";
 import { getChallengeEndDate } from "~/util/Challenge.util";
 import CreateChallengeDialogImageUpload from "./CreateChallengeDialogImageUpload";
 import { Button } from "~/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
 
 interface CreateChallengeDialogFormProps {
   locationId: string;
