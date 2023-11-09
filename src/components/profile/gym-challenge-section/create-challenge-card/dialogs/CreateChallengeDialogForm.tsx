@@ -1,24 +1,24 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@radix-ui/react-select";
 import { Loader2 } from "lucide-react";
-import { Button } from "react-day-picker";
-import { useForm, Form } from "react-hook-form";
-import { FormField, FormItem, FormLabel, FormMessage, FormControl, FormDescription } from "~/components/ui/form";
+import { useForm } from "react-hook-form";
+import { FormField, FormItem, FormLabel, FormMessage, FormControl, FormDescription, Form } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { ChallengeCreateInputSchema } from "~/schema/challenge.schema";
 import { type Grades } from "~/server/api/routers/grade";
 import { type ZonesByLocation } from "~/server/api/routers/zone";
 import { getChallengeEndDate } from "~/util/Challenge.util";
-import CreateChallengeCardImageUpload from "./CreateChallengeCardImageUpload";
+import CreateChallengeDialogImageUpload from "./CreateChallengeDialogImageUpload";
+import { Button } from "~/components/ui/button";
 
-interface FormComponentProps {
+interface CreateChallengeDialogFormProps {
   locationId: string;
   zones: ZonesByLocation;
   grades: Grades;
   onFormSubmit: (formData: ChallengeCreateInputSchema) => void;
 }
 
-export function CreateChallengeCardForm({ locationId, zones, grades, onFormSubmit }: FormComponentProps) {
+export function CreateChallengeDialogForm({ locationId, zones, grades, onFormSubmit }: CreateChallengeDialogFormProps) {
   const today = new Date();
 
   const form = useForm<ChallengeCreateInputSchema>({
@@ -46,7 +46,7 @@ export function CreateChallengeCardForm({ locationId, zones, grades, onFormSubmi
           render={() => (
             <FormItem className="flex flex-col">
               <FormLabel>Route image</FormLabel>
-              <CreateChallengeCardImageUpload
+              <CreateChallengeDialogImageUpload
                 autoOpen={true}
                 onImageUploaded={(fileUrl) => {
                   form.setValue("imageUrl", fileUrl);

@@ -2,12 +2,15 @@ import { useEffect, useRef, useState } from "react";
 import { api } from "~/lib/api";
 import { uploadFileToStorage } from "~/lib/r2";
 
-interface ImageUploadProps {
+interface CreateChallengeDialogImageUploadProps {
   autoOpen?: boolean;
   onImageUploaded?: (fileName: string) => void;
 }
 
-export default function CreateChallengeCardImageUpload({ autoOpen, onImageUploaded }: ImageUploadProps) {
+export default function CreateChallengeDialogImageUpload({
+  autoOpen,
+  onImageUploaded
+}: CreateChallengeDialogImageUploadProps) {
   const [imageFile, setImageFile] = useState<File>(null);
 
   const fileInput = useRef<HTMLInputElement>(null);
