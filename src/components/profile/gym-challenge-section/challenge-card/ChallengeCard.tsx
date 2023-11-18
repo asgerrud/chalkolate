@@ -7,7 +7,7 @@ import { ChallengeCardDetails } from "./challenge-card-details/ChallengeCardDeta
 import { ChallengeCardImage } from "./ChallengeCardImage";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ChallengeCardExpanded } from "./ChallengeCardExpanded";
+import { ChallengeCardExpanded } from "./challenge-card-expanded/ChallengeCardExpanded";
 
 dayjs.extend(relativeTime);
 
@@ -42,11 +42,7 @@ export default function ChallengeCard({ challenge }: ChallengeCardProps) {
           </motion.div>
         </Card>
       </motion.div>
-      {expanded && (
-        <div onClick={() => setExpanded((prev) => !prev)}>
-          <ChallengeCardExpanded challenge={challenge} />
-        </div>
-      )}
+      {expanded && <ChallengeCardExpanded challenge={challenge} onClose={() => setExpanded((prev) => !prev)} />}
     </motion.div>
   );
 }
