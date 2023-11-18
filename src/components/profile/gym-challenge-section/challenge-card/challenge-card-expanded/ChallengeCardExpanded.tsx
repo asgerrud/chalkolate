@@ -3,7 +3,7 @@ import { type ChallengesByLocation } from "~/server/api/routers/challenge";
 import { motion } from "framer-motion";
 import { Button } from "~/components/ui/button";
 import Image from "next/image";
-import { Check } from "lucide-react";
+import { Check, X } from "lucide-react";
 import { Stat } from "~/components/ui/custom/Stat";
 import { ChallengeCardTechniqueGrid } from "~/components/profile/gym-challenge-section/challenge-card/challenge-card-expanded/ChallengeCardTechniqueGrid";
 import { useLockBodyScroll } from "@uidotdev/usehooks";
@@ -27,6 +27,11 @@ export function ChallengeCardExpanded({ challenge, onClose }: ChallengeCardExpan
         layoutId={`card-wrapper-${id}`}>
         <Card className="flex flex-col w-full border-none">
           <motion.div className="relative flex flex-[4] overflow-hidden bg-black" layoutId={`card-image-${id}`}>
+            <div className="absolute z-[2] top-[8px] right-[8px]">
+              <Button className="rounded-full w-[28px] h-[28px] p-0" variant="secondary" onClick={() => onClose()}>
+                <X size={20} />
+              </Button>
+            </div>
             <Image
               src={imageUrl}
               className="absolute left-0 top-0 blur-md w-full h-full scale-x-150 scale-y-125 z-[0]"
@@ -47,7 +52,6 @@ export function ChallengeCardExpanded({ challenge, onClose }: ChallengeCardExpan
               <div className="flex flex-col h-full justify-between">
                 <div className="space-y-4">
                   <p className="font-bold text-xl">Challenge</p>
-                  <div className="flex text-sm">Ends: {dayjs(endDate).format("DD/MM/YYYY")}</div>
 
                   <div className="flex justify-between space-x-4">
                     <Stat label="Zone">{zone.name}</Stat>
@@ -59,14 +63,16 @@ export function ChallengeCardExpanded({ challenge, onClose }: ChallengeCardExpan
                   </div>
 
                   <ChallengeCardTechniqueGrid />
+
+                  <div className="flex text-sm ml-1 flex-col">
+                    <span className="font-medium">Disappears on</span>
+                    {dayjs(endDate).format("DD/MM/YYYY")}
+                  </div>
                 </div>
 
-                <div className="flex justify-between py-3">
-                  <Button variant="ghost" onClick={() => onClose()}>
-                    Close
-                  </Button>
+                <div className="flex justify-end py-3">
                   <Button>
-                    Complete
+                    Finish challenge
                     <Check className="ml-1" size={18} />
                   </Button>
                 </div>

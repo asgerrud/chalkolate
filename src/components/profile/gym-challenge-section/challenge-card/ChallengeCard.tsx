@@ -24,12 +24,17 @@ export default function ChallengeCard({ challenge }: ChallengeCardProps) {
 
   return (
     <motion.div layout>
-      <motion.div transition={{ duration: 0.3, delay: 0.1 }} layoutId={`card-wrapper-${id}`}>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.3, delay: 0.1 }}
+        layoutId={`card-wrapper-${id}`}>
         <Card className="w-full hover:scale-[99%] transition duration-200" onClick={() => setExpanded((prev) => !prev)}>
           <ChallengeCardImage id={id} imageUrl={imageUrl} gradeColor={grade.hex} />
           <motion.div layoutId={`card-content-${id}`}>
             <CardContent className="p-3">
-              <div className="flex flex-col flex-1">
+              <div className="flex flex-col flex-1 space-y-4">
                 <ChallengeCardDetails zoneName={zone.name} endDate={endDate} />
                 {challengeInProgress && (
                   <ChallengeProgressBar

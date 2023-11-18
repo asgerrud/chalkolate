@@ -16,5 +16,5 @@ export function ChallengeProgressBar({ endDate, changeIntervalWeeks }: Challenge
     return "bg-green-500";
   };
 
-  return <Progress className="h-3 mt-4" color={getProgressBarColor(percentagePassed)} value={percentagePassed} />;
+  return <Progress className="h-3" color={getProgressBarColor(percentagePassed)} value={percentagePassed} />;
 }
