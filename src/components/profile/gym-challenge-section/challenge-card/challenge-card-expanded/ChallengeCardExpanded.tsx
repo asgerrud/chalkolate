@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Check } from "lucide-react";
 import { Stat } from "~/components/ui/custom/Stat";
 import { ChallengeCardTechniqueGrid } from "~/components/profile/gym-challenge-section/challenge-card/challenge-card-expanded/ChallengeCardTechniqueGrid";
+import { useLockBodyScroll } from "@uidotdev/usehooks";
 import dayjs from "dayjs";
 
 interface ChallengeCardExpandedProps {
@@ -14,7 +15,9 @@ interface ChallengeCardExpandedProps {
 }
 
 export function ChallengeCardExpanded({ challenge, onClose }: ChallengeCardExpandedProps) {
-  const { id, imageUrl, grade, zone, endDate } = challenge;
+  useLockBodyScroll();
+
+  const { id, imageUrl, zone, endDate } = challenge;
 
   return (
     <div className="fixed top-0 left-0 z-50 flex w-screen h-screen">
