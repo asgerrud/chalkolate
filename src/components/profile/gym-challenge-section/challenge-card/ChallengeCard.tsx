@@ -8,6 +8,7 @@ import { ChallengeCardImage } from "./ChallengeCardImage";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { ChallengeCardExpanded } from "./challenge-card-expanded/ChallengeCardExpanded";
+import { cn } from "~/lib/utils";
 
 dayjs.extend(relativeTime);
 
@@ -24,17 +25,20 @@ export default function ChallengeCard({ challenge }: ChallengeCardProps) {
 
   return (
     <motion.div layout>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.3, delay: 0.1 }}
-        layoutId={`card-wrapper-${id}`}>
+      <motion.div transition={{ duration: 0.3, delay: 0.1 }} layoutId={`card-wrapper-${id}`}>
         <Card className="w-full hover:scale-[99%] transition duration-200" onClick={() => setExpanded((prev) => !prev)}>
           <ChallengeCardImage id={id} imageUrl={imageUrl} gradeColor={grade.hex} />
-          <motion.div layoutId={`card-content-${id}`}>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            layoutId={`card-content-${id}`}>
             <CardContent className="p-3">
-              <div className="flex flex-col flex-1 space-y-4">
+              <div
+                className={cn(
+                  "flex flex-col flex-1 space-y-4 transition-opacity",
+                  expanded ? "opacity-0" : "opacity-100"
+                )}>
                 <ChallengeCardDetails zoneName={zone.name} endDate={endDate} />
                 {challengeInProgress && (
                   <ChallengeProgressBar

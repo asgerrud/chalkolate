@@ -12,7 +12,7 @@ interface ChallengeCardImageProps {
 export function ChallengeCardImage({ id, imageUrl, gradeColor, className }: ChallengeCardImageProps) {
   return (
     <motion.div
-      className={cn("h-[200px]", className)}
+      className={cn("w-full h-[200px]", className)}
       style={{
         backgroundColor: gradeColor
       }}
