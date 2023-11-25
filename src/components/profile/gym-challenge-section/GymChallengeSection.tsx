@@ -38,10 +38,14 @@ export function GymChallengeSection({ challengesByLocation, grades }: GymChallen
         <ChallengeList challenges={activeChallenges} />
         <CreateChallengeCard locationId={challengesByLocation.id} zones={zones} grades={grades} />
       </div>
-      <h3 className="text-lg font-semibold leading-none tracking-tight text-gray-700">Expired challenges</h3>
-      <div className={gridClasses}>
-        <ChallengeList challenges={expiredChallenges} />
-      </div>
+      {expiredChallenges.length && (
+        <>
+          <h3 className="text-lg font-semibold leading-none tracking-tight text-gray-700">Expired challenges</h3>
+          <div className={gridClasses}>
+            <ChallengeList challenges={expiredChallenges} />
+          </div>
+        </>
+      )}
     </div>
   );
 }
