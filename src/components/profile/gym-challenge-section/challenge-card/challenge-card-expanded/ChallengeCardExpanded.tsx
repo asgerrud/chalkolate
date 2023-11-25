@@ -18,7 +18,7 @@ export function ChallengeCardExpanded({ challenge, onClose }: ChallengeCardExpan
   const { id, imageUrl, zone, endDate } = challenge;
 
   return (
-    <div className="fixed top-0 left-0 z-50 flex w-screen h-screen">
+    <div className="fixed top-0 left-0 right-0 z-50 flex w-screen h-[calc(100vh_-_60px)]">
       <motion.div
         className="flex w-full h-full mx-auto"
         transition={{ duration: 0.3, delay: 0.1 }}
@@ -33,7 +33,7 @@ export function ChallengeCardExpanded({ challenge, onClose }: ChallengeCardExpan
             <ChallengeCardExpandedImage imageUrl={imageUrl} />
           </motion.div>
           <motion.div className="flex flex-[3]" layoutId={`card-content-${id}`}>
-            <CardContent className="w-full p-3 pb-0">
+            <CardContent className="w-full p-3">
               <div className="flex flex-col h-full justify-between">
                 <div className="space-y-4">
                   <p className="font-bold text-xl">Challenge</p>

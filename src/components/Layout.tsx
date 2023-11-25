@@ -18,7 +18,7 @@ export default function Layout({ pageTitle = "Climbing App", navbarDisabled, chi
       </Head>
       <main className="flex flex-col min-h-screen bg-secondary">
         <div className="flex flex-auto items-center justify-center p-6 pb-8 mb-[60px] overflow-hidden">{children}</div>
-        {!navbarDisabled && <Navbar />}{" "}
+        {!navbarDisabled && <Navbar />}
       </main>
     </>
   );
