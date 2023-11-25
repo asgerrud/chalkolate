@@ -22,15 +22,15 @@ export function ChallengePage({ id }: ChallengePageProps) {
 
   return (
     <Layout className="p-0">
-      <div className="flex flex-col w-full overflow-auto h-[calc(100vh_-_60px)]">
-        <div className="flex flex-[4]">
+      <div className="flex flex-col w-full overflow-auto h-[calc(100vh_-_60px)] md:h-full md:max-w-[640px] md:rounded-2xl">
+        <div className="flex flex-[4] relative">
+          <CloseButton />
           <ChallengeImage imageUrl={imageUrl} />
         </div>
         <div className="flex flex-[3]">
           <ChallengeBody zoneName={zone.name} endDate={endDate} />
         </div>
       </div>
-      <CloseButton />
     </Layout>
   );
 }
