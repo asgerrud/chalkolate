@@ -1,7 +1,7 @@
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import dayjs from "dayjs";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
-import { ChallengeCreateInputSchema } from "~/schema/challenge.schema";
+import { ChallengeCreateInputSchema, ChallengeFindByIdInputSchema } from "~/schema/challenge.schema";
 import { type RouterOutput, type Singular } from "~/server/api/root";
 
 dayjs.extend(isSameOrBefore);
@@ -38,6 +38,16 @@ export const challengeRouter = createTRPCRouter({
       }
     });
   }),
+  findById: protectedProcedure.input(ChallengeFindByIdInputSchema).query(async ({ ctx, input }) => {
+    return await ctx.prisma.challenge.findUnique({
+      where: {
+        id: input.id
+      },
+      include: {
+        zone: true
+      }
+    });
+  }),
   findLocationsWithUserChallenges: protectedProcedure.query(({ ctx }) => {
     return ctx.prisma.location.findMany({
       include: {
@@ -64,6 +74,8 @@ export const challengeRouter = createTRPCRouter({
     });
   })
 });
+
+export type ChallengeById = RouterOutput["challenge"]["findById"];
 
 export type FindLocationsWithUserChallenges = RouterOutput["challenge"]["findLocationsWithUserChallenges"];
 export type LocationWithUserChallenges = Singular<FindLocationsWithUserChallenges>;

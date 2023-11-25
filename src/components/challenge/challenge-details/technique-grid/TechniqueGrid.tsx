@@ -1,4 +1,4 @@
-import { TechniqueGridItem } from "~/components/profile/gym-challenge-section/challenge-card/challenge-card-expanded/challenge-card-expanded-details/technique-grid/TechniqueGridItem";
+import { TechniqueGridItem } from "~/components/challenge/challenge-details/technique-grid/TechniqueGridItem";
 
 export function TechniqueGrid() {
   const techniques = ["crimps", "slab", "slopers"];

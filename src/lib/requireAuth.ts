@@ -14,6 +14,6 @@ export function requireAuth(callback) {
       };
     }
 
-    return await callback();
+    return await callback(ctx);
   };
 }

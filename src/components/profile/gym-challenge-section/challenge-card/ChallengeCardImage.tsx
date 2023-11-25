@@ -1,6 +1,5 @@
 import { cn } from "~/lib/utils";
 import Image from "next/image";
-import { motion } from "framer-motion";
 
 interface ChallengeCardImageProps {
   id: string;
@@ -9,14 +8,13 @@ interface ChallengeCardImageProps {
   className?: string;
 }
 
-export function ChallengeCardImage({ id, imageUrl, gradeColor, className }: ChallengeCardImageProps) {
+export function ChallengeCardImage({ imageUrl, gradeColor, className }: ChallengeCardImageProps) {
   return (
-    <motion.div
+    <div
       className={cn("w-full h-[200px]", className)}
       style={{
         backgroundColor: gradeColor
-      }}
-      layoutId={`card-image-${id}`}>
+      }}>
       {imageUrl !== null && (
         <Image
           src={imageUrl}
@@ -26,6 +24,6 @@ export function ChallengeCardImage({ id, imageUrl, gradeColor, className }: Chal
           alt="Picture of a climbing problem"
         />
       )}
-    </motion.div>
+    </div>
   );
 }

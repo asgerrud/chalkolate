@@ -1,5 +1,5 @@
 export enum EPageRoute {
   PROFILE = "/profile",
-  ADD = "/#",
+  CHALLENGE = "/challenge",
   SETTINGS = "/settings"
 }

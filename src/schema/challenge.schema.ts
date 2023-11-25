@@ -12,3 +12,7 @@ export const ChallengeCreateInputSchema = z
   .strict();
 
 export type ChallengeCreateInputSchema = z.infer<typeof ChallengeCreateInputSchema>;
+
+export const ChallengeFindByIdInputSchema = z.object({
+  id: z.string()
+});

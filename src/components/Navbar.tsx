@@ -1,14 +1,12 @@
 import { signIn, signOut, useSession } from "next-auth/react";
-import { Button } from "~/components/ui/button";
 import { EPageRoute } from "~/types/enums/EPageRoute";
-import { LogOut, PlusCircle, Settings, UserCircle2 } from "lucide-react";
+import { LogIn, LogOut, Settings, UserCircle2 } from "lucide-react";
 import Link from "next/link";
 import { cn } from "~/lib/utils";
 import { useRouter } from "next/router";
 
 const pages = [
   { href: EPageRoute.PROFILE, title: "Profile", icon: <UserCircle2 className="h-5" /> },
-  { href: EPageRoute.ADD, title: "Add", icon: <PlusCircle className="h-5" /> },
   { href: EPageRoute.SETTINGS, title: "Settings", icon: <Settings className="h-5" /> }
 ];
 
@@ -17,8 +15,10 @@ export default function Navbar() {
   const router = useRouter();
   const user = session.data?.user;
 
+  const NAVBAR_HEIGHT = "h-[60px]";
+
   return (
-    <div className="px-8 py-3 bg-white fixed w-full bottom-0">
+    <div className={cn("px-8 py-3 bg-white fixed w-full bottom-0", NAVBAR_HEIGHT)}>
       <div className="flex justify-between items-center max-w-[640px] mx-auto">
         {user != null ? (
           <>
@@ -31,9 +31,10 @@ export default function Navbar() {
             </div>
           </>
         ) : (
-          <Button variant="ghost" onClick={() => signIn()}>
+          <div className="flex flex-row items-center mx-auto" onClick={() => signIn()}>
+            <LogIn className="h-5" />
             Login
-          </Button>
+          </div>
         )}
       </div>
     </div>
