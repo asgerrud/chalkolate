@@ -3,7 +3,7 @@ import { useToast } from "~/components/ui/use-toast";
 import { type ChallengeCreateInputSchema } from "~/schema/challenge.schema";
 import { CopyPlus } from "lucide-react";
 import { Card } from "~/components/ui/card";
-import { CreateChallengeDialog } from "./dialogs/CreateChallengeDialog";
+import { CreateChallengeDialog } from "~/components/profile/gym-challenge-section/create-challenge-card/dialog/create-challenge-dialog/CreateChallengeDialog";
 import { type Grade } from ".prisma/client";
 import { type ZoneWithChangeSchedule } from "~/server/api/routers/zone";
 

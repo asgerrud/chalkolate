@@ -5,7 +5,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "~/components/ui/input";
 import { ChallengeCreateInputSchema } from "~/schema/challenge.schema";
 import { getChallengeEndDate } from "~/util/Challenge.util";
-import CreateChallengeDialogImageUpload from "./CreateChallengeDialogImageUpload";
+import CreateChallengeImageUpload from "~/components/profile/gym-challenge-section/create-challenge-card/dialog/create-challenge-dialog/CreateChallengeImageUpload";
 import { Button } from "~/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
 import { type ZoneWithChangeSchedule } from "~/server/api/routers/zone";
@@ -29,6 +29,7 @@ export function CreateChallengeDialogForm({ locationId, zones, grades, onFormSub
     }
   });
 
+  const watchImage = form.watch("imageUrl");
   const watchGrade = form.watch("grade");
 
   const getZoneById = (zoneId: string) => zones.find((zone: ZoneWithChangeSchedule) => zone.id === zoneId);
@@ -45,8 +46,7 @@ export function CreateChallengeDialogForm({ locationId, zones, grades, onFormSub
           name="imageUrl"
           render={() => (
             <FormItem className="flex flex-col">
-              <FormLabel>Route image</FormLabel>
-              <CreateChallengeDialogImageUpload
+              <CreateChallengeImageUpload
                 autoOpen={true}
                 onImageUploaded={(fileUrl) => {
                   form.setValue("imageUrl", fileUrl);
@@ -56,6 +56,7 @@ export function CreateChallengeDialogForm({ locationId, zones, grades, onFormSub
             </FormItem>
           )}
         />
+
         <FormField
           name="zone"
           control={form.control}
