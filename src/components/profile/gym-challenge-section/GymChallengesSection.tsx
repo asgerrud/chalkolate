@@ -61,7 +61,12 @@ export function GymChallengesSection({ locationId, locationName, grades }: GymCh
       <h3 className="text-2xl font-semibold leading-none tracking-tight">{locationName}</h3>
       <div className={gridClasses}>
         {activeChallenges.length > 0 && <ChallengeList challenges={activeChallenges} />}
-        <CreateChallengeCard locationId={locationId} zones={zones} grades={grades} />
+        <CreateChallengeCard
+          locationId={locationId}
+          zones={zones}
+          grades={grades}
+          onChallengeCreated={() => challengeQuery.refetch()}
+        />
       </div>
       {expiredChallenges.length > 0 && (
         <>

@@ -11,9 +11,10 @@ interface CreateChallengeCardProps {
   locationId: string;
   grades: Grade[];
   zones: ZoneWithChangeSchedule[];
+  onChallengeCreated: () => void;
 }
 
-export function CreateChallengeCard({ locationId, zones, grades }: CreateChallengeCardProps) {
+export function CreateChallengeCard({ locationId, zones, grades, onChallengeCreated }: CreateChallengeCardProps) {
   const { toast } = useToast();
 
   const createChallenge = api.challenge.create.useMutation({
@@ -21,6 +22,7 @@ export function CreateChallengeCard({ locationId, zones, grades }: CreateChallen
       toast({
         title: "Challenge created!"
       });
+      onChallengeCreated();
     }
   });
 
