@@ -1,22 +1,22 @@
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Card, CardContent } from "~/components/ui/card";
-import { type ChallengesByLocation } from "~/server/api/routers/challenge";
 import { ChallengeProgressBar } from "./ChallengeCardProgressBar";
 import { ChallengeCardDetails } from "./challenge-card-details/ChallengeCardDetails";
 import { ChallengeCardImage } from "./ChallengeCardImage";
 import { cn } from "~/lib/utils";
 import { EPageRoute } from "~/types/enums/EPageRoute";
 import Link from "next/link";
+import { type ChallengeWithZoneAndGrade } from "~/server/api/routers/challenge";
 
 dayjs.extend(relativeTime);
 
 interface ChallengeCardProps {
-  challenge: ChallengesByLocation;
+  challenge: ChallengeWithZoneAndGrade;
 }
 
 export default function ChallengeCard({ challenge }: ChallengeCardProps) {
-  const { id, imageUrl, grade, zone, endDate } = challenge;
+  const { id, imageUrl, zone, grade, endDate } = challenge;
 
   const challengeInProgress = dayjs() <= dayjs(endDate);
 

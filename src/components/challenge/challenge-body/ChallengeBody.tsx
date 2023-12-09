@@ -14,6 +14,7 @@ export default function ChallengeBody({ zoneName, endDate }: ChallengeBodyProps)
         <ChallengeDetails zoneName={zoneName} endDate={endDate} />
       </div>
 
+      {/* TODO: don't show if challenge is expired */}
       <div className="text-right py-3">
         <Button>
           Finish challenge

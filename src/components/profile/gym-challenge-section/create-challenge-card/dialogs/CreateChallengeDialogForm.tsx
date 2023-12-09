@@ -4,17 +4,17 @@ import { useForm } from "react-hook-form";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { ChallengeCreateInputSchema } from "~/schema/challenge.schema";
-import { type Grades } from "~/server/api/routers/grade";
-import { type ZonesByLocation } from "~/server/api/routers/zone";
 import { getChallengeEndDate } from "~/util/Challenge.util";
 import CreateChallengeDialogImageUpload from "./CreateChallengeDialogImageUpload";
 import { Button } from "~/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
+import { type ZoneWithChangeSchedule } from "~/server/api/routers/zone";
+import { type Grade } from ".prisma/client";
 
 interface CreateChallengeDialogFormProps {
   locationId: string;
-  zones: ZonesByLocation;
-  grades: Grades;
+  zones: ZoneWithChangeSchedule[];
+  grades: Grade[];
   onFormSubmit: (formData: ChallengeCreateInputSchema) => void;
 }
 
@@ -31,7 +31,7 @@ export function CreateChallengeDialogForm({ locationId, zones, grades, onFormSub
 
   const watchGrade = form.watch("grade");
 
-  const getZoneById = (zoneId: string) => zones.find((zone) => zone.id === zoneId);
+  const getZoneById = (zoneId: string) => zones.find((zone: ZoneWithChangeSchedule) => zone.id === zoneId);
 
   const onSubmit = (formData: ChallengeCreateInputSchema) => {
     onFormSubmit(formData);
@@ -66,7 +66,8 @@ export function CreateChallengeDialogForm({ locationId, zones, grades, onFormSub
                 defaultValue={field.value}
                 onValueChange={(zoneId: string) => {
                   field.onChange(zoneId);
-                  form.setValue("endDate", getChallengeEndDate(getZoneById(zoneId), today));
+                  const changeSchedule = getZoneById(zoneId).changeSchedule;
+                  form.setValue("endDate", getChallengeEndDate(changeSchedule, today));
                 }}>
                 <FormControl>
                   <SelectTrigger>
@@ -74,7 +75,6 @@ export function CreateChallengeDialogForm({ locationId, zones, grades, onFormSub
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {/* get zones */}
                   {zones?.map((zone) => (
                     <SelectItem key={zone.id} value={zone.id}>
                       {zone.name}

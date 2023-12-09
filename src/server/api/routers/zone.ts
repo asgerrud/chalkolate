@@ -1,9 +1,9 @@
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { z } from "zod";
-import { type RouterOutput } from "~/server/api/root";
+import { type Prisma } from ".prisma/client";
 
 export const zoneRouter = createTRPCRouter({
-  findZonesByLocation: publicProcedure.input(z.object({ locationId: z.string() })).query(({ ctx, input }) => {
+  findAllByLocation: publicProcedure.input(z.object({ locationId: z.string() })).query(({ ctx, input }) => {
     return ctx.prisma.zone.findMany({
       where: {
         locationId: input.locationId
@@ -15,4 +15,6 @@ export const zoneRouter = createTRPCRouter({
   })
 });
 
-export type ZonesByLocation = RouterOutput["zone"]["findZonesByLocation"];
+export type ZoneWithChangeSchedule = Prisma.ZoneGetPayload<{
+  include: { changeSchedule: true };
+}>;

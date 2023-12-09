@@ -1,10 +1,9 @@
 import dayjs from "dayjs";
-import { type Singular } from "~/server/api/root";
-import { type ZonesByLocation } from "~/server/api/routers/zone";
+import { type ChangeSchedule } from ".prisma/client";
 
 // TODO: add unit test
-export const getChallengeEndDate = (zone: Singular<ZonesByLocation>, startDate: Date): Date => {
-  const { startDate: latestZoneReset, changeIntervalWeeks } = zone.changeSchedule;
+export const getChallengeEndDate = (changeSchedule: ChangeSchedule, startDate: Date): Date => {
+  const { startDate: latestZoneReset, changeIntervalWeeks } = changeSchedule;
 
   const changeIntervalInDays = changeIntervalWeeks * 7;
 

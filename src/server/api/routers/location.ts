@@ -1,14 +1,15 @@
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { type QueryResult } from "~/server/api/root";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 export const locationRouter = createTRPCRouter({
-  findAll: publicProcedure.query(({ ctx }) => {
+  findAllWithUserActivity: protectedProcedure.query(({ ctx }) => {
     return ctx.prisma.location.findMany({
-      include: {
-        zones: true
+      where: {
+        challenges: {
+          some: {
+            userId: ctx.session.user.id
+          }
+        }
       }
     });
   })
 });
-
-export type ClimbingLocations = QueryResult<"location", "findAll">;

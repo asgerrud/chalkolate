@@ -1,16 +1,16 @@
-import { type Grades } from "~/server/api/routers/grade";
 import { api } from "~/lib/api";
 import { useToast } from "~/components/ui/use-toast";
 import { type ChallengeCreateInputSchema } from "~/schema/challenge.schema";
 import { CopyPlus } from "lucide-react";
-import { type ZonesByLocation } from "~/server/api/routers/zone";
 import { Card } from "~/components/ui/card";
 import { CreateChallengeDialog } from "./dialogs/CreateChallengeDialog";
+import { type Grade } from ".prisma/client";
+import { type ZoneWithChangeSchedule } from "~/server/api/routers/zone";
 
 interface CreateChallengeCardProps {
   locationId: string;
-  grades: Grades;
-  zones: ZonesByLocation;
+  grades: Grade[];
+  zones: ZoneWithChangeSchedule[];
 }
 
 export function CreateChallengeCard({ locationId, zones, grades }: CreateChallengeCardProps) {

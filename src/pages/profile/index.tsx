@@ -1,21 +1,39 @@
 import Layout from "~/components/Layout";
 import { requireAuth } from "~/lib/requireAuth";
 import { api } from "~/lib/api";
-import { GymChallengeSection } from "~/components/profile/gym-challenge-section/GymChallengeSection";
+import { GymChallengesSection } from "~/components/profile/gym-challenge-section/GymChallengesSection";
+import { useState } from "react";
+import { type Location } from ".prisma/client";
 
 export function ProfilePage() {
-  const { data: userChallengesByLocation } = api.challenge.findLocationsWithUserChallenges.useQuery();
+  const [locations, setLocations] = useState<Location[]>([]);
+
+  const { data: locationsData, isLoading } = api.location.findAllWithUserActivity.useQuery(undefined, {
+    onSuccess: (locations: Location[]) => {
+      setLocations(locations);
+    }
+  });
+
+  // TODO: move to location
   const { data: grades } = api.grade.findAll.useQuery();
 
-  const getLocationsWithChallenges = userChallengesByLocation?.filter((location) => location.challenges.length);
+  if (!locationsData || isLoading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <Layout>
       <div className="flex flex-col items-center flex-1 space-y-8">
-        {/* Add blank state if no challenges created */}
-        {getLocationsWithChallenges?.map((location) => (
-          <GymChallengeSection key={location.id} challengesByLocation={location} grades={grades} />
-        ))}
+        {/* TODO: add blank state if no challenges created */}
+        {locations.length > 0 &&
+          locations?.map((location) => (
+            <GymChallengesSection
+              key={location.id}
+              locationId={location.id}
+              locationName={location.name}
+              grades={grades}
+            />
+          ))}
       </div>
     </Layout>
   );

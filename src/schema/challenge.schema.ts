@@ -16,3 +16,7 @@ export type ChallengeCreateInputSchema = z.infer<typeof ChallengeCreateInputSche
 export const ChallengeFindByIdInputSchema = z.object({
   id: z.string()
 });
+
+export const ChallengeFindByLocationInputSchema = z.object({
+  locationId: z.string()
+});

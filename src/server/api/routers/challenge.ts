@@ -1,8 +1,13 @@
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import dayjs from "dayjs";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
-import { ChallengeCreateInputSchema, ChallengeFindByIdInputSchema } from "~/schema/challenge.schema";
-import { type RouterOutput, type Singular } from "~/server/api/root";
+import {
+  ChallengeCreateInputSchema,
+  ChallengeFindByIdInputSchema,
+  ChallengeFindByLocationInputSchema
+} from "~/schema/challenge.schema";
+import { type RouterOutputs } from "~/lib/api";
+import { type Singular } from "~/server/api/root";
 
 dayjs.extend(isSameOrBefore);
 
@@ -38,6 +43,26 @@ export const challengeRouter = createTRPCRouter({
       }
     });
   }),
+  findAllByLocation: protectedProcedure.input(ChallengeFindByLocationInputSchema).query(async ({ ctx, input }) => {
+    return await ctx.prisma.challenge.findMany({
+      where: {
+        locationId: input.locationId
+      },
+      include: {
+        zone: {
+          select: {
+            name: true,
+            changeSchedule: true
+          }
+        },
+        grade: {
+          select: {
+            hex: true
+          }
+        }
+      }
+    });
+  }),
   findById: protectedProcedure.input(ChallengeFindByIdInputSchema).query(async ({ ctx, input }) => {
     return await ctx.prisma.challenge.findUnique({
       where: {
@@ -47,36 +72,7 @@ export const challengeRouter = createTRPCRouter({
         zone: true
       }
     });
-  }),
-  findLocationsWithUserChallenges: protectedProcedure.query(({ ctx }) => {
-    return ctx.prisma.location.findMany({
-      include: {
-        challenges: {
-          where: { userId: ctx.session.user.id },
-          include: {
-            zone: {
-              select: {
-                name: true,
-                changeSchedule: true
-              }
-            },
-            grade: {
-              select: {
-                hex: true
-              }
-            }
-          },
-          orderBy: {
-            endDate: "asc"
-          }
-        }
-      }
-    });
   })
 });
 
-export type ChallengeById = RouterOutput["challenge"]["findById"];
-
-export type FindLocationsWithUserChallenges = RouterOutput["challenge"]["findLocationsWithUserChallenges"];
-export type LocationWithUserChallenges = Singular<FindLocationsWithUserChallenges>;
-export type ChallengesByLocation = Singular<FindLocationsWithUserChallenges[number]["challenges"]>;
+export type ChallengeWithZoneAndGrade = Singular<RouterOutputs["challenge"]["findAllByLocation"]>;

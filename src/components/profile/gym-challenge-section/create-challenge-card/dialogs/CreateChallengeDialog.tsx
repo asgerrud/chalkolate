@@ -1,16 +1,16 @@
-import { type Grades } from "~/server/api/routers/grade";
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "~/components/ui/dialog";
 import { type ChallengeCreateInputSchema } from "~/schema/challenge.schema";
-import { type ZonesByLocation } from "~/server/api/routers/zone";
 import { CreateChallengeDialogForm } from "./CreateChallengeDialogForm";
+import { type ZoneWithChangeSchedule } from "~/server/api/routers/zone";
+import { type Grade } from ".prisma/client";
 
 interface CreateChallengeDialogProps {
   locationId: string;
-  grades: Grades;
-  zones: ZonesByLocation;
+  grades: Grade[];
+  zones: ZoneWithChangeSchedule[];
   onSubmit: (data: ChallengeCreateInputSchema) => void;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export function CreateChallengeDialog({ locationId, zones, grades, onSubmit, children }: CreateChallengeDialogProps) {
