@@ -2,6 +2,7 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import dayjs from "dayjs";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import {
+  ChallengeCompleteInputSchema,
   ChallengeCreateInputSchema,
   ChallengeFindByIdInputSchema,
   ChallengeFindByLocationInputSchema
@@ -15,11 +16,12 @@ export const challengeRouter = createTRPCRouter({
   create: protectedProcedure.input(ChallengeCreateInputSchema).mutation(async ({ ctx, input }) => {
     const { imageUrl, location, zone, grade, startDate, endDate } = input;
 
-    return await ctx.prisma.challenge.create({
+    return ctx.prisma.challenge.create({
       data: {
         startDate: new Date(startDate),
         endDate: new Date(endDate),
         imageUrl: imageUrl,
+        completed: false,
         user: {
           connect: {
             id: ctx.session.user?.id
@@ -44,7 +46,7 @@ export const challengeRouter = createTRPCRouter({
     });
   }),
   findAllByLocation: protectedProcedure.input(ChallengeFindByLocationInputSchema).query(async ({ ctx, input }) => {
-    return await ctx.prisma.challenge.findMany({
+    return ctx.prisma.challenge.findMany({
       where: {
         locationId: input.locationId
       },
@@ -64,12 +66,22 @@ export const challengeRouter = createTRPCRouter({
     });
   }),
   findById: protectedProcedure.input(ChallengeFindByIdInputSchema).query(async ({ ctx, input }) => {
-    return await ctx.prisma.challenge.findUnique({
+    return ctx.prisma.challenge.findUnique({
       where: {
         id: input.id
       },
       include: {
         zone: true
+      }
+    });
+  }),
+  complete: protectedProcedure.input(ChallengeCompleteInputSchema).mutation(async ({ ctx, input }) => {
+    return ctx.prisma.challenge.update({
+      where: {
+        id: input.id
+      },
+      data: {
+        completed: true
       }
     });
   })

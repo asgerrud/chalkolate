@@ -17,6 +17,10 @@ export const ChallengeFindByIdInputSchema = z.object({
   id: z.string()
 });
 
+export const ChallengeCompleteInputSchema = z.object({
+    id: z.string()
+  })
+
 export const ChallengeFindByLocationInputSchema = z.object({
   locationId: z.string()
 });

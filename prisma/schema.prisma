@@ -127,6 +127,8 @@ model Challenge {
 
   imageUrl String?
 
+  completed Boolean @default(false)
+
   @@index([userId])
   @@index([zoneId])
   @@index([locationId])

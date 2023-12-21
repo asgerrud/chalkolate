@@ -6,13 +6,29 @@ import { ChallengeImage } from "~/components/challenge/challenge-image/challenge
 import { EPageRoute } from "~/types/enums/EPageRoute";
 import CloseButton from "~/components/challenge/close-button/CloseButton";
 import ChallengeBody from "~/components/challenge/challenge-body/ChallengeBody";
+import { useRouter } from "next/router";
 
 interface ChallengePageProps {
   id: string;
 }
 
 export function ChallengePage({ id }: ChallengePageProps) {
+  const router = useRouter()
   const challenge = api.challenge.findById.useQuery({ id });
+
+  const { mutate: complete } = api.challenge.complete.useMutation();
+
+  const completeChallenge = () => {
+    complete({ id }, {
+      onSuccess: () => {
+        router.push(EPageRoute.PROFILE);
+      },
+      onError: () => {
+        // TODO: add error handling
+        alert("Error completing challenge");
+      }
+    })
+  }
 
   if (challenge.data == null) {
     return null;
@@ -28,7 +44,7 @@ export function ChallengePage({ id }: ChallengePageProps) {
           {imageUrl != null && <ChallengeImage imageUrl={imageUrl} />}
         </div>
         <div className="flex flex-[3]">
-          <ChallengeBody zoneName={zone.name} endDate={endDate} />
+          <ChallengeBody zoneName={zone.name} endDate={endDate} onFinish={() => completeChallenge()} />
         </div>
       </div>
     </Layout>
