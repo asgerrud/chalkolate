@@ -1,15 +1,18 @@
 import { env } from "~/env.mjs";
+import imageCompression from "browser-image-compression";
 
-export function uploadFileToStorage(file: File, url: string) {
+export async function uploadFileToStorage(file: File, url: string) {
+  const compressedFile = await imageCompression(file, {
+    maxSizeMB: 0.75
+  });
+
   return fetch(url, {
     method: "PUT",
-    body: file
+    body: compressedFile
   }).then((res) => {
     if (!res.ok) {
       throw Error(res.statusText);
     }
-
-    // TODO: return public link to image file
 
     const fileName = new URL(url).pathname.substring(1);
 
