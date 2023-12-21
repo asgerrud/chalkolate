@@ -8,6 +8,7 @@ import { cn } from "~/lib/utils";
 import { EPageRoute } from "~/types/enums/EPageRoute";
 import Link from "next/link";
 import { type ChallengeWithZoneAndGrade } from "~/server/api/routers/challenge";
+import { isChallengeInProgress } from "~/util/Challenge.util";
 
 dayjs.extend(relativeTime);
 
@@ -18,7 +19,7 @@ interface ChallengeCardProps {
 export default function ChallengeCard({ challenge }: ChallengeCardProps) {
   const { id, imageUrl, zone, grade, endDate } = challenge;
 
-  const challengeInProgress = dayjs() <= dayjs(endDate);
+  const isCompleted = challenge.completedAt != null;
 
   const challengeLink = EPageRoute.CHALLENGE + "/" + id;
 
@@ -28,8 +29,8 @@ export default function ChallengeCard({ challenge }: ChallengeCardProps) {
         <ChallengeCardImage id={id} imageUrl={imageUrl} gradeColor={grade.hex} />
         <CardContent className="p-3">
           <div className={cn("flex flex-col flex-1 space-y-4")}>
-            <ChallengeCardDetails zoneName={zone.name} endDate={endDate} />
-            {challengeInProgress && (
+            <ChallengeCardDetails zoneName={zone.name} endDate={endDate} isCompleted={isCompleted} />
+            {isChallengeInProgress(challenge) && (
               <ChallengeProgressBar endDate={endDate} changeIntervalWeeks={zone.changeSchedule.changeIntervalWeeks} />
             )}
           </div>

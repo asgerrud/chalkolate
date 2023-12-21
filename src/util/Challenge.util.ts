@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { type ChangeSchedule } from ".prisma/client";
+import { type Challenge, type ChangeSchedule } from ".prisma/client";
 
 // TODO: add unit test
 export const getChallengeEndDate = (changeSchedule: ChangeSchedule, startDate: Date): Date => {
@@ -21,7 +21,6 @@ export const getChallengeEndDate = (changeSchedule: ChangeSchedule, startDate: D
   return nextChangeDate;
 };
 
-// TODO: fix calculation
 export const getChallengeTimePercentagePassed = (endDate: Date, changeIntervalWeeks: number): number => {
   const now = new Date().getTime();
 
@@ -31,4 +30,14 @@ export const getChallengeTimePercentagePassed = (endDate: Date, changeIntervalWe
   const timePassed = now - latestScheduleReset.getTime();
 
   return Math.round((timePassed / totalTime) * 100);
+};
+
+export const isChallengeInProgress = (challenge: Challenge): boolean => {
+  const now = dayjs();
+
+  if (challenge.completedAt) {
+    return false;
+  }
+
+  return now < dayjs(challenge.endDate);
 };

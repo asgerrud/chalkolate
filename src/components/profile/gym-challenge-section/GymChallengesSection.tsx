@@ -1,12 +1,13 @@
 import { api } from "~/lib/api";
 import dayjs from "dayjs";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { CreateChallengeCard } from "./create-challenge-card/CreateChallengeCard";
 import ChallengeCard from "./challenge-card/ChallengeCard";
 import { type ZoneWithChangeSchedule } from "~/server/api/routers/zone";
 import { type ChallengeWithZoneAndGrade } from "~/server/api/routers/challenge";
 import { type Grade } from ".prisma/client";
+import { EChallengeState } from "~/types/enums/EChallengeState";
 
 dayjs.extend(isSameOrBefore);
 
@@ -17,16 +18,30 @@ interface GymChallengeCardProps {
 }
 
 export function GymChallengesSection({ locationId, locationName, grades }: GymChallengeCardProps) {
-  const [challenges, setChallenges] = useState<ChallengeWithZoneAndGrade[]>([]);
+  const [activeChallenges, setActiveChallenges] = useState<ChallengeWithZoneAndGrade[]>([]);
+  const [completedChallenges, setCompletedChallenges] = useState<ChallengeWithZoneAndGrade[]>([]);
   const [zones, setZones] = useState<ZoneWithChangeSchedule[]>([]);
 
   const challengeQuery = api.challenge.findAllByLocation.useQuery(
     {
-      locationId: locationId
+      locationId: locationId,
+      state: EChallengeState.ACTIVE
     },
     {
       onSuccess: (challenges: ChallengeWithZoneAndGrade[]) => {
-        setChallenges(challenges);
+        setActiveChallenges(challenges);
+      }
+    }
+  );
+
+  const completedChallengeQuery = api.challenge.findAllByLocation.useQuery(
+    {
+      locationId: locationId,
+      state: EChallengeState.COMPLETED
+    },
+    {
+      onSuccess: (challenges: ChallengeWithZoneAndGrade[]) => {
+        setCompletedChallenges(challenges);
       }
     }
   );
@@ -40,19 +55,9 @@ export function GymChallengesSection({ locationId, locationName, grades }: GymCh
     }
   );
 
-  const activeChallenges: ChallengeWithZoneAndGrade[] = useMemo(
-    () => challenges.filter((challenge) => dayjs().isSameOrBefore(challenge.endDate)),
-    [challenges]
-  );
-
-  const expiredChallenges: ChallengeWithZoneAndGrade[] = useMemo(
-    () => challenges.filter((challenge) => dayjs().isAfter(challenge.endDate)),
-    [challenges]
-  );
-
   const gridClasses = "grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3";
 
-  if (challengeQuery.isLoading || zoneQuery.isLoading) {
+  if (challengeQuery.isLoading || completedChallengeQuery.isLoading || zoneQuery.isLoading) {
     return <p>Loading...</p>;
   }
 
@@ -68,11 +73,11 @@ export function GymChallengesSection({ locationId, locationName, grades }: GymCh
           onChallengeCreated={() => challengeQuery.refetch()}
         />
       </div>
-      {expiredChallenges.length > 0 && (
+      {completedChallenges.length > 0 && (
         <>
-          <h3 className="text-lg font-semibold leading-none tracking-tight text-gray-700">Expired challenges</h3>
+          <h3 className="text-lg font-semibold leading-none tracking-tight text-gray-700">Completed challenges</h3>
           <div className={gridClasses}>
-            <ChallengeList challenges={expiredChallenges} />
+            <ChallengeList challenges={completedChallenges} />
           </div>
         </>
       )}
@@ -83,6 +88,7 @@ export function GymChallengesSection({ locationId, locationName, grades }: GymCh
 interface ChallengeListProps {
   challenges: ChallengeWithZoneAndGrade[];
 }
+
 function ChallengeList({ challenges }: ChallengeListProps) {
   return (
     <>

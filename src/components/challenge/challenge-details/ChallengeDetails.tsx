@@ -5,8 +5,13 @@ import { TechniqueGrid } from "~/components/challenge/challenge-details/techniqu
 interface ChallengeCardExpandedDetailsProps {
   zoneName: string;
   endDate: Date;
+  completedAt: Date;
 }
-export function ChallengeDetails({ zoneName, endDate }: ChallengeCardExpandedDetailsProps) {
+
+export function ChallengeDetails({ zoneName, endDate, completedAt }: ChallengeCardExpandedDetailsProps) {
+  const dateLabel = completedAt ? "Completed on" : "Disappears on";
+  const date = dayjs(completedAt || endDate).format("DD/MM/YYYY");
+
   return (
     <>
       <div className="flex justify-between space-x-4">
@@ -17,8 +22,8 @@ export function ChallengeDetails({ zoneName, endDate }: ChallengeCardExpandedDet
       <TechniqueGrid />
 
       <div className="flex text-sm ml-1 flex-col">
-        <span className="font-medium">Disappears on</span>
-        <div className="flex flex-row">{dayjs(endDate).format("DD/MM/YYYY")}</div>
+        <span className="font-medium">{dateLabel}</span>
+        <div className="flex flex-row">{date}</div>
       </div>
     </>
   );

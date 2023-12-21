@@ -28,7 +28,6 @@ export function CreateChallengeCard({ locationId, zones, grades, onChallengeCrea
 
   function handleFormSubmit(parsedFormData: ChallengeCreateInputSchema) {
     createChallenge.mutate(parsedFormData);
-    // TODO: re-render challenge list on challenge create
   }
 
   return (

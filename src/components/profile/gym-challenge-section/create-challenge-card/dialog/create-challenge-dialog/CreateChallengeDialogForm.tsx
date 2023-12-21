@@ -29,7 +29,6 @@ export function CreateChallengeDialogForm({ locationId, zones, grades, onFormSub
     }
   });
 
-  const watchImage = form.watch("imageUrl");
   const watchGrade = form.watch("grade");
 
   const getZoneById = (zoneId: string) => zones.find((zone: ZoneWithChangeSchedule) => zone.id === zoneId);

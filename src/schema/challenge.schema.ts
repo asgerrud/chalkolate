@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { EChallengeState } from "~/types/enums/EChallengeState";
 
 export const ChallengeCreateInputSchema = z
   .object({
@@ -22,5 +23,6 @@ export const ChallengeCompleteInputSchema = z.object({
   })
 
 export const ChallengeFindByLocationInputSchema = z.object({
-  locationId: z.string()
+  locationId: z.string(),
+  state: z.nativeEnum(EChallengeState).optional()
 });

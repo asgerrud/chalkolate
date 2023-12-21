@@ -13,28 +13,31 @@ interface ChallengePageProps {
 }
 
 export function ChallengePage({ id }: ChallengePageProps) {
-  const router = useRouter()
+  const router = useRouter();
   const challenge = api.challenge.findById.useQuery({ id });
 
   const { mutate: complete } = api.challenge.complete.useMutation();
 
   const completeChallenge = () => {
-    complete({ id }, {
-      onSuccess: () => {
-        router.push(EPageRoute.PROFILE);
-      },
-      onError: () => {
-        // TODO: add error handling
-        alert("Error completing challenge");
+    complete(
+      { id },
+      {
+        onSuccess: () => {
+          router.push(EPageRoute.PROFILE);
+        },
+        onError: () => {
+          // TODO: add error handling
+          alert("Error completing challenge");
+        }
       }
-    })
-  }
+    );
+  };
 
   if (challenge.data == null) {
     return null;
   }
 
-  const { imageUrl, zone, endDate } = challenge.data;
+  const { imageUrl, zone, endDate, completedAt } = challenge.data;
 
   return (
     <Layout className="p-0">
@@ -44,7 +47,12 @@ export function ChallengePage({ id }: ChallengePageProps) {
           {imageUrl != null && <ChallengeImage imageUrl={imageUrl} />}
         </div>
         <div className="flex flex-[3]">
-          <ChallengeBody zoneName={zone.name} endDate={endDate} onFinish={() => completeChallenge()} />
+          <ChallengeBody
+            zoneName={zone.name}
+            endDate={endDate}
+            completedAt={completedAt}
+            onFinish={() => completeChallenge()}
+          />
         </div>
       </div>
     </Layout>
@@ -57,6 +65,7 @@ export const getStaticPaths: GetStaticPaths = () => {
     fallback: "blocking" // Don't send the HTMl to client until it's done generating
   };
 };
+
 export async function getStaticProps(context: GetStaticPropsContext<{ id: string }>) {
   const id = context.params?.id;
 
@@ -80,4 +89,5 @@ export async function getStaticProps(context: GetStaticPropsContext<{ id: string
     }
   };
 }
+
 export default ChallengePage;

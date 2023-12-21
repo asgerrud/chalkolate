@@ -127,7 +127,7 @@ model Challenge {
 
   imageUrl String?
 
-  completed Boolean @default(false)
+  completedAt DateTime?
 
   @@index([userId])
   @@index([zoneId])

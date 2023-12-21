@@ -14,7 +14,6 @@ export function ProfilePage() {
     }
   });
 
-  // TODO: move to location
   const { data: grades } = api.grade.findAll.useQuery();
 
   if (!locationsData || isLoading) {
